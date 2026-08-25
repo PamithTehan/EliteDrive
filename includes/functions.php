@@ -1,5 +1,7 @@
 <?php
 // includes/functions.php
+if (defined('FUNCTIONS_PHP_LOADED')) return;
+define('FUNCTIONS_PHP_LOADED', 1);
 
 function csrfToken(): string {
     if (empty($_SESSION['csrf'])) {

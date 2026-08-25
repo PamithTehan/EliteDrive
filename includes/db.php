@@ -1,5 +1,7 @@
 <?php
 // includes/db.php
+if (defined('DB_PHP_LOADED')) return;
+define('DB_PHP_LOADED', 1);
 
 function getDb(): PDO {
     static $pdo = null;
