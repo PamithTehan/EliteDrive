@@ -68,7 +68,7 @@ require __DIR__ . '/../includes/partials/head.php';
             <div class="alert alert-error"><?= escapeHtml($error) ?></div>
         <?php endif; ?>
 
-        <form method="POST" action="/register.php">
+        <form method="POST" action="<?= baseUrl('/register.php') ?>">
             <input type="hidden" name="csrf" value="<?= csrfToken() ?>">
             
             <div class="form-group">

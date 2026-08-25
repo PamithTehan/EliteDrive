@@ -30,8 +30,8 @@ require __DIR__ . '/../../includes/partials/head.php';
                 <p class="body-md">Borrower Dashboard</p>
                 <hr style="border:0; border-top: 1px solid var(--color-outline); margin: var(--space-md) 0;">
                 <ul class="stack-sm" style="list-style:none; padding:0;">
-                    <li><a href="/borrower/my_bookings.php" class="btn btn-ghost" style="width:100%; justify-content:flex-start; font-weight: bold;">My Bookings</a></li>
-                    <li><a href="/fleet/search.php" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">Find a Vehicle</a></li>
+                    <li><a href="<?= baseUrl('/borrower/my_bookings.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start; font-weight: bold;">My Bookings</a></li>
+                    <li><a href="<?= baseUrl('/fleet/search.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">Find a Vehicle</a></li>
                 </ul>
             </div>
         </div>
@@ -44,7 +44,7 @@ require __DIR__ . '/../../includes/partials/head.php';
             <div class="card">
                 <div class="card-body" style="text-align:center; padding: var(--space-lg);">
                     <p class="body-lg" style="color:var(--color-secondary);">You don't have any bookings yet.</p>
-                    <a href="/fleet/search.php" class="btn btn-primary" style="margin-top: var(--space-md);">Browse Fleet</a>
+                    <a href="<?= baseUrl('/fleet/search.php') ?>" class="btn btn-primary" style="margin-top: var(--space-md);">Browse Fleet</a>
                 </div>
             </div>
         <?php else: ?>
@@ -109,7 +109,7 @@ require __DIR__ . '/../../includes/partials/head.php';
         formData.append('comment', comment || '');
         formData.append('target_user', 'owner');
         
-        const res = await fetch('/api/reviews/submit.php', { method: 'POST', body: formData });
+        const res = await fetch('<?= baseUrl('/api/reviews/submit.php') ?>', { method: 'POST', body: formData });
         if (res.ok) {
             alert('Review submitted successfully!');
         } else {
@@ -130,7 +130,7 @@ require __DIR__ . '/../../includes/partials/head.php';
         formData.append('reason', reason);
         formData.append('description', desc || '');
         
-        const res = await fetch('/api/disputes/create.php', { method: 'POST', body: formData });
+        const res = await fetch('<?= baseUrl('/api/disputes/create.php') ?>', { method: 'POST', body: formData });
         if (res.ok) {
             alert('Dispute submitted successfully! An admin will review it.');
         } else {
