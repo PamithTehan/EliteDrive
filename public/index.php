@@ -47,9 +47,9 @@ require __DIR__ . '/../includes/partials/head.php';
         <h1 class="hero-title">The Premium Vehicle<br>Rental Experience</h1>
         <p class="hero-subtitle">Discover and book the perfect car for your next journey, or list your own vehicle and start earning today.</p>
         <div style="display: flex; gap: var(--space-md); justify-content: center;">
-            <a href="/fleet/search.php" class="btn btn-primary" style="font-size: 1.1rem; padding: 12px 24px;">Browse Fleet</a>
+            <a href="/Vehical rental system/public/fleet/search.php" class="btn btn-primary" style="font-size: 1.1rem; padding: 12px 24px;">Browse Fleet</a>
             <?php if (!currentUser()): ?>
-                <a href="/register.php" class="btn btn-ghost" style="font-size: 1.1rem; padding: 12px 24px; border: 1px solid var(--color-outline);">List Your Car</a>
+                <a href="/Vehical rental system/public/register.php" class="btn btn-ghost" style="font-size: 1.1rem; padding: 12px 24px; border: 1px solid var(--color-outline);">List Your Car</a>
             <?php endif; ?>
         </div>
     </div>
@@ -78,7 +78,7 @@ require __DIR__ . '/../includes/partials/head.php';
 <div style="background: var(--color-primary); color: white; padding: 80px 0; text-align: center;">
     <div class="container">
         <h2 class="headline-lg" style="color: white; margin-bottom: var(--space-md);">Ready to hit the road?</h2>
-        <a href="/fleet/search.php" class="btn" style="background: white; color: var(--color-primary); padding: 12px 32px; font-weight: bold; font-size: 1.1rem;">Find a Vehicle</a>
+        <a href="/Vehical rental system/public/fleet/search.php" class="btn" style="background: white; color: var(--color-primary); padding: 12px 32px; font-weight: bold; font-size: 1.1rem;">Find a Vehicle</a>
     </div>
 </div>
 
