@@ -49,7 +49,7 @@ require __DIR__ . '/../includes/partials/head.php';
             <div class="alert alert-error"><?= escapeHtml($error) ?></div>
         <?php endif; ?>
 
-        <form method="POST" action="/login.php">
+        <form method="POST" action="<?= baseUrl('/login.php') ?>">
             <input type="hidden" name="csrf" value="<?= csrfToken() ?>">
             
             <div class="form-group">
@@ -66,7 +66,7 @@ require __DIR__ . '/../includes/partials/head.php';
         </form>
         
         <div class="auth-footer">
-            Don't have an account? <a href="/register.php" style="color: var(--color-accent);">Sign Up</a>
+            Don't have an account? <a href="<?= baseUrl('/register.php') ?>" style="color: var(--color-accent);">Sign Up</a>
         </div>
     </div>
 </div>

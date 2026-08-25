@@ -46,8 +46,8 @@ require __DIR__ . '/../../includes/partials/head.php';
                 <p class="body-md">Owner Dashboard</p>
                 <hr style="border:0; border-top: 1px solid var(--color-outline); margin: var(--space-md) 0;">
                 <ul class="stack-sm" style="list-style:none; padding:0;">
-                    <li><a href="/owner/dashboard.php" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">My Vehicles</a></li>
-                    <li><a href="/owner/bookings.php" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">Bookings</a></li>
+                    <li><a href="<?= baseUrl('/owner/dashboard.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">My Vehicles</a></li>
+                    <li><a href="<?= baseUrl('/owner/bookings.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">Bookings</a></li>
                 </ul>
             </div>
         </div>
@@ -64,7 +64,7 @@ require __DIR__ . '/../../includes/partials/head.php';
                 <div class="alert alert-success"><?= escapeHtml($success) ?></div>
             <?php endif; ?>
             
-            <form method="POST" action="/owner/vehicle_form.php">
+            <form method="POST" action="<?= baseUrl('/owner/vehicle_form.php') ?>">
                 <input type="hidden" name="csrf" value="<?= csrfToken() ?>">
                 
                 <div class="grid grid-2">

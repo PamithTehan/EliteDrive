@@ -107,7 +107,7 @@ require __DIR__ . '/../../includes/partials/head.php';
             payData.append('amount', "<?= $price ?>");
             payData.append('payment_token', 'tok_mock_' + Math.random().toString(36).substring(7));
             
-            const payRes = await fetch('/api/payments/process.php', {
+            const payRes = await fetch('<?= baseUrl('/api/payments/process.php') ?>', {
                 method: 'POST',
                 body: payData
             });
@@ -131,7 +131,7 @@ require __DIR__ . '/../../includes/partials/head.php';
             formData.append('pickup_location', "<?= $pickupLocation ?>");
             formData.append('transaction_id', payResult.transaction_id);
 
-            const res = await fetch('/api/bookings/create.php', {
+            const res = await fetch('<?= baseUrl('/api/bookings/create.php') ?>', {
                 method: 'POST',
                 body: formData
             });
@@ -145,7 +145,7 @@ require __DIR__ . '/../../includes/partials/head.php';
                 
                 // Redirect to borrower dashboard
                 setTimeout(() => {
-                    window.location.href = '/borrower/my_bookings.php';
+                    window.location.href = '<?= baseUrl('/borrower/my_bookings.php') ?>';
                 }, 2000);
             } else {
                 throw new Error(data.error || 'Failed to create booking.');
