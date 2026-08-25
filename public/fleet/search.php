@@ -67,7 +67,11 @@ require __DIR__ . '/../../includes/partials/head.php';
             }
             const vehicles = await res.json();
             
-            if (vehicles.length === 0) {
+            if (vehicles.error) {
+                throw new Error(`API Error: ${vehicles.error} (File: ${vehicles.file}, Line: ${vehicles.line})`);
+            }
+            
+            if (!Array.isArray(vehicles) || vehicles.length === 0) {
                 resultsGrid.innerHTML = `
                     <div style="grid-column: 1 / -1; text-align: center; padding: var(--space-lg); background: #fff; border-radius: var(--radius-lg); border: 1px solid var(--color-outline);">
                         <p class="body-lg" style="color:var(--color-secondary);">No vehicles found matching your criteria.</p>
