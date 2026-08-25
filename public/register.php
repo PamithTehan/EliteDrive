@@ -4,7 +4,7 @@ require __DIR__ . '/../includes/auth.php';
 require __DIR__ . '/../includes/functions.php';
 
 if (currentUser()) {
-    header('Location: /');
+    header('Location: ' . baseUrl('/'));
     exit;
 }
 
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     unset($userRow['password_hash']);
                     loginUser($userRow);
                     
-                    header('Location: /');
+                    header('Location: ' . baseUrl('/'));
                     exit;
                 } catch (Exception $e) {
                     $error = 'An error occurred during registration. Please try again.';

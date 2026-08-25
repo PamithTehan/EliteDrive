@@ -4,7 +4,7 @@ require __DIR__ . '/../includes/auth.php';
 require __DIR__ . '/../includes/functions.php';
 
 if (currentUser()) {
-    header('Location: /');
+    header('Location: ' . baseUrl('/'));
     exit;
 }
 
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($userRow && password_verify($password, $userRow['password_hash'])) {
                 unset($userRow['password_hash']);
                 loginUser($userRow);
-                header('Location: /');
+                header('Location: ' . baseUrl('/'));
                 exit;
             } else {
                 $error = 'Invalid email or password.';

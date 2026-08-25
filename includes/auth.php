@@ -1,5 +1,6 @@
 <?php
 // includes/auth.php
+require_once __DIR__ . '/functions.php';
 
 session_start([
     'cookie_httponly' => true,
@@ -13,7 +14,7 @@ function currentUser(): ?array {
 
 function requireLogin(): void {
     if (!currentUser()) {
-        header('Location: /login.php');
+        header('Location: ' . baseUrl('/login.php'));
         exit;
     }
 }
@@ -36,6 +37,6 @@ function loginUser(array $userRow): void {
 function logoutUser(): void {
     session_destroy();
     $_SESSION = [];
-    header('Location: /');
+    header('Location: ' . baseUrl('/'));
     exit;
 }
