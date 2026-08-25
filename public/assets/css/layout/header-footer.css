@@ -1,0 +1,4 @@
+.site-header { display: flex; align-items: center; justify-content: space-between; padding: var(--space-md) var(--margin-desktop); background: #fff; }
+.site-nav a { margin-inline: var(--space-md); color: var(--color-secondary); }
+.site-nav a.active { color: var(--color-primary); border-bottom: 2px solid var(--color-primary); }
+.site-footer { background: var(--color-surface-container, #f2f4f6); padding: var(--space-lg) var(--margin-desktop); }
