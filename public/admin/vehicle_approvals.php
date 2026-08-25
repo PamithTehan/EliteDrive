@@ -18,8 +18,8 @@ require __DIR__ . '/../../includes/partials/head.php';
                 <p class="body-md">Manage platform</p>
                 <hr style="border:0; border-top: 1px solid var(--color-outline); margin: var(--space-md) 0;">
                 <ul class="stack-sm" style="list-style:none; padding:0;">
-                    <li><a href="/admin/vehicle_approvals.php" class="btn btn-ghost" style="width:100%; justify-content:flex-start; font-weight: bold;">Vehicle Approvals</a></li>
-                    <li><a href="/admin/verification_queue.php" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">Verification Queue</a></li>
+                    <li><a href="<?= baseUrl('/admin/vehicle_approvals.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start; font-weight: bold;">Vehicle Approvals</a></li>
+                    <li><a href="<?= baseUrl('/admin/verification_queue.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">Verification Queue</a></li>
                 </ul>
             </div>
         </div>
@@ -54,7 +54,7 @@ require __DIR__ . '/../../includes/partials/head.php';
     
     async function loadQueue() {
         try {
-            const res = await fetch('/api/vehicles/pending.php');
+            const res = await fetch('<?= baseUrl('/api/vehicles/pending.php') ?>');
             const rows = await res.json();
             const tbody = document.querySelector('#queue-body');
             
@@ -86,7 +86,7 @@ require __DIR__ . '/../../includes/partials/head.php';
             btn.disabled = true;
             
             try {
-                const res = await fetch('/api/vehicles/approve.php', { 
+                const res = await fetch('<?= baseUrl('/api/vehicles/approve.php') ?>', { 
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

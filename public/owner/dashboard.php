@@ -24,8 +24,8 @@ require __DIR__ . '/../../includes/partials/head.php';
                 <p class="body-md">Owner Dashboard</p>
                 <hr style="border:0; border-top: 1px solid var(--color-outline); margin: var(--space-md) 0;">
                 <ul class="stack-sm" style="list-style:none; padding:0;">
-                    <li><a href="/owner/dashboard.php" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">My Vehicles</a></li>
-                    <li><a href="/owner/bookings.php" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">Bookings</a></li>
+                    <li><a href="<?= baseUrl('/owner/dashboard.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">My Vehicles</a></li>
+                    <li><a href="<?= baseUrl('/owner/bookings.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">Bookings</a></li>
                 </ul>
             </div>
         </div>
@@ -34,7 +34,7 @@ require __DIR__ . '/../../includes/partials/head.php';
     <main class="dashboard-content" style="grid-column: 2 / 4;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-md);">
             <h1 class="headline-lg">My Vehicles</h1>
-            <a href="/owner/vehicle_form.php" class="btn btn-primary">Add Vehicle</a>
+            <a href="<?= baseUrl('/owner/vehicle_form.php') ?>" class="btn btn-primary">Add Vehicle</a>
         </div>
         
         <?php if (empty($vehicles)): ?>

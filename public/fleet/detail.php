@@ -46,7 +46,7 @@ require __DIR__ . '/../../includes/partials/head.php';
         <div class="booking-card">
             <h3 class="headline-lg" style="color:var(--color-primary); margin-bottom: var(--space-sm);">$<?= escapeHtml($vehicle['daily_rate']) ?> <span class="body-md" style="color:var(--color-secondary); font-weight:normal;">/ day</span></h3>
             
-            <form method="POST" action="/borrower/booking_confirm.php" id="booking-form">
+            <form method="POST" action="<?= baseUrl('/borrower/booking_confirm.php') ?>" id="booking-form">
                 <input type="hidden" name="csrf" value="<?= csrfToken() ?>">
                 <input type="hidden" name="vehicle_id" value="<?= $vehicle['id'] ?>">
                 
@@ -88,7 +88,7 @@ require __DIR__ . '/../../includes/partials/head.php';
                 <?php if (currentUser()): ?>
                     <button type="submit" class="btn btn-primary" style="width: 100%;">Continue to Booking</button>
                 <?php else: ?>
-                    <a href="/login.php" class="btn btn-primary" style="width: 100%; display:block; text-align:center;">Log in to Book</a>
+                    <a href="<?= baseUrl('/login.php') ?>" class="btn btn-primary" style="width: 100%; display:block; text-align:center;">Log in to Book</a>
                 <?php endif; ?>
             </form>
         </div>

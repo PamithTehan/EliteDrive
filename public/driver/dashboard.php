@@ -24,8 +24,8 @@ require __DIR__ . '/../../includes/partials/head.php';
                 <p class="body-md">Driver Dashboard</p>
                 <hr style="border:0; border-top: 1px solid var(--color-outline); margin: var(--space-md) 0;">
                 <ul class="stack-sm" style="list-style:none; padding:0;">
-                    <li><a href="/driver/dashboard.php" class="btn btn-ghost" style="width:100%; justify-content:flex-start; font-weight: bold;">Overview</a></li>
-                    <li><a href="/driver/assignments.php" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">Assignments</a></li>
+                    <li><a href="<?= baseUrl('/driver/dashboard.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start; font-weight: bold;">Overview</a></li>
+                    <li><a href="<?= baseUrl('/driver/assignments.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">Assignments</a></li>
                 </ul>
             </div>
         </div>
@@ -51,7 +51,7 @@ require __DIR__ . '/../../includes/partials/head.php';
                 <div class="card-body">
                     <h2 class="headline-md" style="margin-bottom: var(--space-sm);">Upload Driving License</h2>
                     <p class="body-md" style="margin-bottom: var(--space-md); color:var(--color-secondary);">You must upload a valid driving license to start accepting trips.</p>
-                    <form method="POST" action="/driver/dashboard.php" enctype="multipart/form-data">
+                    <form method="POST" action="<?= baseUrl('/driver/dashboard.php') ?>" enctype="multipart/form-data">
                         <!-- Simplified mock upload for now -->
                         <div class="form-group">
                             <input type="file" name="license_doc" class="input" required>

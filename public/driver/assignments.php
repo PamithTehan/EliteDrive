@@ -31,8 +31,8 @@ require __DIR__ . '/../../includes/partials/head.php';
                 <p class="body-md">Driver Dashboard</p>
                 <hr style="border:0; border-top: 1px solid var(--color-outline); margin: var(--space-md) 0;">
                 <ul class="stack-sm" style="list-style:none; padding:0;">
-                    <li><a href="/driver/dashboard.php" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">Overview</a></li>
-                    <li><a href="/driver/assignments.php" class="btn btn-ghost" style="width:100%; justify-content:flex-start; font-weight: bold;">Assignments</a></li>
+                    <li><a href="<?= baseUrl('/driver/dashboard.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">Overview</a></li>
+                    <li><a href="<?= baseUrl('/driver/assignments.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start; font-weight: bold;">Assignments</a></li>
                 </ul>
             </div>
         </div>

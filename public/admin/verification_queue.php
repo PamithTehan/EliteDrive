@@ -18,8 +18,8 @@ require __DIR__ . '/../../includes/partials/head.php';
                 <p class="body-md">Manage platform</p>
                 <hr style="border:0; border-top: 1px solid var(--color-outline); margin: var(--space-md) 0;">
                 <ul class="stack-sm" style="list-style:none; padding:0;">
-                    <li><a href="/admin/vehicle_approvals.php" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">Vehicle Approvals</a></li>
-                    <li><a href="/admin/verification_queue.php" class="btn btn-ghost" style="width:100%; justify-content:flex-start; font-weight: bold;">Verification Queue</a></li>
+                    <li><a href="<?= baseUrl('/admin/vehicle_approvals.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">Vehicle Approvals</a></li>
+                    <li><a href="<?= baseUrl('/admin/verification_queue.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start; font-weight: bold;">Verification Queue</a></li>
                 </ul>
             </div>
         </div>
@@ -54,7 +54,7 @@ require __DIR__ . '/../../includes/partials/head.php';
     
     async function loadQueue() {
         try {
-            const res = await fetch('/api/licenses/pending.php');
+            const res = await fetch('<?= baseUrl('/api/licenses/pending.php') ?>');
             const rows = await res.json();
             const tbody = document.querySelector('#queue-body');
             
@@ -68,7 +68,7 @@ require __DIR__ . '/../../includes/partials/head.php';
                     <td>${escapeHtml(r.full_name)}</td>
                     <td>${escapeHtml(r.license_number)}</td>
                     <td>${escapeHtml(r.expiry_date)}</td>
-                    <td><a href="/document.php?type=license&id=${r.id}" target="_blank" style="color:var(--color-accent); text-decoration:underline;">View Doc</a></td>
+                    <td><a href="<?= baseUrl('/document.php') ?>?type=license&id=${r.id}" target="_blank" style="color:var(--color-accent); text-decoration:underline;">View Doc</a></td>
                     <td>
                         <button class="btn btn-primary btn-approve" data-id="${r.id}" style="padding: 4px 12px; font-size: 12px;">Approve</button>
                         <button class="btn btn-ghost btn-reject" data-id="${r.id}" style="padding: 4px 12px; font-size: 12px; color: var(--color-error);">Reject</button>
@@ -95,7 +95,7 @@ require __DIR__ . '/../../includes/partials/head.php';
             }
             
             try {
-                const res = await fetch('/api/licenses/verify.php', { 
+                const res = await fetch('<?= baseUrl('/api/licenses/verify.php') ?>', { 
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
