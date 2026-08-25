@@ -60,8 +60,11 @@ require __DIR__ . '/../../includes/partials/head.php';
         const maxPrice = priceRange.value;
         
         try {
-            const url = `/api/vehicles/search.php?category=${encodeURIComponent(category)}&max_price=${encodeURIComponent(maxPrice)}`;
+            const url = `<?= baseUrl('/api/vehicles/search.php') ?>?category=${encodeURIComponent(category)}&max_price=${encodeURIComponent(maxPrice)}`;
             const res = await fetch(url);
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
             const vehicles = await res.json();
             
             if (vehicles.length === 0) {
@@ -76,8 +79,8 @@ require __DIR__ . '/../../includes/partials/head.php';
                 <div class="card">
                     <div class="card-media">
                         <!-- Image placeholder -->
-                        <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#ccc;">
-                            [Image]
+                        <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#ccc; overflow: hidden;">
+                            ${v.photo_path ? `<img src="${escapeHtml(v.photo_path)}" style="width:100%; height:100%; object-fit:cover;" alt="Vehicle">` : '[No Image]'}
                         </div>
                     </div>
                     <div class="card-body">
@@ -86,14 +89,18 @@ require __DIR__ . '/../../includes/partials/head.php';
                             <span class="badge badge-${v.category.toLowerCase()}">${escapeHtml(v.category)}</span>
                         </div>
                         <div class="card-price" style="margin-bottom: var(--space-md);">$${escapeHtml(v.daily_rate)}<span style="font-size:14px; font-weight:normal; color:var(--color-secondary);">/day</span></div>
-                        <a href="/fleet/detail.php?id=${v.id}" class="btn btn-primary" style="width:100%;">View Details</a>
+                        <a href="<?= baseUrl('/fleet/detail.php') ?>?id=${v.id}" class="btn btn-primary" style="width:100%;">View Details</a>
                     </div>
                 </div>
             `).join('');
             
         } catch (e) {
-            console.error(e);
-            resultsGrid.innerHTML = `<p>Error loading vehicles.</p>`;
+            console.error("Fetch error:", e);
+            resultsGrid.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: var(--space-lg); background: #ffebee; border-radius: var(--radius-lg); border: 1px solid #ffcdd2; color: #c62828;">
+                    <p class="body-lg">Error loading vehicles. Please check the server connection and try again.</p>
+                    <p class="body-sm" style="margin-top: 8px;">Details: ${escapeHtml(e.message)}</p>
+                </div>`;
         }
     }
 
