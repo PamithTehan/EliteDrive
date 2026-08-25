@@ -1,0 +1,4 @@
+.alert { padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); margin-bottom: var(--space-md); }
+.alert-success { background: #dcfce7; color: #14532d; }
+.alert-error   { background: #fee2e2; color: #7f1d1d; }
+.trust-badge { display: flex; align-items: center; gap: var(--space-sm); }
