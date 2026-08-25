@@ -73,3 +73,11 @@ function resolveLicenseRequirement(array $booking, PDO $db): array {
         'license_status'     => $license['status'] ?? 'missing',
     ];
 }
+
+function baseUrl(string $path = ''): string {
+    static $config = null;
+    if ($config === null) {
+        $config = require __DIR__ . '/../config/config.php';
+    }
+    return rtrim($config['base_url'], '/') . '/' . ltrim($path, '/');
+}
