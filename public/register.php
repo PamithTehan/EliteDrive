@@ -113,7 +113,7 @@ require __DIR__ . '/../includes/partials/head.php';
         </form>
         
         <div class="auth-footer">
-            Already have an account? <a href="vehical rental system\public\login.php" style="color: var(--color-accent);">Log In</a>
+            Already have an account? <a href="<?= baseUrl('/login.php') ?>" style="color: var(--color-accent);">Log In</a>
         </div>
     </div>
 </div>

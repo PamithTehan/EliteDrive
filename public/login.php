@@ -66,7 +66,7 @@ require __DIR__ . '/../includes/partials/head.php';
         </form>
         
         <div class="auth-footer">
-            Don't have an account? <a href="vehical rental system\public\register.php" style="color: var(--color-accent);">Sign Up</a>
+            Don't have an account? <a href="<?= baseUrl('/register.php') ?>" style="color: var(--color-accent);">Sign Up</a>
         </div>
     </div>
 </div>
