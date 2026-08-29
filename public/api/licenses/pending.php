@@ -7,7 +7,7 @@ header('Content-Type: application/json');
 
 $db = getDb();
 $stmt = $db->query(
-    "SELECT dl.id, u.full_name, dl.license_number, dl.expiry_date, dl.document_path
+    "SELECT dl.id, u.full_name, dl.license_number, dl.expiry_date, dl.upload_format
      FROM driving_licenses dl 
      JOIN users u ON u.id = dl.user_id
      WHERE dl.status = 'pending'
