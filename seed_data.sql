@@ -12,10 +12,17 @@ INSERT INTO `users` (`id`, `full_name`, `email`, `password_hash`, `contact_numbe
 (7, 'Olivia Davis (Borrower)', 'olivia.d@example.com', '$2y$10$Qx/h1C8X/l9fL9Pq0vH/QOf9D0hI00vVfS8b.W0T/5P6QfXk916tW', '555-0106', 0, 0, 1, 0, '2023-10-07 13:25:00', '2023-10-07 13:25:00');
 
 -- 2. Insert Driving Licenses (For Drivers & some Borrowers)
-INSERT INTO `driving_licenses` (`id`, `user_id`, `license_number`, `expiry_date`, `document_path`, `status`, `reviewed_by`, `reviewed_at`, `created_at`) VALUES
-(1, 4, 'DL-8492019', '2028-12-31', 'licenses/mock_license_david.jpg', 'verified', 1, '2023-10-05 10:00:00', '2023-10-04 15:00:00'),
-(2, 5, 'DL-3394821', '2025-06-15', 'licenses/mock_license_emma.jpg', 'verified', 1, '2023-10-06 10:00:00', '2023-10-05 17:00:00'),
-(3, 6, 'DL-9948211', '2027-01-20', 'licenses/mock_license_james.pdf', 'pending', NULL, NULL, '2023-10-06 09:00:00');
+INSERT INTO `driving_licenses` (`id`, `user_id`, `license_number`, `expiry_date`, `upload_format`, `status`, `reviewed_by`, `reviewed_at`, `created_at`) VALUES
+(1, 4, 'DL-8492019', '2028-12-31', 'image', 'verified', 1, '2023-10-05 10:00:00', '2023-10-04 15:00:00'),
+(2, 5, 'DL-3394821', '2025-06-15', 'image', 'verified', 1, '2023-10-06 10:00:00', '2023-10-05 17:00:00'),
+(3, 6, 'DL-9948211', '2027-01-20', 'pdf', 'pending', NULL, NULL, '2023-10-06 09:00:00');
+
+INSERT INTO `driving_license_images` (`id`, `license_id`, `front_image_path`, `back_image_path`) VALUES
+(1, 1, 'licenses/mock_license_david_front.jpg', 'licenses/mock_license_david_back.jpg'),
+(2, 2, 'licenses/mock_license_emma_front.jpg', 'licenses/mock_license_emma_back.jpg');
+
+INSERT INTO `driving_license_pdfs` (`id`, `license_id`, `file_path`) VALUES
+(1, 3, 'licenses/mock_license_james.pdf');
 
 -- 3. Insert Vehicles
 INSERT INTO `vehicles` (`id`, `owner_id`, `make`, `model`, `category`, `daily_rate`, `location`, `description`, `status`, `created_at`) VALUES

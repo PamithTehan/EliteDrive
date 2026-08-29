@@ -22,7 +22,7 @@ CREATE TABLE driving_licenses (
     user_id INT NOT NULL,
     license_number VARCHAR(100) NOT NULL,
     expiry_date DATE NOT NULL,
-    document_path VARCHAR(255) NOT NULL,
+    upload_format ENUM('pdf', 'image') NOT NULL DEFAULT 'pdf',
     status ENUM('pending', 'verified', 'rejected', 'expired') DEFAULT 'pending',
     rejection_reason TEXT,
     reviewed_by INT NULL,
@@ -30,6 +30,21 @@ CREATE TABLE driving_licenses (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (reviewed_by) REFERENCES users(id) ON DELETE SET NULL
+);
+
+CREATE TABLE driving_license_pdfs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    license_id INT NOT NULL,
+    file_path VARCHAR(255) NOT NULL,
+    FOREIGN KEY (license_id) REFERENCES driving_licenses(id) ON DELETE CASCADE
+);
+
+CREATE TABLE driving_license_images (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    license_id INT NOT NULL,
+    front_image_path VARCHAR(255) NOT NULL,
+    back_image_path VARCHAR(255) NOT NULL,
+    FOREIGN KEY (license_id) REFERENCES driving_licenses(id) ON DELETE CASCADE
 );
 
 CREATE TABLE vehicles (
