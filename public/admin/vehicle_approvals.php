@@ -55,7 +55,16 @@ require_once __DIR__ . '/../../includes/partials/head.php';
     async function loadQueue() {
         try {
             const res = await fetch('<?= baseUrl('/api/vehicles/pending.php') ?>');
-            const rows = await res.json();
+            const text = await res.text();
+            let rows;
+            try {
+                rows = JSON.parse(text);
+            } catch (err) {
+                console.error("API Error Response:", text);
+                document.querySelector('#queue-body').innerHTML = `<tr><td colspan="5" style="color:red;">Error loading data. Check console. Response: ${escapeHtml(text).substring(0, 100)}...</td></tr>`;
+                return;
+            }
+            
             const tbody = document.querySelector('#queue-body');
             
             if (rows.length === 0) {
@@ -85,6 +94,15 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             const decision = btn.matches('.btn-approve') ? 'approved' : 'rejected';
             btn.disabled = true;
             
+            let reason = null;
+            if (decision === 'rejected') {
+                reason = prompt('Please provide a reason for rejection:');
+                if (reason === null) {
+                    btn.disabled = false;
+                    return; // Cancelled
+                }
+            }
+            
             try {
                 const res = await fetch('<?= baseUrl('/api/vehicles/approve.php') ?>', { 
                     method: 'POST',
@@ -94,6 +112,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                     body: JSON.stringify({
                         vehicle_id: btn.dataset.id,
                         decision: decision,
+                        reason: reason,
                         csrf: csrfToken
                     })
                 });

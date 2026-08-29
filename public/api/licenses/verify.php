@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '/../../includes/db.php';
-require_once __DIR__ . '/../../includes/auth.php';
-require_once __DIR__ . '/../../includes/functions.php';
+require_once __DIR__ . '/../../../includes/db.php';
+require_once __DIR__ . '/../../../includes/auth.php';
+require_once __DIR__ . '/../../../includes/functions.php';
 
 requireRole('admin');
 header('Content-Type: application/json');
@@ -31,7 +31,12 @@ if (!$id || !in_array($decision, $validDecisions, true)) {
 $db = getDb();
 $user = currentUser();
 
-$stmt = $db->prepare('UPDATE driving_licenses SET status = ?, reviewed_by = ?, reviewed_at = NOW(), rejection_reason = ? WHERE id = ?');
-$stmt->execute([$decision, $user['id'], $reason, $id]);
+$stmt = $db->prepare('UPDATE driving_licenses SET status = ?, reviewed_by = ?, reviewed_at = NOW() WHERE id = ?');
+$stmt->execute([$decision, $user['id'], $id]);
+
+if ($decision === 'rejected' && $reason) {
+    $logStmt = $db->prepare('INSERT INTO rejection_logs (entity_type, entity_id, reason, rejected_by) VALUES (?, ?, ?, ?)');
+    $logStmt->execute(['license', $id, $reason, $user['id']]);
+}
 
 echo json_encode(['ok' => true]);
