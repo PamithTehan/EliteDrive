@@ -63,17 +63,26 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                 return;
             }
             
-            tbody.innerHTML = rows.map(r => `
+            tbody.innerHTML = rows.map(r => {
+                let docLinks = '';
+                if (r.upload_format === 'pdf') {
+                    docLinks = `<a href="<?= baseUrl('/document.php') ?>?type=license_pdf&id=${r.id}" target="_blank" style="color:var(--color-accent); text-decoration:underline;">View PDF</a>`;
+                } else {
+                    docLinks = `<a href="<?= baseUrl('/document.php') ?>?type=license_front&id=${r.id}" target="_blank" style="color:var(--color-accent); text-decoration:underline;">Front</a> | <a href="<?= baseUrl('/document.php') ?>?type=license_back&id=${r.id}" target="_blank" style="color:var(--color-accent); text-decoration:underline;">Back</a>`;
+                }
+
+                return `
                 <tr data-id="${r.id}">
                     <td>${escapeHtml(r.full_name)}</td>
                     <td>${escapeHtml(r.license_number)}</td>
                     <td>${escapeHtml(r.expiry_date)}</td>
-                    <td><a href="<?= baseUrl('/document.php') ?>?type=license&id=${r.id}" target="_blank" style="color:var(--color-accent); text-decoration:underline;">View Doc</a></td>
+                    <td>${docLinks}</td>
                     <td>
                         <button class="btn btn-primary btn-approve" data-id="${r.id}" style="padding: 4px 12px; font-size: 12px;">Approve</button>
                         <button class="btn btn-ghost btn-reject" data-id="${r.id}" style="padding: 4px 12px; font-size: 12px; color: var(--color-error);">Reject</button>
                     </td>
-                </tr>`).join('');
+                </tr>`;
+            }).join('');
         } catch (e) {
             console.error('Failed to load queue', e);
         }
