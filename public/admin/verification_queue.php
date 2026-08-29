@@ -55,7 +55,16 @@ require_once __DIR__ . '/../../includes/partials/head.php';
     async function loadQueue() {
         try {
             const res = await fetch('<?= baseUrl('/api/licenses/pending.php') ?>');
-            const rows = await res.json();
+            const text = await res.text();
+            let rows;
+            try {
+                rows = JSON.parse(text);
+            } catch (err) {
+                console.error("API Error Response:", text);
+                document.querySelector('#queue-body').innerHTML = `<tr><td colspan="5" style="color:red;">Error loading data. Check console. Response: ${escapeHtml(text).substring(0, 100)}...</td></tr>`;
+                return;
+            }
+            
             const tbody = document.querySelector('#queue-body');
             
             if (rows.length === 0) {
