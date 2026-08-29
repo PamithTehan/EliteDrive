@@ -77,9 +77,17 @@ function resolveLicenseRequirement(array $booking, PDO $db): array {
 }
 
 function baseUrl(string $path = ''): string {
-    static $config = null;
-    if ($config === null) {
-        $config = require __DIR__ . '/../config/config.php';
+    $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+    $publicPos = strpos($scriptName, '/public/');
+    
+    if ($publicPos !== false) {
+        // We are running in a subdirectory where /public/ is visible in the URL
+        $basePath = substr($scriptName, 0, $publicPos + 7);
+    } else {
+        // We are running directly from the public folder as document root
+        $basePath = '';
     }
-    return rtrim($config['base_url'], '/') . '/' . ltrim($path, '/');
+    
+    // Ensure properly formatted absolute path relative to the domain
+    return rtrim($basePath, '/') . '/' . ltrim($path, '/');
 }

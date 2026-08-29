@@ -1,10 +1,10 @@
 <?php
-require __DIR__ . '/../includes/db.php';
-require __DIR__ . '/../includes/auth.php';
-require __DIR__ . '/../includes/functions.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/functions.php';
 
 if (currentUser()) {
-    header('Location: ' . baseUrl('/'));
+    header('Location: ' . baseUrl('/index.php'));
     exit;
 }
 
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($userRow && password_verify($password, $userRow['password_hash'])) {
                 unset($userRow['password_hash']);
                 loginUser($userRow);
-                header('Location: ' . baseUrl('/'));
+                header('Location: ' . baseUrl('/index.php'));
                 exit;
             } else {
                 $error = 'Invalid email or password.';
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $extraCss = ['auth'];
-require __DIR__ . '/../includes/partials/head.php';
+require_once __DIR__ . '/../includes/partials/head.php';
 ?>
 
 <div class="container">
@@ -49,7 +49,7 @@ require __DIR__ . '/../includes/partials/head.php';
             <div class="alert alert-error"><?= escapeHtml($error) ?></div>
         <?php endif; ?>
 
-        <form method="POST" action="<?= baseUrl('/login.php') ?>">
+        <form method="POST" action="">
             <input type="hidden" name="csrf" value="<?= csrfToken() ?>">
             
             <div class="form-group">
@@ -71,4 +71,4 @@ require __DIR__ . '/../includes/partials/head.php';
     </div>
 </div>
 
-<?php require __DIR__ . '/../includes/partials/footer.php'; ?>
+<?php require_once __DIR__ . '/../includes/partials/footer.php'; ?>

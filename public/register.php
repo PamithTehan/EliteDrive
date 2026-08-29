@@ -1,10 +1,10 @@
 <?php
-require __DIR__ . '/../includes/db.php';
-require __DIR__ . '/../includes/auth.php';
-require __DIR__ . '/../includes/functions.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/functions.php';
 
 if (currentUser()) {
-    header('Location: ' . baseUrl('/'));
+    header('Location: ' . baseUrl('/index.php'));
     exit;
 }
 
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     unset($userRow['password_hash']);
                     loginUser($userRow);
                     
-                    header('Location: ' . baseUrl('/'));
+                    header('Location: ' . baseUrl('/index.php'));
                     exit;
                 } catch (Exception $e) {
                     $error = 'An error occurred during registration. Please try again.';
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $extraCss = ['auth'];
-require __DIR__ . '/../includes/partials/head.php';
+require_once __DIR__ . '/../includes/partials/head.php';
 ?>
 
 <div class="container">
@@ -68,7 +68,7 @@ require __DIR__ . '/../includes/partials/head.php';
             <div class="alert alert-error"><?= escapeHtml($error) ?></div>
         <?php endif; ?>
 
-        <form method="POST" action="<?= baseUrl('/register.php') ?>">
+        <form method="POST" action="">
             <input type="hidden" name="csrf" value="<?= csrfToken() ?>">
             
             <div class="form-group">
@@ -118,4 +118,4 @@ require __DIR__ . '/../includes/partials/head.php';
     </div>
 </div>
 
-<?php require __DIR__ . '/../includes/partials/footer.php'; ?>
+<?php require_once __DIR__ . '/../includes/partials/footer.php'; ?>
