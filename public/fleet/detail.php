@@ -1,7 +1,7 @@
 <?php
-require __DIR__ . '/../../includes/db.php';
-require __DIR__ . '/../../includes/auth.php';
-require __DIR__ . '/../../includes/functions.php';
+require_once __DIR__ . '/../../includes/db.php';
+require_once __DIR__ . '/../../includes/auth.php';
+require_once __DIR__ . '/../../includes/functions.php';
 
 $id = (int)($_GET['id'] ?? 0);
 if (!$id) {
@@ -21,7 +21,7 @@ if (!$vehicle) {
 }
 
 $extraCss = ['fleet-search'];
-require __DIR__ . '/../../includes/partials/head.php';
+require_once __DIR__ . '/../../includes/partials/head.php';
 ?>
 
 <div class="detail-hero">
@@ -97,4 +97,4 @@ require __DIR__ . '/../../includes/partials/head.php';
 
 <script src="/assets/js/booking-form.js"></script>
 
-<?php require __DIR__ . '/../../includes/partials/footer.php'; ?>
+<?php require_once __DIR__ . '/../../includes/partials/footer.php'; ?>

@@ -1,7 +1,7 @@
 <?php
-require __DIR__ . '/../includes/db.php';
-require __DIR__ . '/../includes/auth.php';
-require __DIR__ . '/../includes/functions.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/functions.php';
 
 if (currentUser()) {
     header('Location: ' . baseUrl('/'));
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $extraCss = ['auth'];
-require __DIR__ . '/../includes/partials/head.php';
+require_once __DIR__ . '/../includes/partials/head.php';
 ?>
 
 <div class="container">
@@ -118,4 +118,4 @@ require __DIR__ . '/../includes/partials/head.php';
     </div>
 </div>
 
-<?php require __DIR__ . '/../includes/partials/footer.php'; ?>
+<?php require_once __DIR__ . '/../includes/partials/footer.php'; ?>

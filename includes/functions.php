@@ -79,7 +79,7 @@ function resolveLicenseRequirement(array $booking, PDO $db): array {
 function baseUrl(string $path = ''): string {
     static $config = null;
     if ($config === null) {
-        $config = require __DIR__ . '/../config/config.php';
+        $config = require_once __DIR__ . '/../config/config.php';
     }
     return rtrim($config['base_url'], '/') . '/' . ltrim($path, '/');
 }

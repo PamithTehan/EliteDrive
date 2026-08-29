@@ -1,7 +1,7 @@
 <?php
-require __DIR__ . '/../../includes/db.php';
-require __DIR__ . '/../../includes/auth.php';
-require __DIR__ . '/../../includes/functions.php';
+require_once __DIR__ . '/../../includes/db.php';
+require_once __DIR__ . '/../../includes/auth.php';
+require_once __DIR__ . '/../../includes/functions.php';
 
 requireRole('borrower');
 $user = currentUser();
@@ -19,7 +19,7 @@ $stmt->execute([$user['id']]);
 $bookings = $stmt->fetchAll();
 
 $extraCss = ['dashboard'];
-require __DIR__ . '/../../includes/partials/head.php';
+require_once __DIR__ . '/../../includes/partials/head.php';
 ?>
 
 <div class="container grid grid-3" style="margin-top: var(--space-lg); margin-bottom: var(--space-lg);">
@@ -140,4 +140,4 @@ require __DIR__ . '/../../includes/partials/head.php';
     }
 </script>
 
-<?php require __DIR__ . '/../../includes/partials/footer.php'; ?>
+<?php require_once __DIR__ . '/../../includes/partials/footer.php'; ?>
