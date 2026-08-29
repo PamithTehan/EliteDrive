@@ -37,6 +37,6 @@ function loginUser(array $userRow): void {
 function logoutUser(): void {
     session_destroy();
     $_SESSION = [];
-    header('Location: ' . baseUrl('/'));
+    header('Location: ' . baseUrl('/index.php'));
     exit;
 }
