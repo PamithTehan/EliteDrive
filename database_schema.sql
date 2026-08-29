@@ -24,7 +24,6 @@ CREATE TABLE driving_licenses (
     expiry_date DATE NOT NULL,
     upload_format ENUM('pdf', 'image') NOT NULL DEFAULT 'pdf',
     status ENUM('pending', 'verified', 'rejected', 'expired') DEFAULT 'pending',
-    rejection_reason TEXT,
     reviewed_by INT NULL,
     reviewed_at TIMESTAMP NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -98,4 +97,14 @@ CREATE TABLE reviews (
     FOREIGN KEY (booking_id) REFERENCES bookings(id),
     FOREIGN KEY (reviewer_id) REFERENCES users(id),
     FOREIGN KEY (target_id) REFERENCES users(id)
+);
+
+CREATE TABLE rejection_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    entity_type ENUM('license', 'vehicle', 'booking', 'other') NOT NULL,
+    entity_id INT NOT NULL,
+    reason TEXT NOT NULL,
+    rejected_by INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (rejected_by) REFERENCES users(id) ON DELETE CASCADE
 );
