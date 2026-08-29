@@ -49,7 +49,22 @@ require_once __DIR__ . '/../../includes/partials/head.php';
     </main>
 </div>
 
+<!-- Document Modal -->
+<div id="doc-modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8);">
+    <div style="background-color: var(--color-surface); margin: 5% auto; padding: var(--space-md); border-radius: var(--radius-md); width: 90%; max-width: 900px; height: 85vh; display: flex; flex-direction: column; box-shadow: var(--shadow-lg);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm);">
+            <h3 class="headline-sm" style="margin: 0;">Document Viewer</h3>
+            <button id="close-modal" class="btn btn-ghost" style="padding: 4px 12px; font-size: 20px;">&times;</button>
+        </div>
+        <div id="doc-container" style="width: 100%; flex-grow: 1; border: 1px solid var(--color-outline); border-radius: var(--radius-sm); background: #eee; display: flex; align-items: center; justify-content: center; overflow: auto;">
+            <!-- Content loaded dynamically -->
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     const csrfToken = "<?= csrfToken() ?>";
     
     async function loadQueue() {
@@ -75,9 +90,9 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             tbody.innerHTML = rows.map(r => {
                 let docLinks = '';
                 if (r.upload_format === 'pdf') {
-                    docLinks = `<a href="<?= baseUrl('/document.php') ?>?type=license_pdf&id=${r.id}" target="_blank" style="color:var(--color-accent); text-decoration:underline;">View PDF</a>`;
+                    docLinks = `<a href="<?= baseUrl('/document.php') ?>?type=license_pdf&id=${r.id}" class="doc-link" style="color:var(--color-accent); text-decoration:underline;">View PDF</a>`;
                 } else {
-                    docLinks = `<a href="<?= baseUrl('/document.php') ?>?type=license_front&id=${r.id}" target="_blank" style="color:var(--color-accent); text-decoration:underline;">Front</a> | <a href="<?= baseUrl('/document.php') ?>?type=license_back&id=${r.id}" target="_blank" style="color:var(--color-accent); text-decoration:underline;">Back</a>`;
+                    docLinks = `<a href="<?= baseUrl('/document.php') ?>?type=license_front&id=${r.id}" class="doc-link" style="color:var(--color-accent); text-decoration:underline;">Front</a> | <a href="<?= baseUrl('/document.php') ?>?type=license_back&id=${r.id}" class="doc-link" style="color:var(--color-accent); text-decoration:underline;">Back</a>`;
                 }
 
                 return `
@@ -137,6 +152,52 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                 alert('Network error');
                 btn.disabled = false;
             }
+        } else if (e.target.matches('.doc-link')) {
+            e.preventDefault();
+            const url = e.target.getAttribute('href');
+            const container = document.getElementById('doc-container');
+            
+            if (url.includes('license_pdf')) {
+                container.innerHTML = `<canvas id="pdf-canvas" style="max-width:100%; object-fit:contain;"></canvas>`;
+                
+                const loadingTask = pdfjsLib.getDocument(url);
+                loadingTask.promise.then(pdf => {
+                    return pdf.getPage(1); // Render first page
+                }).then(page => {
+                    const scale = 1.5;
+                    const viewport = page.getViewport({ scale: scale });
+                    const canvas = document.getElementById('pdf-canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    
+                    const renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+                    page.render(renderContext);
+                }).catch(err => {
+                    container.innerHTML = `<p style="color:red;">Error loading PDF: ${err.message}</p>`;
+                });
+            } else {
+                container.innerHTML = `<img src="${url}" style="max-width:100%; max-height:100%; object-fit:contain;">`;
+            }
+            
+            document.getElementById('doc-modal').style.display = 'block';
+        }
+    });
+
+    document.getElementById('close-modal').addEventListener('click', () => {
+        document.getElementById('doc-modal').style.display = 'none';
+        document.getElementById('doc-container').innerHTML = '';
+    });
+
+    // Close modal when clicking outside of it
+    window.addEventListener('click', (e) => {
+        const modal = document.getElementById('doc-modal');
+        if (e.target === modal) {
+            modal.style.display = 'none';
+            document.getElementById('doc-container').innerHTML = '';
         }
     });
 

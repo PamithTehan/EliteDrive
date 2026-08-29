@@ -59,7 +59,22 @@ if (!file_exists($fullPath)) {
     exit('File missing on disk');
 }
 
-$mime = mime_content_type($fullPath);
+$ext = strtolower(pathinfo($fullPath, PATHINFO_EXTENSION));
+$mimes = [
+    'pdf' => 'application/pdf',
+    'jpg' => 'image/jpeg',
+    'jpeg' => 'image/jpeg',
+    'png' => 'image/png'
+];
+$mime = $mimes[$ext] ?? mime_content_type($fullPath);
+
+if (!$mime) {
+    $mime = 'application/octet-stream';
+}
+
 header('Content-Type: ' . $mime);
-header('Content-Disposition: inline; filename="document"');
+header('Content-Disposition: inline; filename="' . basename($fullPath) . '"');
+header('Content-Transfer-Encoding: binary');
+header('Accept-Ranges: bytes');
+header('Content-Length: ' . filesize($fullPath));
 readfile($fullPath);
