@@ -101,11 +101,12 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             <div class="alert alert-warning" style="background:#fef9c3; color:#713f12;">
                 <strong>License under review.</strong> You cannot accept assignments until an admin verifies your license.
             </div>
-        <?php elseif ($licenseStatus === 'rejected'): ?>
-            <div class="alert alert-error">
-                <strong>License rejected.</strong> Please upload a valid document.
-            </div>
         <?php else: ?>
+            <?php if ($licenseStatus === 'rejected'): ?>
+                <div class="alert alert-error" style="margin-bottom: var(--space-md);">
+                    <strong>License rejected.</strong> Please upload a valid document.
+                </div>
+            <?php endif; ?>
             <div class="card">
                 <div class="card-body">
                     <h2 class="headline-md" style="margin-bottom: var(--space-sm);">Upload Driving License</h2>

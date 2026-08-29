@@ -8,7 +8,7 @@ $user = currentUser();
 $type = $_GET['type'] ?? '';
 $id = (int)($_GET['id'] ?? 0);
 
-if (!$id || !in_array($type, ['license_pdf', 'license_front', 'license_back', 'id', 'vehicle_doc'], true)) {
+if (!$id || !in_array($type, ['license_pdf', 'license_pdf_b64', 'license_front', 'license_back', 'id', 'vehicle_doc'], true)) {
     http_response_code(400);
     exit('Invalid request');
 }
@@ -24,7 +24,7 @@ if (strpos($type, 'license_') === 0) {
     if ($row) {
         $isOwnerOfDoc = $row['user_id'] === $user['id'];
         
-        if ($type === 'license_pdf') {
+        if ($type === 'license_pdf' || $type === 'license_pdf_b64') {
             $stmt = $db->prepare('SELECT file_path FROM driving_license_pdfs WHERE license_id = ?');
             $stmt->execute([$id]);
             $path = $stmt->fetchColumn();
@@ -70,6 +70,12 @@ $mime = $mimes[$ext] ?? mime_content_type($fullPath);
 
 if (!$mime) {
     $mime = 'application/octet-stream';
+}
+
+if ($type === 'license_pdf_b64') {
+    header('Content-Type: application/json');
+    echo json_encode(['pdf_base64' => base64_encode(file_get_contents($fullPath))]);
+    exit;
 }
 
 header('Content-Type: ' . $mime);

@@ -160,8 +160,20 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             if (url.includes('license_pdf')) {
                 container.innerHTML = `<canvas id="pdf-canvas" style="max-width:100%; object-fit:contain;"></canvas>`;
                 
-                const loadingTask = pdfjsLib.getDocument(url);
-                loadingTask.promise.then(pdf => {
+                const b64Url = url.replace('type=license_pdf', 'type=license_pdf_b64');
+                
+                fetch(b64Url).then(res => res.json()).then(data => {
+                    if (!data.pdf_base64) throw new Error("Invalid PDF response");
+                    
+                    const binary = atob(data.pdf_base64);
+                    const uint8Array = new Uint8Array(binary.length);
+                    for (let i = 0; i < binary.length; i++) {
+                        uint8Array[i] = binary.charCodeAt(i);
+                    }
+                    
+                    const loadingTask = pdfjsLib.getDocument({ data: uint8Array });
+                    return loadingTask.promise;
+                }).then(pdf => {
                     return pdf.getPage(1); // Render first page
                 }).then(page => {
                     const scale = 1.5;
