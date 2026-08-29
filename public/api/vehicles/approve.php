@@ -27,8 +27,17 @@ if (!$id || !in_array($decision, $validDecisions, true)) {
     exit(json_encode(['error' => 'Invalid input']));
 }
 
+$reason = $input['reason'] ?? null;
+
 $db = getDb();
+$user = currentUser();
+
 $stmt = $db->prepare('UPDATE vehicles SET status = ? WHERE id = ?');
 $stmt->execute([$decision, $id]);
+
+if ($decision === 'rejected' && $reason) {
+    $logStmt = $db->prepare('INSERT INTO rejection_logs (entity_type, entity_id, reason, rejected_by) VALUES (?, ?, ?, ?)');
+    $logStmt->execute(['vehicle', $id, $reason, $user['id']]);
+}
 
 echo json_encode(['ok' => true]);

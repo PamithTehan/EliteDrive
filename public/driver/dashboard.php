@@ -8,9 +8,18 @@ $user = currentUser();
 $db = getDb();
 
 // Check license status
-$stmt = $db->prepare('SELECT status FROM driving_licenses WHERE user_id = ? ORDER BY created_at DESC LIMIT 1');
+$stmt = $db->prepare('SELECT id, status FROM driving_licenses WHERE user_id = ? ORDER BY created_at DESC LIMIT 1');
 $stmt->execute([$user['id']]);
-$licenseStatus = $stmt->fetchColumn();
+$licenseRow = $stmt->fetch();
+$licenseStatus = $licenseRow ? $licenseRow['status'] : null;
+$licenseId = $licenseRow ? $licenseRow['id'] : null;
+
+$rejectionReason = '';
+if ($licenseStatus === 'rejected' && $licenseId) {
+    $rStmt = $db->prepare('SELECT reason FROM rejection_logs WHERE entity_type = ? AND entity_id = ? ORDER BY created_at DESC LIMIT 1');
+    $rStmt->execute(['license', $licenseId]);
+    $rejectionReason = $rStmt->fetchColumn() ?: 'No reason provided.';
+}
 
 $error = '';
 $success = '';
@@ -104,7 +113,8 @@ require_once __DIR__ . '/../../includes/partials/head.php';
         <?php else: ?>
             <?php if ($licenseStatus === 'rejected'): ?>
                 <div class="alert alert-error" style="margin-bottom: var(--space-md);">
-                    <strong>License rejected.</strong> Please upload a valid document.
+                    <strong>License rejected.</strong> Please upload a valid document.<br>
+                    <span style="display:inline-block; margin-top:5px; font-size:0.9em; opacity:0.9;">Reason: <?= escapeHtml($rejectionReason) ?></span>
                 </div>
             <?php endif; ?>
             <div class="card">

@@ -94,6 +94,15 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             const decision = btn.matches('.btn-approve') ? 'approved' : 'rejected';
             btn.disabled = true;
             
+            let reason = null;
+            if (decision === 'rejected') {
+                reason = prompt('Please provide a reason for rejection:');
+                if (reason === null) {
+                    btn.disabled = false;
+                    return; // Cancelled
+                }
+            }
+            
             try {
                 const res = await fetch('<?= baseUrl('/api/vehicles/approve.php') ?>', { 
                     method: 'POST',
@@ -103,6 +112,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                     body: JSON.stringify({
                         vehicle_id: btn.dataset.id,
                         decision: decision,
+                        reason: reason,
                         csrf: csrfToken
                     })
                 });
