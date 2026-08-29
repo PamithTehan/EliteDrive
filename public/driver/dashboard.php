@@ -51,13 +51,60 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                 <div class="card-body">
                     <h2 class="headline-md" style="margin-bottom: var(--space-sm);">Upload Driving License</h2>
                     <p class="body-md" style="margin-bottom: var(--space-md); color:var(--color-secondary);">You must upload a valid driving license to start accepting trips.</p>
-                    <form method="POST" action="<?= baseUrl('/driver/dashboard.php') ?>" enctype="multipart/form-data">
-                        <!-- Simplified mock upload for now -->
-                        <div class="form-group">
-                            <input type="file" name="license_doc" class="input" required>
+                    
+
+                    <form method="POST" action="" enctype="multipart/form-data">
+                        <div class="drop-zone" id="drop-zone">
+                            <div class="drop-zone-icon">📄</div>
+                            <div class="drop-zone-text" id="drop-zone-text">
+                                Drag and drop your license document here or click to browse
+                            </div>
+                            <input type="file" name="license_doc" id="file-input" required>
                         </div>
                         <button type="submit" class="btn btn-primary">Upload License</button>
                     </form>
+                    
+                    <script>
+                        const dropZone = document.getElementById('drop-zone');
+                        const fileInput = document.getElementById('file-input');
+                        const dropZoneText = document.getElementById('drop-zone-text');
+
+                        // Click to open file dialog
+                        dropZone.addEventListener('click', () => fileInput.click());
+
+                        // Drag and drop events
+                        dropZone.addEventListener('dragover', (e) => {
+                            e.preventDefault();
+                            dropZone.classList.add('dragover');
+                        });
+
+                        dropZone.addEventListener('dragleave', () => {
+                            dropZone.classList.remove('dragover');
+                        });
+
+                        dropZone.addEventListener('drop', (e) => {
+                            e.preventDefault();
+                            dropZone.classList.remove('dragover');
+                            
+                            if (e.dataTransfer.files.length) {
+                                fileInput.files = e.dataTransfer.files;
+                                updateFileName();
+                            }
+                        });
+
+                        // File input change event (when user clicks and selects a file)
+                        fileInput.addEventListener('change', updateFileName);
+
+                        function updateFileName() {
+                            if (fileInput.files.length > 0) {
+                                dropZoneText.innerHTML = `<strong>Selected file:</strong> ${fileInput.files[0].name}`;
+                                dropZoneText.style.color = 'var(--color-primary)';
+                            } else {
+                                dropZoneText.innerHTML = 'Drag and drop your license document here or click to browse';
+                                dropZoneText.style.color = 'var(--color-secondary)';
+                            }
+                        }
+                    </script>
                 </div>
             </div>
         <?php endif; ?>
