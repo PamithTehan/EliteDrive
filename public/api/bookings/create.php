@@ -49,7 +49,9 @@ try {
         'license_status' => $check['license_status'],
         'message'    => $status === 'confirmed'
             ? 'Booking confirmed.'
-            : 'Booking pending — the required driving license is not yet verified.',
+            : ($check['license_status'] === 'assignment_pending'
+                ? 'Booking pending — waiting for an admin to assign a driver.'
+                : 'Booking pending — the required driving license is not yet verified.'),
     ]);
 } catch (Exception $e) {
     http_response_code(500);

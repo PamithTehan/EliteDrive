@@ -51,6 +51,14 @@ function resolveLicenseRequirement(array $booking, PDO $db): array {
     };
 
     if (!$userIdToCheck) {
+        if ($arrangement === 'hired') {
+            return [
+                'user_id_required'   => null,
+                'satisfied'          => false,
+                'license_status'     => 'assignment_pending',
+            ];
+        }
+        
         return [
             'user_id_required'   => null,
             'satisfied'          => false,

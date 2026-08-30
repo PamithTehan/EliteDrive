@@ -16,8 +16,21 @@ $vehicle = $stmt->fetch();
 
 if (!$vehicle) {
     http_response_code(404);
-    echo "Vehicle not found.";
-    exit;
+    exit('Vehicle not found.');
+}
+
+$isOwnerDriver = false;
+$stmt = $db->prepare("
+    SELECT u.is_driver, dl.status as license_status 
+    FROM users u 
+    LEFT JOIN driving_licenses dl ON dl.user_id = u.id 
+    WHERE u.id = ? ORDER BY dl.created_at DESC LIMIT 1
+");
+$stmt->execute([$vehicle['owner_id']]);
+$ownerDriverData = $stmt->fetch();
+
+if ($ownerDriverData && $ownerDriverData['is_driver'] == 1 && $ownerDriverData['license_status'] === 'verified') {
+    $isOwnerDriver = true;
 }
 
 $extraCss = ['fleet-search'];
@@ -70,9 +83,11 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                     <label style="display:block; margin-bottom:8px;">
                         <input type="radio" name="driver_arrangement" value="self" checked> I'll drive myself
                     </label>
+                    <?php if ($isOwnerDriver): ?>
                     <label style="display:block; margin-bottom:8px;">
                         <input type="radio" name="driver_arrangement" value="owner"> Owner drives (chauffeur)
                     </label>
+                    <?php endif; ?>
                     <label style="display:block;">
                         <input type="radio" name="driver_arrangement" value="hired"> Assign a hired driver
                     </label>
@@ -95,6 +110,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
     </aside>
 </div>
 
-<script src="/assets/js/booking-form.js"></script>
+<script>window.appBaseUrl = "<?= rtrim(baseUrl(), '/') ?>";</script>
+<script src="<?= baseUrl('/assets/js/booking-form.js') ?>"></script>
 
 <?php require_once __DIR__ . '/../../includes/partials/footer.php'; ?>
