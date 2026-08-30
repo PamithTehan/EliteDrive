@@ -101,25 +101,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
         btn.textContent = 'Processing Payment...';
         
         try {
-            // 1. Process mock payment
-            const payData = new FormData();
-            payData.append('csrf', csrfToken);
-            payData.append('amount', "<?= $price ?>");
-            payData.append('payment_token', 'tok_mock_' + Math.random().toString(36).substring(7));
-            
-            const payRes = await fetch('<?= baseUrl('/api/payments/process.php') ?>', {
-                method: 'POST',
-                body: payData
-            });
-            
-            const payResult = await payRes.json();
-            
-            if (!payRes.ok) {
-                throw new Error(payResult.error || 'Payment failed.');
-            }
-            
-            // 2. Create Booking
-            btn.textContent = 'Confirming Booking...';
+            btn.textContent = 'Redirecting to Payment...';
             
             const formData = new FormData();
             formData.append('csrf', csrfToken);
@@ -129,7 +111,6 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             formData.append('pickup_date', "<?= $pickupDate ?>");
             formData.append('return_date', "<?= $returnDate ?>");
             formData.append('pickup_location', "<?= $pickupLocation ?>");
-            formData.append('transaction_id', payResult.transaction_id);
 
             const res = await fetch('<?= baseUrl('/api/bookings/create.php') ?>', {
                 method: 'POST',
@@ -138,17 +119,11 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             
             const data = await res.json();
             
-            if (res.ok) {
-                document.getElementById('payment-status').textContent = 'Payment successful! Booking confirmed.';
-                document.getElementById('payment-status').style.display = 'block';
-                document.getElementById('payment-error').style.display = 'none';
-                
-                // Redirect to borrower dashboard
-                setTimeout(() => {
-                    window.location.href = '<?= baseUrl('/borrower/my_bookings.php') ?>';
-                }, 2000);
+            if (res.ok && data.stripe_url) {
+                // Redirect directly to Stripe Checkout
+                window.location.href = data.stripe_url;
             } else {
-                throw new Error(data.error || 'Failed to create booking.');
+                throw new Error(data.error || 'Failed to initialize payment.');
             }
         } catch (err) {
             document.getElementById('payment-error').textContent = err.message;

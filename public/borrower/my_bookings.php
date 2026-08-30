@@ -81,6 +81,10 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                                         <strong>Action Required:</strong> Your booking is held until the required driving license is verified by an admin.
                                     <?php endif; ?>
                                 </div>
+                            <?php elseif ($b['status'] === 'pending_payment'): ?>
+                                <div class="alert alert-warning" style="margin-top: var(--space-md); margin-bottom: 0; background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; padding: var(--space-sm); border-radius: var(--radius-sm);">
+                                    <strong>Payment Required:</strong> Your booking is awaiting payment. If you cancelled the payment, you may cancel this booking and try again.
+                                </div>
                             <?php endif; ?>
                             
                             <?php 
