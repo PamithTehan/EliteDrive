@@ -28,6 +28,20 @@ $booking = [
 
 $check = resolveLicenseRequirement($booking, $db);
 
+if (!isVehicleAvailable($booking['vehicle_id'], $booking['pickup_date'], $booking['return_date'], $db)) {
+    http_response_code(400);
+    echo json_encode(['error' => 'This vehicle is already booked for the selected dates.']);
+    exit;
+}
+
+if ($booking['driver_arrangement'] === 'hired' && $booking['assigned_driver_id']) {
+    if (!isDriverAvailable($booking['assigned_driver_id'], $booking['pickup_date'], $booking['return_date'], $db)) {
+        http_response_code(400);
+        echo json_encode(['error' => 'The selected driver is already booked for the selected dates.']);
+        exit;
+    }
+}
+
 // We always start with pending_payment now
 $status = 'pending_payment';
 
