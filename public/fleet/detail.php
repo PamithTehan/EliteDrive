@@ -10,7 +10,11 @@ if (!$id) {
 }
 
 $db = getDb();
-$stmt = $db->prepare('SELECT v.*, u.full_name as owner_name FROM vehicles v JOIN users u ON u.id = v.owner_id WHERE v.id = ? AND v.status = "approved"');
+$stmt = $db->prepare('SELECT v.*, u.full_name as owner_name, p.photo_path 
+                      FROM vehicles v 
+                      JOIN users u ON u.id = v.owner_id 
+                      LEFT JOIN vehicle_photos p ON p.vehicle_id = v.id AND p.is_primary = 1 
+                      WHERE v.id = ? AND v.status = "approved"');
 $stmt->execute([$id]);
 $vehicle = $stmt->fetch();
 
@@ -37,8 +41,17 @@ $extraCss = ['fleet-search'];
 require_once __DIR__ . '/../../includes/partials/head.php';
 ?>
 
-<div class="detail-hero">
-    <h1 class="headline-xl" style="color:var(--color-primary);"><?= escapeHtml($vehicle['make'] . ' ' . $vehicle['model']) ?></h1>
+<?php
+// Fallback to a high-quality stock car image if no photo is uploaded
+$imageUrl = !empty($vehicle['photo_path']) 
+    ? baseUrl($vehicle['photo_path']) 
+    : baseUrl('/assets/images/placeholder-car.jpg');
+
+$bgStyle = "background-image: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url('" . escapeHtml($imageUrl) . "'); background-size: cover; background-position: center;";
+$titleColor = "color: white;";
+?>
+<div class="detail-hero" style="<?= $bgStyle ?>">
+    <h1 class="headline-xl" style="<?= $titleColor ?>"><?= escapeHtml($vehicle['make'] . ' ' . $vehicle['model']) ?></h1>
 </div>
 
 <div class="container grid grid-3" style="margin-top: var(--space-lg); margin-bottom: var(--space-lg);">
