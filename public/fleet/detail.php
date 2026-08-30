@@ -118,13 +118,13 @@ $titleColor = "color: white;";
                 <input type="hidden" name="vehicle_id" value="<?= $vehicle['id'] ?>">
                 
                 <div class="form-group">
-                    <label class="form-label" for="pickup_date">Pick-up Date</label>
-                    <input type="date" id="pickup_date" name="pickup_date" class="input" required min="<?= date('Y-m-d') ?>">
+                    <label class="form-label" for="pickup_date">Pick-up Date & Time</label>
+                    <input type="datetime-local" id="pickup_date" name="pickup_date" class="input" required min="<?= date('Y-m-d\TH:i') ?>">
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label" for="return_date">Return Date</label>
-                    <input type="date" id="return_date" name="return_date" class="input" required min="<?= date('Y-m-d') ?>">
+                    <label class="form-label" for="return_date">Return Date & Time</label>
+                    <input type="datetime-local" id="return_date" name="return_date" class="input" required min="<?= date('Y-m-d\TH:i') ?>">
                 </div>
                 
                 <div class="form-group">
