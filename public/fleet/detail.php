@@ -23,6 +23,10 @@ if (!$vehicle) {
     exit('Vehicle not found.');
 }
 
+$stmtPhotos = $db->prepare('SELECT photo_path FROM vehicle_photos WHERE vehicle_id = ? ORDER BY is_primary DESC, id ASC');
+$stmtPhotos->execute([$id]);
+$allPhotos = $stmtPhotos->fetchAll(PDO::FETCH_COLUMN);
+
 $isOwnerDriver = false;
 $stmt = $db->prepare("
     SELECT d.user_id, dl.status as license_status 
@@ -64,6 +68,43 @@ $titleColor = "color: white;";
                 </div>
                 <h2 class="headline-md" style="margin-bottom: var(--space-sm);">About this vehicle</h2>
                 <p class="body-md" style="white-space:pre-wrap;"><?= escapeHtml($vehicle['description'] ?? 'No description provided.') ?></p>
+                
+                <?php if (!empty($allPhotos)): ?>
+                <h2 class="headline-md" style="margin-top: var(--space-lg); margin-bottom: var(--space-sm);">Photos</h2>
+                <div class="photo-slider-container" style="position: relative; overflow: hidden; border-radius: var(--radius-md); border: 1px solid var(--color-outline);">
+                    <div class="photo-slider" style="display: flex; transition: transform 0.3s ease;">
+                        <?php foreach ($allPhotos as $photo): ?>
+                            <?php $pUrl = (strpos($photo, 'http') === 0) ? $photo : baseUrl($photo); ?>
+                            <img src="<?= escapeHtml($pUrl) ?>" style="width: 100%; max-height: 400px; flex-shrink: 0; object-fit: cover;" alt="Vehicle Photo">
+                        <?php endforeach; ?>
+                    </div>
+                    <?php if (count($allPhotos) > 1): ?>
+                    <button class="slider-btn prev-btn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: none; width: 40px; height: 40px; cursor: pointer; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px;">&#10094;</button>
+                    <button class="slider-btn next-btn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: none; width: 40px; height: 40px; cursor: pointer; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px;">&#10095;</button>
+                    <?php endif; ?>
+                </div>
+                
+                <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const slider = document.querySelector('.photo-slider');
+                    const prevBtn = document.querySelector('.prev-btn');
+                    const nextBtn = document.querySelector('.next-btn');
+                    let currentIndex = 0;
+                    const totalSlides = <?= count($allPhotos) ?>;
+                    
+                    if (prevBtn && nextBtn && slider) {
+                        prevBtn.addEventListener('click', () => {
+                            currentIndex = (currentIndex > 0) ? currentIndex - 1 : totalSlides - 1;
+                            slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+                        });
+                        nextBtn.addEventListener('click', () => {
+                            currentIndex = (currentIndex < totalSlides - 1) ? currentIndex + 1 : 0;
+                            slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+                        });
+                    }
+                });
+                </script>
+                <?php endif; ?>
             </div>
         </div>
     </main>
@@ -77,13 +118,13 @@ $titleColor = "color: white;";
                 <input type="hidden" name="vehicle_id" value="<?= $vehicle['id'] ?>">
                 
                 <div class="form-group">
-                    <label class="form-label" for="pickup_date">Pick-up Date</label>
-                    <input type="date" id="pickup_date" name="pickup_date" class="input" required min="<?= date('Y-m-d') ?>">
+                    <label class="form-label" for="pickup_date">Pick-up Date & Time</label>
+                    <input type="datetime-local" id="pickup_date" name="pickup_date" class="input" required min="<?= date('Y-m-d\TH:i') ?>">
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label" for="return_date">Return Date</label>
-                    <input type="date" id="return_date" name="return_date" class="input" required min="<?= date('Y-m-d') ?>">
+                    <label class="form-label" for="return_date">Return Date & Time</label>
+                    <input type="datetime-local" id="return_date" name="return_date" class="input" required min="<?= date('Y-m-d\TH:i') ?>">
                 </div>
                 
                 <div class="form-group">

@@ -21,8 +21,8 @@ $booking = [
     'borrower_id'        => $user['id'],
     'driver_arrangement' => $_POST['driver_arrangement'], // owner|self|hired
     'assigned_driver_id' => !empty($_POST['driver_id']) ? (int) $_POST['driver_id'] : null,
-    'pickup_date'        => $_POST['pickup_date'],
-    'return_date'        => $_POST['return_date'],
+    'pickup_date'        => str_replace('T', ' ', $_POST['pickup_date']),
+    'return_date'        => str_replace('T', ' ', $_POST['return_date']),
     'pickup_location'    => $_POST['pickup_location'],
 ];
 
