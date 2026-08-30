@@ -16,16 +16,19 @@ function onArrangementChange(e) {
 async function loadAvailableDrivers() {
   const vehicleId = document.querySelector('[name="vehicle_id"]').value;
   try {
-      const res = await fetch(`/api/drivers/available.php?vehicle_id=${vehicleId}`);
+      const baseUrl = window.appBaseUrl || '';
+      const res = await fetch(`${baseUrl}/api/drivers/available.php?vehicle_id=${vehicleId}`);
       const drivers = await res.json();
       const select = document.querySelector('#driver-select');
       
       if (drivers.length === 0) {
-          select.innerHTML = '<option value="">No drivers currently available</option>';
+          select.innerHTML = '<option value="">No drivers available (Admin will assign)</option>';
           return;
       }
       
-      select.innerHTML = drivers.map(d => `<option value="${d.id}">${escapeHtml(d.full_name)}</option>`).join('');
+      let options = '<option value="">Let admin assign a driver</option>';
+      options += drivers.map(d => `<option value="${d.id}">${escapeHtml(d.full_name)}</option>`).join('');
+      select.innerHTML = options;
   } catch (err) {
       console.error('Failed to load drivers', err);
       const select = document.querySelector('#driver-select');
