@@ -30,6 +30,12 @@ try {
     $stmt->execute($params);
     $vehicles = $stmt->fetchAll();
 
+    foreach ($vehicles as &$v) {
+        if (!empty($v['photo_path']) && strpos($v['photo_path'], 'http') !== 0) {
+            $v['photo_path'] = baseUrl($v['photo_path']);
+        }
+    }
+
     echo json_encode($vehicles);
 } catch (\Throwable $e) {
     echo json_encode([

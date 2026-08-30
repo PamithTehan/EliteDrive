@@ -44,7 +44,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
 <?php
 // Fallback to a high-quality stock car image if no photo is uploaded
 $imageUrl = !empty($vehicle['photo_path']) 
-    ? baseUrl($vehicle['photo_path']) 
+    ? (strpos($vehicle['photo_path'], 'http') === 0 ? $vehicle['photo_path'] : baseUrl($vehicle['photo_path'])) 
     : baseUrl('/assets/images/placeholder-car.jpg');
 
 $bgStyle = "background-image: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url('" . escapeHtml($imageUrl) . "'); background-size: cover; background-position: center;";
