@@ -10,11 +10,24 @@ CREATE TABLE users (
     password_hash VARCHAR(255) NOT NULL,
     contact_number VARCHAR(50),
     is_admin TINYINT(1) DEFAULT 0,
-    is_owner TINYINT(1) DEFAULT 0,
-    is_driver TINYINT(1) DEFAULT 0,
-    is_borrower TINYINT(1) DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE borrowers (
+    user_id INT PRIMARY KEY,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE owners (
+    user_id INT PRIMARY KEY,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE drivers (
+    user_id INT PRIMARY KEY,
+    driving_preference ENUM('own_vehicles', 'any_vehicle') DEFAULT 'any_vehicle',
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE driving_licenses (
