@@ -20,6 +20,18 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             <h3 class="headline-md">Filters</h3>
             
             <div class="filter-group">
+                <div class="filter-group-title">Availability</div>
+                <div style="margin-bottom: 8px;">
+                    <label class="label-sm" style="color:var(--color-secondary);">Pick-up</label>
+                    <input type="date" id="filter-pickup" class="input" style="width:100%;" min="<?= date('Y-m-d') ?>">
+                </div>
+                <div>
+                    <label class="label-sm" style="color:var(--color-secondary);">Return</label>
+                    <input type="date" id="filter-return" class="input" style="width:100%;" min="<?= date('Y-m-d') ?>">
+                </div>
+            </div>
+            
+            <div class="filter-group">
                 <div class="filter-group-title">Category</div>
                 <label class="filter-option"><input type="radio" name="category" value="" checked> All</label>
                 <label class="filter-option"><input type="radio" name="category" value="Premium"> Premium</label>
@@ -58,9 +70,14 @@ require_once __DIR__ . '/../../includes/partials/head.php';
     async function loadVehicles() {
         const category = document.querySelector('input[name="category"]:checked').value;
         const maxPrice = priceRange.value;
+        const pickupDate = document.getElementById('filter-pickup').value;
+        const returnDate = document.getElementById('filter-return').value;
         
         try {
-            const url = `<?= baseUrl('/api/vehicles/search.php') ?>?category=${encodeURIComponent(category)}&max_price=${encodeURIComponent(maxPrice)}`;
+            let url = `<?= baseUrl('/api/vehicles/search.php') ?>?category=${encodeURIComponent(category)}&max_price=${encodeURIComponent(maxPrice)}`;
+            if (pickupDate && returnDate) {
+                url += `&pickup_date=${encodeURIComponent(pickupDate)}&return_date=${encodeURIComponent(returnDate)}`;
+            }
             const res = await fetch(url);
             if (!res.ok) {
                 throw new Error(`HTTP error! status: ${res.status}`);
@@ -118,6 +135,8 @@ require_once __DIR__ . '/../../includes/partials/head.php';
         priceDisplay.textContent = '$' + e.target.value;
     });
     priceRange.addEventListener('change', loadVehicles);
+    document.getElementById('filter-pickup').addEventListener('change', loadVehicles);
+    document.getElementById('filter-return').addEventListener('change', loadVehicles);
     
     // Initial load
     loadVehicles();

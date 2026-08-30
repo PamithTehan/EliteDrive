@@ -8,6 +8,15 @@ try {
     $db = getDb();
     $category = $_GET['category'] ?? '';
     $maxPrice = $_GET['max_price'] ?? '';
+    $pickupDate = $_GET['pickup_date'] ?? null;
+    $returnDate = $_GET['return_date'] ?? null;
+
+    if ($pickupDate) {
+        $pickupDate = explode('T', $pickupDate)[0] . ' 00:00:00';
+    }
+    if ($returnDate) {
+        $returnDate = explode('T', $returnDate)[0] . ' 23:59:59';
+    }
 
     $sql = "SELECT v.id, v.make, v.model, v.category, v.daily_rate, p.photo_path 
             FROM vehicles v 
@@ -22,6 +31,17 @@ try {
     if ($maxPrice && is_numeric($maxPrice)) {
         $sql .= " AND v.daily_rate <= ?";
         $params[] = $maxPrice;
+    }
+    if ($pickupDate && $returnDate) {
+        $sql .= " AND NOT EXISTS (
+                    SELECT 1 FROM bookings b 
+                    WHERE b.vehicle_id = v.id 
+                    AND b.status NOT IN ('cancelled', 'rejected')
+                    AND b.pickup_date < ? 
+                    AND b.return_date > ?
+                  )";
+        $params[] = $returnDate;
+        $params[] = $pickupDate;
     }
 
     $sql .= " ORDER BY v.created_at DESC";
