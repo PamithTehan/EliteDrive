@@ -18,8 +18,8 @@ if (!csrfCheck($_POST['csrf'] ?? '')) {
 
 $vehicleId = (int)$_POST['vehicle_id'];
 $driverArrangement = $_POST['driver_arrangement'];
-$pickupDate = $_POST['pickup_date'];
-$returnDate = $_POST['return_date'];
+$pickupDate = str_replace('T', ' ', $_POST['pickup_date']);
+$returnDate = str_replace('T', ' ', $_POST['return_date']);
 $pickupLocation = $_POST['pickup_location'];
 $driverId = $_POST['driver_id'] ?? null;
 
