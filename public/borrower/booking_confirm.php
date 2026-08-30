@@ -31,6 +31,20 @@ if (!$vehicle) {
     die('Vehicle not found.');
 }
 
+$errorMessage = '';
+if (!isVehicleAvailable($vehicleId, $pickupDate, $returnDate, $db)) {
+    $errorMessage = 'This vehicle is already booked for the selected dates. Please go back and choose different dates.';
+} elseif ($driverArrangement === 'hired' && $driverId && !isDriverAvailable((int)$driverId, $pickupDate, $returnDate, $db)) {
+    $errorMessage = 'The selected driver is already booked for the selected dates. Please go back and choose another driver.';
+}
+
+if ($errorMessage) {
+    require_once __DIR__ . '/../../includes/partials/head.php';
+    echo '<div class="container" style="margin-top: 40px; margin-bottom: 40px;"><div class="alert alert-error">'.escapeHtml($errorMessage).'</div><br><a href="javascript:history.back()" class="btn btn-primary">Go Back</a></div>';
+    require_once __DIR__ . '/../../includes/partials/footer.php';
+    exit;
+}
+
 $price = calculatePrice([
     'vehicle_id' => $vehicleId,
     'pickup_date' => $pickupDate,
