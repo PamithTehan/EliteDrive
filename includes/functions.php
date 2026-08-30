@@ -31,10 +31,23 @@ function calculatePrice(array $booking, PDO $db): float {
 
     $pickup = new DateTime($booking['pickup_date']);
     $return = new DateTime($booking['return_date']);
-    $days = (float) $pickup->diff($return)->days;
-    if ($days == 0) $days = 1;
+    
+    $diffSeconds = $return->getTimestamp() - $pickup->getTimestamp();
+    if ($diffSeconds <= 0) {
+        return 0.0;
+    }
 
-    return $dailyRate * $days;
+    // Convert to full hours (rounding up any partial hour)
+    $borrowPeriodInHours = (int) ceil($diffSeconds / 3600);
+    
+    $chargeBlock = intdiv($borrowPeriodInHours, 4);
+    $uncompletedChargeBlock = ($borrowPeriodInHours % 4 > 0) ? 1 : 0;
+    
+    $chargeForDayQuarter = $dailyRate / 4;
+    
+    $chargeTotal = ($chargeBlock + $uncompletedChargeBlock) * $chargeForDayQuarter;
+    
+    return $chargeTotal;
 }
 
 /**
