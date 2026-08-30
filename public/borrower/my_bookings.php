@@ -75,7 +75,11 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                             
                             <?php if ($b['status'] === 'pending_verification'): ?>
                                 <div class="alert alert-error" style="margin-top: var(--space-md); margin-bottom: 0;">
-                                    <strong>Action Required:</strong> Your booking is held until the required driving license is verified by an admin.
+                                    <?php if ($b['driver_arrangement'] === 'hired' && empty($b['assigned_driver_id'])): ?>
+                                        <strong>Pending:</strong> Waiting for an admin to assign a driver to your booking.
+                                    <?php else: ?>
+                                        <strong>Action Required:</strong> Your booking is held until the required driving license is verified by an admin.
+                                    <?php endif; ?>
                                 </div>
                             <?php endif; ?>
                             
