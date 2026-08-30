@@ -1,0 +1,48 @@
+.about-hero {
+    background-image: linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 100%), url('https://images.unsplash.com/photo-1603386329225-868f9b1ee6c9?q=80&w=2069&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    padding: 120px 0;
+}
+
+.section-padding {
+    padding: 80px 0;
+}
+
+.years-badge {
+    position: absolute;
+    bottom: -20px;
+    left: -20px;
+    background-color: #1a1a2e;
+    padding: 32px;
+    border-radius: var(--radius-md);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.value-card {
+    padding: 32px;
+    text-align: left;
+    border: 1px solid var(--color-outline);
+    background-color: white;
+}
+
+.value-card .icon-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background-color: #e0e7ff;
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.team-card img {
+    filter: grayscale(100%);
+    transition: filter 0.3s ease;
+}
+
+.team-card:hover img {
+    filter: grayscale(0%);
+}
