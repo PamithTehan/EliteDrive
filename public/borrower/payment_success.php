@@ -1,0 +1,84 @@
+<?php
+require_once __DIR__ . '/../../includes/db.php';
+require_once __DIR__ . '/../../includes/auth.php';
+require_once __DIR__ . '/../../includes/functions.php';
+
+requireRole('borrower');
+$db = getDb();
+$user = currentUser();
+
+$bookingId = (int)($_GET['booking_id'] ?? 0);
+if (!$bookingId) {
+    die('Invalid booking ID.');
+}
+
+// Get the session ID from the DB
+$stmt = $db->prepare('SELECT id, stripe_session_id, booking_id FROM payments WHERE booking_id = ? AND status = "pending"');
+$stmt->execute([$bookingId]);
+$payment = $stmt->fetch();
+
+if (!$payment || empty($payment['stripe_session_id'])) {
+    die('Payment not found or already processed.');
+}
+
+$sessionId = $payment['stripe_session_id'];
+
+$config = require __DIR__ . '/../../config/config.php';
+$stripeKey = $config['stripe_secret_key'] ?? '';
+
+// Verify session with Stripe
+$ch = curl_init('https://api.stripe.com/v1/checkout/sessions/' . urlencode($sessionId));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_USERPWD, $stripeKey . ':');
+$response = curl_exec($ch);
+$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+curl_close($ch);
+
+if ($httpCode !== 200) {
+    die('Failed to verify payment with Stripe.');
+}
+
+$session = json_decode($response, true);
+if ($session['payment_status'] !== 'paid') {
+    die('Payment not completed.');
+}
+
+// Update payment status
+if ($payment) {
+    $db->prepare('UPDATE payments SET status = "completed", stripe_payment_intent_id = ? WHERE id = ?')
+       ->execute([$session['payment_intent'] ?? null, $payment['id']]);
+
+    // Resolve booking status
+    $stmt = $db->prepare('SELECT * FROM bookings WHERE id = ?');
+    $stmt->execute([$payment['booking_id']]);
+    $booking = $stmt->fetch();
+
+    if ($booking) {
+        $check = resolveLicenseRequirement($booking, $db);
+        $newStatus = $check['satisfied'] ? 'confirmed' : 'pending_verification';
+        
+        $db->prepare('UPDATE bookings SET status = ? WHERE id = ?')
+           ->execute([$newStatus, $booking['id']]);
+    }
+}
+
+$extraCss = ['dashboard'];
+require_once __DIR__ . '/../../includes/partials/head.php';
+?>
+
+<div class="container" style="margin-top: var(--space-xl); margin-bottom: var(--space-xl); text-align: center; max-width: 600px;">
+    <div class="card">
+        <div class="card-body" style="padding: var(--space-xl);">
+            <div style="font-size: 64px; color: var(--color-success); margin-bottom: var(--space-md);">
+                ✓
+            </div>
+            <h1 class="headline-lg" style="margin-bottom: var(--space-sm);">Payment Successful!</h1>
+            <p class="body-lg" style="color: var(--color-secondary); margin-bottom: var(--space-lg);">
+                Your booking has been secured and payment was processed successfully.
+            </p>
+            <a href="<?= baseUrl('/borrower/my_bookings.php') ?>" class="btn btn-primary">View My Bookings</a>
+        </div>
+    </div>
+</div>
+
+<?php require_once __DIR__ . '/../../includes/partials/footer.php'; ?>
