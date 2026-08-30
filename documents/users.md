@@ -25,3 +25,10 @@ You can use these credentials to log in and test different parts of the applicat
 - **Email:** `david.t@example.com` (or `emma.w@example.com`)
 - **Permissions:** Can upload a driving license and view assigned jobs as a hired driver.
 - **Access:** Driver Dashboard
+
+## 5. Stripe Payment Testing
+When prompted for payment during the booking process, use the following Stripe test card to simulate a successful transaction:
+- **Card Number:** `4242 4242 4242 4242`
+- **Expiration Date:** Any date in the future (e.g., `12/30`)
+- **CVC:** Any 3 digits (e.g., `123`)
+- **ZIP Code:** Any valid ZIP code (e.g., `90210`)
