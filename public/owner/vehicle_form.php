@@ -26,6 +26,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $db->prepare('INSERT INTO vehicles (owner_id, make, model, category, daily_rate, location, description, status) VALUES (?, ?, ?, ?, ?, ?, ?, "pending_review")');
             try {
                 $stmt->execute([$user['id'], $make, $model, $category, $dailyRate, $location, $description]);
+                $vehicleId = $db->lastInsertId();
+
+                if (!empty($_FILES['photos']['name'][0])) {
+                    $uploadDir = __DIR__ . '/../../public/assets/uploads/vehicles/';
+                    if (!is_dir($uploadDir)) {
+                        mkdir($uploadDir, 0755, true);
+                    }
+                    $isPrimary = 1;
+                    foreach ($_FILES['photos']['tmp_name'] as $index => $tmpName) {
+                        if ($_FILES['photos']['error'][$index] === UPLOAD_ERR_OK) {
+                            $ext = strtolower(pathinfo($_FILES['photos']['name'][$index], PATHINFO_EXTENSION));
+                            if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp'])) {
+                                $filename = uniqid('veh_') . '.' . $ext;
+                                if (move_uploaded_file($tmpName, $uploadDir . $filename)) {
+                                    $photoPath = '/assets/uploads/vehicles/' . $filename;
+                                    $stmtPhoto = $db->prepare('INSERT INTO vehicle_photos (vehicle_id, photo_path, is_primary) VALUES (?, ?, ?)');
+                                    $stmtPhoto->execute([$vehicleId, $photoPath, $isPrimary]);
+                                    $isPrimary = 0;
+                                }
+                            }
+                        }
+                    }
+                }
+
                 $success = 'Vehicle added successfully and is pending admin review.';
             } catch (Exception $e) {
                 $error = 'Failed to add vehicle.';
@@ -64,7 +88,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                 <div class="alert alert-success"><?= escapeHtml($success) ?></div>
             <?php endif; ?>
             
-            <form method="POST" action="<?= baseUrl('/owner/vehicle_form.php') ?>">
+            <form method="POST" action="<?= baseUrl('/owner/vehicle_form.php') ?>" enctype="multipart/form-data">
                 <input type="hidden" name="csrf" value="<?= csrfToken() ?>">
                 
                 <div class="grid grid-2">
@@ -105,12 +129,15 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                     <textarea id="description" name="description" class="input" rows="4" placeholder="Optional details about the vehicle..."></textarea>
                 </div>
                 
-                <!-- Placeholder for photo upload -->
                 <div class="form-group">
-                    <label class="form-label">Photos (Coming soon)</label>
-                    <div class="file-drop">
-                        <p class="body-md" style="color:var(--color-secondary);">Photo upload functionality will be added in a later phase.</p>
+                    <label class="form-label" for="photos">Photos</label>
+                    <div class="file-drop" id="file-drop-area">
+                        <p class="body-md" style="color:var(--color-secondary);">Drag & drop photos here or click to browse.</p>
+                        <input type="file" id="photos" name="photos[]" multiple accept="image/jpeg,image/png,image/webp" style="display: none;">
+                        <button type="button" class="btn btn-secondary" onclick="document.getElementById('photos').click()" style="margin-top: 10px;">Browse Files</button>
                     </div>
+                    <div id="file-preview-list" style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;"></div>
+                    <p class="body-sm" style="color:var(--color-secondary); margin-top: 4px;">You can select multiple photos. The first photo will be the primary image.</p>
                 </div>
                 
                 <button type="submit" class="btn btn-primary" style="width: 100%;">Submit for Approval</button>
@@ -118,5 +145,78 @@ require_once __DIR__ . '/../../includes/partials/head.php';
         </div>
     </main>
 </div>
+
+<style>
+.file-drop {
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 30px;
+    text-align: center;
+    background: var(--color-surface);
+    transition: all 0.2s ease;
+}
+.file-drop.highlight {
+    border-color: var(--color-primary);
+    background: rgba(37, 99, 235, 0.05);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const dropArea = document.getElementById('file-drop-area');
+    const fileInput = document.getElementById('photos');
+    const previewList = document.getElementById('file-preview-list');
+
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, () => dropArea.classList.add('highlight'), false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, () => dropArea.classList.remove('highlight'), false);
+    });
+
+    dropArea.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+        let dt = e.dataTransfer;
+        let files = dt.files;
+        fileInput.files = files; 
+        handleFiles(files);
+    }
+    
+    fileInput.addEventListener('change', function() {
+        handleFiles(this.files);
+    });
+
+    function handleFiles(files) {
+        previewList.innerHTML = '';
+        [...files].forEach(file => {
+            if (file.type.startsWith('image/')) {
+                let reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onloadend = function() {
+                    let img = document.createElement('img');
+                    img.src = reader.result;
+                    img.style.width = '80px';
+                    img.style.height = '80px';
+                    img.style.objectFit = 'cover';
+                    img.style.borderRadius = 'var(--radius-sm)';
+                    img.style.border = '1px solid var(--color-border)';
+                    previewList.appendChild(img);
+                }
+            }
+        });
+    }
+});
+</script>
 
 <?php require_once __DIR__ . '/../../includes/partials/footer.php'; ?>
