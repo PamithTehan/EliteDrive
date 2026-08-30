@@ -81,12 +81,25 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                                         <strong>Action Required:</strong> Your booking is held until the required driving license is verified by an admin.
                                     <?php endif; ?>
                                 </div>
+                            <?php elseif ($b['status'] === 'pending_payment'): ?>
+                                <div class="alert alert-warning" style="margin-top: var(--space-md); margin-bottom: 0; background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; padding: var(--space-sm); border-radius: var(--radius-sm);">
+                                    <strong>Payment Required:</strong> Your booking is awaiting payment. If you cancelled the payment, you may cancel this booking and try again.
+                                </div>
                             <?php endif; ?>
                             
-                            <?php if (in_array($b['status'], ['completed', 'confirmed'])): ?>
+                            <?php 
+                                $showReview = in_array($b['status'], ['completed', 'confirmed']);
+                                $showCancel = !in_array($b['status'], ['completed', 'cancelled', 'rejected', 'reviewed']);
+                            ?>
+                            <?php if ($showReview || $showCancel): ?>
                                 <div style="margin-top: var(--space-md); border-top: 1px solid var(--color-outline); padding-top: var(--space-sm);">
-                                    <button class="btn btn-ghost" onclick="leaveReview(<?= $b['id'] ?>)" style="padding: 4px 12px; font-size: 14px;">Leave Review</button>
-                                    <button class="btn btn-ghost" onclick="reportDispute(<?= $b['id'] ?>)" style="padding: 4px 12px; font-size: 14px; color: var(--color-error);">Report Dispute</button>
+                                    <?php if ($showReview): ?>
+                                        <button class="btn btn-ghost" onclick="leaveReview(<?= $b['id'] ?>)" style="padding: 4px 12px; font-size: 14px;">Leave Review</button>
+                                        <button class="btn btn-ghost" onclick="reportDispute(<?= $b['id'] ?>)" style="padding: 4px 12px; font-size: 14px; color: var(--color-error);">Report Dispute</button>
+                                    <?php endif; ?>
+                                    <?php if ($showCancel): ?>
+                                        <button class="btn btn-ghost" onclick="cancelBooking(<?= $b['id'] ?>)" style="padding: 4px 12px; font-size: 14px; color: var(--color-error);">Cancel Booking</button>
+                                    <?php endif; ?>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -140,6 +153,26 @@ require_once __DIR__ . '/../../includes/partials/head.php';
         } else {
             const data = await res.json();
             alert(data.error || 'Failed to submit dispute');
+        }
+    }
+    
+    async function cancelBooking(bookingId) {
+        if (!confirm("Are you sure you want to cancel this booking?")) return;
+        
+        const formData = new FormData();
+        formData.append('csrf', csrfToken);
+        formData.append('booking_id', bookingId);
+        
+        try {
+            const res = await fetch('<?= baseUrl('/api/bookings/cancel.php') ?>', { method: 'POST', body: formData });
+            if (res.ok) {
+                window.location.reload();
+            } else {
+                const data = await res.json();
+                alert(data.error || 'Failed to cancel booking');
+            }
+        } catch (e) {
+            alert('Network error');
         }
     }
 </script>

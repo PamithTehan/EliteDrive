@@ -27,7 +27,8 @@ $booking = [
 
 $check = resolveLicenseRequirement($booking, $db);
 
-$status = $check['satisfied'] ? 'confirmed' : 'pending_verification';
+// We always start with pending_payment now
+$status = 'pending_payment';
 
 $stmt = $db->prepare(
     'INSERT INTO bookings
@@ -37,23 +38,74 @@ $stmt = $db->prepare(
 );
 
 try {
+    $totalPrice = calculatePrice($booking, $db);
     $stmt->execute([
         $booking['vehicle_id'], $booking['borrower_id'], $booking['driver_arrangement'],
         $booking['assigned_driver_id'], $booking['pickup_date'], $booking['return_date'],
-        $booking['pickup_location'], calculatePrice($booking, $db), $status,
+        $booking['pickup_location'], $totalPrice, $status,
     ]);
+    $bookingId = $db->lastInsertId();
+    
+    // Insert pending payment record
+    $stmt = $db->prepare('INSERT INTO payments (booking_id, user_id, amount, status) VALUES (?, ?, ?, "pending")');
+    $stmt->execute([$bookingId, $user['id'], $totalPrice]);
+    
+    // Create Stripe Checkout Session
+    $config = require __DIR__ . '/../../../config/config.php';
+    $stripeKey = $config['stripe_secret_key'] ?? '';
+    
+    $successUrl = baseUrl('/borrower/payment_success.php?booking_id=' . $bookingId);
+    if (strpos($successUrl, 'http://') !== 0 && strpos($successUrl, 'https://') !== 0) {
+        $successUrl = 'http://' . ltrim($successUrl, '/');
+    }
+
+    $cancelUrl = baseUrl('/borrower/payment_cancel.php?booking_id=' . $bookingId);
+    if (strpos($cancelUrl, 'http://') !== 0 && strpos($cancelUrl, 'https://') !== 0) {
+        $cancelUrl = 'http://' . ltrim($cancelUrl, '/');
+    }
+    
+    $stripeData = http_build_query([
+        'payment_method_types[0]' => 'card',
+        'line_items[0][price_data][currency]' => 'usd',
+        'line_items[0][price_data][product_data][name]' => 'Vehicle Rental Booking #' . $bookingId,
+        'line_items[0][price_data][unit_amount]' => round($totalPrice * 100), // in cents
+        'line_items[0][quantity]' => 1,
+        'mode' => 'payment',
+        'success_url' => $successUrl,
+        'cancel_url' => $cancelUrl,
+        'client_reference_id' => $bookingId,
+    ]);
+    
+    $ch = curl_init('https://api.stripe.com/v1/checkout/sessions');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $stripeData);
+    curl_setopt($ch, CURLOPT_USERPWD, $stripeKey . ':');
+    
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    
+    if ($httpCode !== 200) {
+        $db->exec("UPDATE bookings SET status = 'cancelled' WHERE id = " . (int)$bookingId);
+        $db->exec("UPDATE payments SET status = 'failed' WHERE booking_id = " . (int)$bookingId);
+        throw new Exception('Stripe API error: ' . $response);
+    }
+    
+    $stripeRes = json_decode($response, true);
+    if (empty($stripeRes['url'])) {
+        throw new Exception('Stripe Checkout URL not returned.');
+    }
+    
+    // Save stripe session id
+    $db->prepare('UPDATE payments SET stripe_session_id = ? WHERE booking_id = ?')->execute([$stripeRes['id'], $bookingId]);
 
     echo json_encode([
-        'booking_id' => $db->lastInsertId(),
-        'status'     => $status,
-        'license_status' => $check['license_status'],
-        'message'    => $status === 'confirmed'
-            ? 'Booking confirmed.'
-            : ($check['license_status'] === 'assignment_pending'
-                ? 'Booking pending — waiting for an admin to assign a driver.'
-                : 'Booking pending — the required driving license is not yet verified.'),
+        'ok' => true,
+        'booking_id' => $bookingId,
+        'stripe_url' => $stripeRes['url']
     ]);
 } catch (Exception $e) {
     http_response_code(500);
-    echo json_encode(['error' => 'Could not create booking.']);
+    echo json_encode(['error' => 'Could not create booking: ' . $e->getMessage()]);
 }
