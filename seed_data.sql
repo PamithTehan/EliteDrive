@@ -2,19 +2,29 @@
 -- All users have the password: password123
 
 -- 1. Insert Users
-INSERT INTO `users` (`id`, `full_name`, `email`, `password_hash`, `contact_number`, `is_owner`, `is_driver`, `is_borrower`, `is_admin`, `created_at`, `updated_at`) VALUES
-(1, 'Admin User', 'admin@elitedrive.com', '$2y$10$Qx/h1C8X/l9fL9Pq0vH/QOf9D0hI00vVfS8b.W0T/5P6QfXk916tW', '555-0100', 0, 0, 0, 1, '2023-10-01 10:00:00', '2023-10-01 10:00:00'),
-(2, 'Sarah Jenkins (Owner)', 'sarah@example.com', '$2y$10$Qx/h1C8X/l9fL9Pq0vH/QOf9D0hI00vVfS8b.W0T/5P6QfXk916tW', '555-0101', 1, 0, 1, 0, '2023-10-02 11:30:00', '2023-10-02 11:30:00'),
-(3, 'Michael Chang (Owner)', 'michael@example.com', '$2y$10$Qx/h1C8X/l9fL9Pq0vH/QOf9D0hI00vVfS8b.W0T/5P6QfXk916tW', '555-0102', 1, 0, 0, 0, '2023-10-03 09:15:00', '2023-10-03 09:15:00'),
-(4, 'David Torres (Driver)', 'david.t@example.com', '$2y$10$Qx/h1C8X/l9fL9Pq0vH/QOf9D0hI00vVfS8b.W0T/5P6QfXk916tW', '555-0103', 0, 1, 0, 0, '2023-10-04 14:20:00', '2023-10-04 14:20:00'),
-(5, 'Emma Wilson (Driver)', 'emma.w@example.com', '$2y$10$Qx/h1C8X/l9fL9Pq0vH/QOf9D0hI00vVfS8b.W0T/5P6QfXk916tW', '555-0104', 0, 1, 0, 0, '2023-10-05 16:45:00', '2023-10-05 16:45:00'),
-(6, 'James Smith (Borrower)', 'james.smith@example.com', '$2y$10$Qx/h1C8X/l9fL9Pq0vH/QOf9D0hI00vVfS8b.W0T/5P6QfXk916tW', '555-0105', 0, 0, 1, 0, '2023-10-06 08:10:00', '2023-10-06 08:10:00'),
-(7, 'Olivia Davis (Borrower)', 'olivia.d@example.com', '$2y$10$Qx/h1C8X/l9fL9Pq0vH/QOf9D0hI00vVfS8b.W0T/5P6QfXk916tW', '555-0106', 0, 0, 1, 0, '2023-10-07 13:25:00', '2023-10-07 13:25:00');
+INSERT INTO `users` (`id`, `full_name`, `email`, `password_hash`, `contact_number`, `is_admin`, `created_at`, `updated_at`) VALUES
+(1, 'Admin User', 'admin@elitedrive.com', '$2y$10$Qx/h1C8X/l9fL9Pq0vH/QOf9D0hI00vVfS8b.W0T/5P6QfXk916tW', '555-0100', 1, '2023-10-01 10:00:00', '2023-10-01 10:00:00'),
+(2, 'Sarah Jenkins (Owner)', 'sarah@example.com', '$2y$10$Qx/h1C8X/l9fL9Pq0vH/QOf9D0hI00vVfS8b.W0T/5P6QfXk916tW', '555-0101', 0, '2023-10-02 11:30:00', '2023-10-02 11:30:00'),
+(3, 'Michael Chang (Owner)', 'michael@example.com', '$2y$10$Qx/h1C8X/l9fL9Pq0vH/QOf9D0hI00vVfS8b.W0T/5P6QfXk916tW', '555-0102', 0, '2023-10-03 09:15:00', '2023-10-03 09:15:00'),
+(4, 'David Torres (Driver)', 'david.t@example.com', '$2y$10$Qx/h1C8X/l9fL9Pq0vH/QOf9D0hI00vVfS8b.W0T/5P6QfXk916tW', '555-0103', 0, '2023-10-04 14:20:00', '2023-10-04 14:20:00'),
+(5, 'Emma Wilson (Driver)', 'emma.w@example.com', '$2y$10$Qx/h1C8X/l9fL9Pq0vH/QOf9D0hI00vVfS8b.W0T/5P6QfXk916tW', '555-0104', 0, '2023-10-05 16:45:00', '2023-10-05 16:45:00'),
+(6, 'James Smith (Borrower)', 'james.smith@example.com', '$2y$10$Qx/h1C8X/l9fL9Pq0vH/QOf9D0hI00vVfS8b.W0T/5P6QfXk916tW', '555-0105', 0, '2023-10-06 08:10:00', '2023-10-06 08:10:00'),
+(7, 'Olivia Davis (Borrower)', 'olivia.d@example.com', '$2y$10$Qx/h1C8X/l9fL9Pq0vH/QOf9D0hI00vVfS8b.W0T/5P6QfXk916tW', '555-0106', 0, '2023-10-07 13:25:00', '2023-10-07 13:25:00');
+
+-- 1.5 Insert Role Affiliations
+INSERT INTO `owners` (`user_id`) VALUES (2), (3);
+INSERT INTO `borrowers` (`user_id`) VALUES (2), (6), (7);
+INSERT INTO `drivers` (`user_id`, `driving_preference`) VALUES (4, 'any_vehicle'), (5, 'any_vehicle');
 
 -- 2. Insert Driving Licenses (For Drivers & some Borrowers)
 INSERT INTO `driving_licenses` (`id`, `user_id`, `license_number`, `expiry_date`, `upload_format`, `status`, `reviewed_by`, `reviewed_at`, `created_at`) VALUES
 (1, 4, 'DL-8492019', '2028-12-31', 'image', 'verified', 1, '2023-10-05 10:00:00', '2023-10-04 15:00:00'),
-(2, 5, 'DL-3394821', '2025-06-15', 'image', 'verified', 1, '2023-10-06 10:00:00', '2023-10-05 17:00:00'),
+(2, 5, 'DL-3394821', '2025-06-15', 'image', 'verified', 1, '2023-10-06 10:00:00', '2023-10-05 17:00:00');
+
+-- Need to make James Smith a driver to give him a license due to new constraints, or drop his license for seed data simplicity.
+-- Let's make James Smith a Driver as well since he has a license uploaded.
+INSERT IGNORE INTO `drivers` (`user_id`, `driving_preference`) VALUES (6, 'any_vehicle');
+INSERT INTO `driving_licenses` (`id`, `user_id`, `license_number`, `expiry_date`, `upload_format`, `status`, `reviewed_by`, `reviewed_at`, `created_at`) VALUES
 (3, 6, 'DL-9948211', '2027-01-20', 'pdf', 'pending', NULL, NULL, '2023-10-06 09:00:00');
 
 INSERT INTO `driving_license_images` (`id`, `license_id`, `front_image_path`, `back_image_path`) VALUES

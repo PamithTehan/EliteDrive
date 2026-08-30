@@ -5,6 +5,7 @@ require_once __DIR__ . '/../../../includes/functions.php';
 
 header('Content-Type: application/json');
 requireLogin();
+requireRole('borrower');
 
 if (!csrfCheck($_POST['csrf'] ?? '')) {
     http_response_code(419);

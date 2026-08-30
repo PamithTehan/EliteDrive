@@ -25,15 +25,15 @@ if (!$vehicle) {
 
 $isOwnerDriver = false;
 $stmt = $db->prepare("
-    SELECT u.is_driver, dl.status as license_status 
-    FROM users u 
-    LEFT JOIN driving_licenses dl ON dl.user_id = u.id 
-    WHERE u.id = ? ORDER BY dl.created_at DESC LIMIT 1
+    SELECT d.user_id, dl.status as license_status 
+    FROM drivers d 
+    LEFT JOIN driving_licenses dl ON dl.user_id = d.user_id 
+    WHERE d.user_id = ? ORDER BY dl.created_at DESC LIMIT 1
 ");
 $stmt->execute([$vehicle['owner_id']]);
 $ownerDriverData = $stmt->fetch();
 
-if ($ownerDriverData && $ownerDriverData['is_driver'] == 1 && $ownerDriverData['license_status'] === 'verified') {
+if ($ownerDriverData && $ownerDriverData['license_status'] === 'verified') {
     $isOwnerDriver = true;
 }
 
@@ -44,7 +44,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
 <?php
 // Fallback to a high-quality stock car image if no photo is uploaded
 $imageUrl = !empty($vehicle['photo_path']) 
-    ? baseUrl($vehicle['photo_path']) 
+    ? (strpos($vehicle['photo_path'], 'http') === 0 ? $vehicle['photo_path'] : baseUrl($vehicle['photo_path'])) 
     : baseUrl('/assets/images/placeholder-car.jpg');
 
 $bgStyle = "background-image: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url('" . escapeHtml($imageUrl) . "'); background-size: cover; background-position: center;";
