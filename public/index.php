@@ -159,9 +159,8 @@ require_once __DIR__ . '/../includes/partials/head.php';
             <h2>Join the Elite Drive Club</h2>
             <p>Get exclusive access to our newest luxury additions and special membership rates for corporate accounts.</p>
         </div>
-        <div class="newsletter-form">
-            <input type="email" placeholder="Enter your email">
-            <button type="button" onclick="alert('Subscribed!')">Subscribe Now</button>
+        <div class="coming-soon-badge">
+            Coming Soon
         </div>
     </div>
 </div>
