@@ -10,6 +10,7 @@ try {
     $maxPrice = $_GET['max_price'] ?? '';
     $pickupDate = $_GET['pickup_date'] ?? null;
     $returnDate = $_GET['return_date'] ?? null;
+    $query = $_GET['q'] ?? '';
 
     if ($pickupDate) {
         $pickupDate = explode('T', $pickupDate)[0] . ' 00:00:00';
@@ -24,9 +25,19 @@ try {
             WHERE v.status = 'approved'";
     $params = [];
 
+    if ($query) {
+        $sql .= " AND (v.make LIKE ? OR v.model LIKE ?)";
+        $params[] = "%$query%";
+        $params[] = "%$query%";
+    }
+
     if ($category) {
-        $sql .= " AND v.category = ?";
-        $params[] = $category;
+        $categories = explode(',', $category);
+        $placeholders = str_repeat('?,', count($categories) - 1) . '?';
+        $sql .= " AND v.category IN ($placeholders)";
+        foreach ($categories as $cat) {
+            $params[] = trim($cat);
+        }
     }
     if ($maxPrice && is_numeric($maxPrice)) {
         $sql .= " AND v.daily_rate <= ?";
