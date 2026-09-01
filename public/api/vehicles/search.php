@@ -19,7 +19,7 @@ try {
         $returnDate = explode('T', $returnDate)[0] . ' 23:59:59';
     }
 
-    $sql = "SELECT v.id, v.make, v.model, v.category, v.daily_rate, p.photo_path 
+    $sql = "SELECT v.id, v.make, v.model, v.category, v.daily_rate, v.transmission, v.mileage, v.km_rate, v.yom, v.yor, p.photo_path 
             FROM vehicles v 
             LEFT JOIN vehicle_photos p ON v.id = p.vehicle_id AND p.is_primary = 1 
             WHERE v.status = 'approved'";

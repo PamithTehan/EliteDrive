@@ -189,6 +189,11 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                 const img = v.photo_path ? (v.photo_path.startsWith('http') ? v.photo_path : `<?= baseUrl('/') ?>${v.photo_path}`) : '';
                 const imgHtml = img ? `<img src="${escapeHtml(img)}" alt="Vehicle">` : `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#ccc;">[No Image]</div>`;
                 
+                const isElectric = v.category === 'Electric';
+                const rateUnit = isElectric ? 'km/charge' : 'km/l';
+                const rateIcon = isElectric ? 'electric_car' : 'local_gas_station';
+                const transIcon = v.transmission === 'Manual' ? 'account_tree' : 'settings';
+
                 return `
                 <div class="fleet-card">
                     <div class="fleet-card-image">
@@ -199,7 +204,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                         <div class="fleet-title-row">
                             <div class="fleet-title-info">
                                 <h3>${escapeHtml(v.make)} ${escapeHtml(v.model)}</h3>
-                                <p>Premium ${escapeHtml(v.category)}</p>
+                                <p>YOM: ${escapeHtml(v.yom)}</p>
                             </div>
                             <div class="fleet-price">
                                 <div class="amount">$${escapeHtml(v.daily_rate)}</div>
@@ -208,16 +213,16 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                         </div>
                         <div class="fleet-specs">
                             <div class="spec-item">
+                                <span class="material-symbols-outlined">${rateIcon}</span>
+                                <span>${escapeHtml(v.km_rate)} ${rateUnit}</span>
+                            </div>
+                            <div class="spec-item">
                                 <span class="material-symbols-outlined">speed</span>
-                                <span>450km Range</span>
+                                <span>${escapeHtml(v.mileage)} km</span>
                             </div>
                             <div class="spec-item">
-                                <span class="material-symbols-outlined">group</span>
-                                <span>5 Seats</span>
-                            </div>
-                            <div class="spec-item">
-                                <span class="material-symbols-outlined">settings</span>
-                                <span>Automatic</span>
+                                <span class="material-symbols-outlined">${transIcon}</span>
+                                <span>${escapeHtml(v.transmission)}</span>
                             </div>
                         </div>
                         <div class="fleet-actions">
