@@ -35,24 +35,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 $db->beginTransaction();
 
-                // Insert into main users table
-                $stmt = $db->prepare('INSERT INTO users (full_name, email, password_hash, contact_number) VALUES (?, ?, ?, ?)');
-                $stmt->execute([$phase1['full_name'], $phase1['email'], $hash, $phase1['contact_number']]);
+                // Insert into main users table with role flags
+                $stmt = $db->prepare('INSERT INTO users (full_name, email, password_hash, contact_number, is_owner, is_borrower, is_driver) VALUES (?, ?, ?, ?, ?, ?, ?)');
+                $stmt->execute([$phase1['full_name'], $phase1['email'], $hash, $phase1['contact_number'], $isOwner, $isBorrower, $isDriver]);
                 $userId = $db->lastInsertId();
 
-                // Insert into child tables
-                if ($isBorrower) {
-                    $stmt = $db->prepare('INSERT INTO borrowers (user_id) VALUES (?)');
-                    $stmt->execute([$userId]);
-                }
-                
-                if ($isOwner) {
-                    $stmt = $db->prepare('INSERT INTO owners (user_id) VALUES (?)');
-                    $stmt->execute([$userId]);
-                }
-                
+                // If user registered as a driver, insert into drivers table for preferences
                 if ($isDriver) {
-                    // Only apply own_vehicles preference if they are also an owner
                     $pref = ($isOwner && $drivingPreference === 'own_vehicles') ? 'own_vehicles' : 'any_vehicle';
                     $stmt = $db->prepare('INSERT INTO drivers (user_id, driving_preference) VALUES (?, ?)');
                     $stmt->execute([$userId, $pref]);
@@ -61,17 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $db->commit();
                 
                 // Fetch user data for login
-                $stmt = $db->prepare('
-                    SELECT u.*, 
-                           (o.user_id IS NOT NULL) AS is_owner,
-                           (d.user_id IS NOT NULL) AS is_driver,
-                           (b.user_id IS NOT NULL) AS is_borrower
-                    FROM users u
-                    LEFT JOIN owners o ON u.id = o.user_id
-                    LEFT JOIN drivers d ON u.id = d.user_id
-                    LEFT JOIN borrowers b ON u.id = b.user_id
-                    WHERE u.id = ?
-                ');
+                $stmt = $db->prepare('SELECT * FROM users WHERE id = ?');
                 $stmt->execute([$userId]);
                 $userRow = $stmt->fetch();
                 unset($userRow['password_hash']);
