@@ -74,13 +74,31 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                 return;
             }
             
-            let options = '<option value="">Select a driver...</option>';
-            options += driversList.map(d => `<option value="${d.id}">${escapeHtml(d.full_name)}</option>`).join('');
-            
-            tbody.innerHTML = rows.map(r => `
+            tbody.innerHTML = rows.map(r => {
+                const eligibleDrivers = driversList.filter(d => 
+                    !d.transmission_preference || d.transmission_preference === 'Both' || d.transmission_preference.toLowerCase() === (r.transmission || '').toLowerCase()
+                );
+                
+                let options = '<option value="">Select a driver...</option>';
+                if (eligibleDrivers.length === 0) {
+                    options = '<option value="">No compatible drivers available</option>';
+                } else {
+                    options += eligibleDrivers.map(d => {
+                        const fee = d.daily_fee ? `$${parseFloat(d.daily_fee).toFixed(2)}/day` : '';
+                        const trans = d.transmission_preference ? ` (${d.transmission_preference})` : '';
+                        return `<option value="${d.id}">${escapeHtml(d.full_name)}${fee ? ' - ' + fee : ''}${trans}</option>`;
+                    }).join('');
+                }
+
+                return `
                 <tr data-id="${r.id}">
                     <td>${escapeHtml(r.renter_name)}</td>
-                    <td>${escapeHtml(r.make)} ${escapeHtml(r.model)}</td>
+                    <td>
+                        <strong>${escapeHtml(r.make)} ${escapeHtml(r.model)}</strong>
+                        <div style="margin-top: 2px;">
+                            <span class="badge" style="font-size:11px; background:var(--color-surface); border:1px solid var(--color-outline);">${escapeHtml(r.transmission || 'Auto')}</span>
+                        </div>
+                    </td>
                     <td>${escapeHtml(r.pickup_date)}<br><small style="color:var(--color-secondary);">${escapeHtml(r.pickup_location)}</small></td>
                     <td>
                         <select class="input driver-select" data-id="${r.id}" style="padding: 4px; font-size: 14px;">
@@ -90,7 +108,8 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                     <td>
                         <button class="btn btn-primary btn-assign" data-id="${r.id}" style="padding: 4px 12px; font-size: 12px;">Assign</button>
                     </td>
-                </tr>`).join('');
+                </tr>`;
+            }).join('');
         } catch (e) {
             console.error('Failed to load queue', e);
             document.querySelector('#queue-body').innerHTML = `<tr><td colspan="5" style="color:red;">Error loading data.</td></tr>`;
