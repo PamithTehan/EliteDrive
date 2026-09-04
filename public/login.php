@@ -21,17 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = 'Please fill in all fields.';
         } else {
             $db = getDb();
-            $stmt = $db->prepare('
-                SELECT u.*, 
-                       (o.user_id IS NOT NULL) AS is_owner,
-                       (d.user_id IS NOT NULL) AS is_driver,
-                       (b.user_id IS NOT NULL) AS is_borrower
-                FROM users u
-                LEFT JOIN owners o ON u.id = o.user_id
-                LEFT JOIN drivers d ON u.id = d.user_id
-                LEFT JOIN borrowers b ON u.id = b.user_id
-                WHERE u.email = ?
-            ');
+            $stmt = $db->prepare('SELECT * FROM users WHERE email = ?');
             $stmt->execute([$email]);
             $userRow = $stmt->fetch();
             
