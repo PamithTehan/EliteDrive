@@ -28,7 +28,17 @@ if (!$bookingId || !$driverId) {
 
 $db = getDb();
 
-// Check if driver is valid and verified
+// Fetch booking details including vehicle
+$bStmt = $db->prepare('SELECT vehicle_id, pickup_date, return_date FROM bookings WHERE id = ?');
+$bStmt->execute([$bookingId]);
+$booking = $bStmt->fetch();
+
+if (!$booking) {
+    http_response_code(404);
+    exit(json_encode(['error' => 'Booking not found.']));
+}
+
+// Check if driver is valid and has verified license
 $stmt = $db->prepare("
     SELECT u.id 
     FROM users u 
@@ -39,6 +49,18 @@ $stmt->execute([$driverId]);
 if (!$stmt->fetchColumn()) {
     http_response_code(400);
     exit(json_encode(['error' => 'Selected driver is not valid or does not have a verified license.']));
+}
+
+// Check transmission compatibility
+if (!isDriverTransmissionCompatible($driverId, (int)$booking['vehicle_id'], $db)) {
+    http_response_code(400);
+    exit(json_encode(['error' => 'Selected driver is not compatible with this vehicle\'s transmission.']));
+}
+
+// Check driver date availability
+if (!isDriverAvailable($driverId, $booking['pickup_date'], $booking['return_date'], $db)) {
+    http_response_code(400);
+    exit(json_encode(['error' => 'Selected driver is already booked for these dates.']));
 }
 
 // Update booking
