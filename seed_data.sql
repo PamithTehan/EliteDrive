@@ -11,11 +11,11 @@ INSERT INTO `users` (`id`, `full_name`, `email`, `password_hash`, `contact_numbe
 (6, 'James Smith (Borrower)', 'james.smith@example.com', '$2y$10$Qx/h1C8X/l9fL9Pq0vH/QOf9D0hI00vVfS8b.W0T/5P6QfXk916tW', '555-0105', 0, 0, 1, 1, '2023-10-06 08:10:00', '2023-10-06 08:10:00'),
 (7, 'Olivia Davis (Borrower)', 'olivia.d@example.com', '$2y$10$Qx/h1C8X/l9fL9Pq0vH/QOf9D0hI00vVfS8b.W0T/5P6QfXk916tW', '555-0106', 0, 0, 1, 0, '2023-10-07 13:25:00', '2023-10-07 13:25:00');
 
--- 2. Insert Drivers
-INSERT INTO `drivers` (`user_id`, `driving_preference`) VALUES 
-(4, 'any_vehicle'), 
-(5, 'any_vehicle'),
-(6, 'any_vehicle');
+-- 2. Insert Drivers with daily fee and transmission preference
+INSERT INTO `drivers` (`user_id`, `daily_fee`, `transmission_preference`, `driving_preference`) VALUES 
+(4, 30.00, 'Both', 'any_vehicle'), 
+(5, 25.00, 'Auto', 'any_vehicle'),
+(6, 22.00, 'Manual', 'any_vehicle');
 
 -- 3. Insert Driving Licenses
 INSERT INTO `driving_licenses` (`id`, `user_id`, `license_number`, `expiry_date`, `upload_format`, `status`, `reviewed_by`, `reviewed_at`, `rejection_reason`, `created_at`) VALUES
