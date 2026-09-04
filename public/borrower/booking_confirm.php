@@ -34,8 +34,12 @@ if (!$vehicle) {
 $errorMessage = '';
 if (!isVehicleAvailable($vehicleId, $pickupDate, $returnDate, $db)) {
     $errorMessage = 'This vehicle is already booked for the selected dates. Please go back and choose different dates.';
-} elseif ($driverArrangement === 'hired' && $driverId && !isDriverAvailable((int)$driverId, $pickupDate, $returnDate, $db)) {
-    $errorMessage = 'The selected driver is already booked for the selected dates. Please go back and choose another driver.';
+} elseif ($driverArrangement === 'hired' && $driverId) {
+    if (!isDriverAvailable((int)$driverId, $pickupDate, $returnDate, $db)) {
+        $errorMessage = 'The selected driver is already booked for the selected dates. Please go back and choose another driver.';
+    } elseif (!isDriverTransmissionCompatible((int)$driverId, $vehicleId, $db)) {
+        $errorMessage = 'The selected driver is not compatible with this vehicle\'s ' . htmlspecialchars($vehicle['transmission']) . ' transmission.';
+    }
 }
 
 if ($errorMessage) {
@@ -47,6 +51,8 @@ if ($errorMessage) {
 
 $price = calculatePrice([
     'vehicle_id' => $vehicleId,
+    'driver_arrangement' => $driverArrangement,
+    'assigned_driver_id' => $driverId ? (int)$driverId : null,
     'pickup_date' => $pickupDate,
     'return_date' => $returnDate
 ], $db);
@@ -54,10 +60,19 @@ $price = calculatePrice([
 $driverName = 'Self (You)';
 if ($driverArrangement === 'owner') {
     $driverName = $vehicle['owner_name'] . ' (Owner)';
-} elseif ($driverArrangement === 'hired' && $driverId) {
-    $stmt = $db->prepare('SELECT full_name FROM users WHERE id = ?');
-    $stmt->execute([$driverId]);
-    $driverName = $stmt->fetchColumn() . ' (Hired)';
+} elseif ($driverArrangement === 'hired') {
+    if ($driverId) {
+        $stmt = $db->prepare('SELECT u.full_name, d.daily_fee, d.transmission_preference FROM users u JOIN drivers d ON d.user_id = u.id WHERE u.id = ?');
+        $stmt->execute([$driverId]);
+        $driverData = $stmt->fetch();
+        if ($driverData) {
+            $driverName = $driverData['full_name'] . ' (Hired - $' . number_format($driverData['daily_fee'], 2) . '/day, ' . $driverData['transmission_preference'] . ')';
+        } else {
+            $driverName = 'Hired Driver';
+        }
+    } else {
+        $driverName = 'Hired Driver (Admin will assign)';
+    }
 }
 
 $extraCss = ['dashboard'];
