@@ -8,18 +8,12 @@ $user = currentUser();
 $db = getDb();
 
 // Check license status
-$stmt = $db->prepare('SELECT id, status FROM driving_licenses WHERE user_id = ? ORDER BY created_at DESC LIMIT 1');
+$stmt = $db->prepare('SELECT id, status, rejection_reason FROM driving_licenses WHERE user_id = ? ORDER BY created_at DESC LIMIT 1');
 $stmt->execute([$user['id']]);
 $licenseRow = $stmt->fetch();
 $licenseStatus = $licenseRow ? $licenseRow['status'] : null;
 $licenseId = $licenseRow ? $licenseRow['id'] : null;
-
-$rejectionReason = '';
-if ($licenseStatus === 'rejected' && $licenseId) {
-    $rStmt = $db->prepare('SELECT reason FROM rejection_logs WHERE entity_type = ? AND entity_id = ? ORDER BY created_at DESC LIMIT 1');
-    $rStmt->execute(['license', $licenseId]);
-    $rejectionReason = $rStmt->fetchColumn() ?: 'No reason provided.';
-}
+$rejectionReason = ($licenseStatus === 'rejected') ? ($licenseRow['rejection_reason'] ?: 'No reason provided.') : '';
 
 $error = '';
 $success = '';
