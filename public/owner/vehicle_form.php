@@ -115,6 +115,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                         <option value="Luxury">Luxury</option>
                         <option value="Budget">Budget</option>
                         <option value="Offroad">Offroad</option>
+                        <option value="Electric">Electric</option>
                     </select>
                 </div>
                 

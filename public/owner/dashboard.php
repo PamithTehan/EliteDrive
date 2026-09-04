@@ -64,6 +64,11 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                                 ?>
                                 <span class="badge <?= $badgeClass ?>"><?= escapeHtml($v['status']) ?></span>
                             </div>
+                            <?php if ($v['status'] === 'rejected' && !empty($v['rejection_reason'])): ?>
+                                <div class="alert alert-error" style="margin-top: var(--space-sm); font-size: 13px; padding: 8px 12px;">
+                                    <strong>Rejection Reason:</strong> <?= escapeHtml($v['rejection_reason']) ?>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 <?php endforeach; ?>
