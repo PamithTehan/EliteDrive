@@ -40,6 +40,11 @@ if ($booking['driver_arrangement'] === 'hired' && $booking['assigned_driver_id']
         echo json_encode(['error' => 'The selected driver is already booked for the selected dates.']);
         exit;
     }
+    if (!isDriverTransmissionCompatible($booking['assigned_driver_id'], $booking['vehicle_id'], $db)) {
+        http_response_code(400);
+        echo json_encode(['error' => 'The selected driver is not compatible with this vehicle\'s transmission.']);
+        exit;
+    }
 }
 
 // We always start with pending_payment now
