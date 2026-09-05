@@ -24,14 +24,34 @@ if (!$vehicle) {
 }
 
 // Fetch reviews for this vehicle
-$stmtRev = $db->prepare('
+$ratingFilter = isset($_GET['rating']) && $_GET['rating'] !== '' ? (int)$_GET['rating'] : null;
+$page = max(1, (int)($_GET['page'] ?? 1));
+$limit = 5;
+$offset = ($page - 1) * $limit;
+
+$revSql = '
     SELECT r.rating, r.comment, r.created_at, u.full_name as reviewer_name
     FROM reviews r
     JOIN users u ON r.reviewer_id = u.id
     WHERE r.target_type = "vehicle" AND r.target_id = ?
-    ORDER BY r.created_at DESC
-');
-$stmtRev->execute([$id]);
+';
+$revParams = [$id];
+
+if ($ratingFilter !== null) {
+    $revSql .= ' AND r.rating = ?';
+    $revParams[] = $ratingFilter;
+}
+
+// Get total for pagination
+$countSql = str_replace('r.rating, r.comment, r.created_at, u.full_name as reviewer_name', 'COUNT(*)', $revSql);
+$stmtCount = $db->prepare($countSql);
+$stmtCount->execute($revParams);
+$totalReviews = $stmtCount->fetchColumn();
+$totalPages = ceil($totalReviews / $limit);
+
+$revSql .= ' ORDER BY r.created_at DESC LIMIT ' . $limit . ' OFFSET ' . $offset;
+$stmtRev = $db->prepare($revSql);
+$stmtRev->execute($revParams);
 $reviews = $stmtRev->fetchAll();
 
 $stmtPhotos = $db->prepare('SELECT photo_path FROM vehicle_photos WHERE vehicle_id = ? ORDER BY is_primary DESC, id ASC');
@@ -130,8 +150,22 @@ $titleColor = "color: white;";
         </div>
         
         <!-- Reviews Section -->
-        <div style="margin-top: var(--space-xl);">
-            <h2 class="headline-md" style="margin-bottom: var(--space-md);">Vehicle Reviews</h2>
+        <div style="margin-top: var(--space-xl);" id="reviews">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: var(--space-md);">
+                <h2 class="headline-md">Vehicle Reviews</h2>
+                <form method="GET" action="<?= baseUrl('/fleet/detail.php') ?>#reviews" style="display:flex; align-items:center; gap:8px;">
+                    <input type="hidden" name="id" value="<?= $id ?>">
+                    <label for="rating" class="body-sm" style="color:var(--color-secondary);">Filter:</label>
+                    <select name="rating" id="rating" class="input" style="padding: 6px 12px; width:auto; border-radius: var(--radius-sm);" onchange="this.form.submit()">
+                        <option value="">All Ratings</option>
+                        <option value="5" <?= $ratingFilter === 5 ? 'selected' : '' ?>>5 Stars</option>
+                        <option value="4" <?= $ratingFilter === 4 ? 'selected' : '' ?>>4 Stars</option>
+                        <option value="3" <?= $ratingFilter === 3 ? 'selected' : '' ?>>3 Stars</option>
+                        <option value="2" <?= $ratingFilter === 2 ? 'selected' : '' ?>>2 Stars</option>
+                        <option value="1" <?= $ratingFilter === 1 ? 'selected' : '' ?>>1 Star</option>
+                    </select>
+                </form>
+            </div>
             <?php if (empty($reviews)): ?>
                 <p class="body-md" style="color:var(--color-secondary);">No reviews yet for this vehicle.</p>
             <?php else: ?>
@@ -151,6 +185,22 @@ $titleColor = "color: white;";
                         </div>
                     <?php endforeach; ?>
                 </div>
+                
+                <?php if ($totalPages > 1): ?>
+                <div style="display:flex; justify-content:center; gap: 8px; margin-top: var(--space-md);">
+                    <?php if ($page > 1): ?>
+                        <a href="<?= baseUrl('/fleet/detail.php?id=' . $id . '&rating=' . ($ratingFilter ?? '') . '&page=' . ($page - 1)) ?>#reviews" class="btn btn-ghost" style="padding: 6px 12px;">Previous</a>
+                    <?php endif; ?>
+                    
+                    <span style="display:flex; align-items:center; padding: 0 12px; color:var(--color-secondary);" class="body-sm">
+                        Page <?= $page ?> of <?= $totalPages ?>
+                    </span>
+                    
+                    <?php if ($page < $totalPages): ?>
+                        <a href="<?= baseUrl('/fleet/detail.php?id=' . $id . '&rating=' . ($ratingFilter ?? '') . '&page=' . ($page + 1)) ?>#reviews" class="btn btn-ghost" style="padding: 6px 12px;">Next</a>
+                    <?php endif; ?>
+                </div>
+                <?php endif; ?>
             <?php endif; ?>
         </div>
     </main>
