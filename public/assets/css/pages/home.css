@@ -41,9 +41,17 @@
 }
 
 @media (max-width: 768px) {
-    .home-hero h1 { font-size: 2.25rem; }
-    .home-hero { padding: 80px 0 60px; }
-    .search-widget-row { grid-template-columns: 1fr; }
+    .home-hero h1 {
+        font-size: 2.25rem;
+    }
+
+    .home-hero {
+        padding: 80px 0 60px;
+    }
+
+    .search-widget-row {
+        grid-template-columns: 1fr;
+    }
 }
 
 .search-field label {
@@ -70,7 +78,8 @@
     pointer-events: none;
 }
 
-.search-input-wrapper input, .search-input-wrapper select {
+.search-input-wrapper input,
+.search-input-wrapper select {
     width: 100%;
     padding: 11px 12px 11px 40px;
     border: 1px solid var(--color-outline);
@@ -80,7 +89,8 @@
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.search-input-wrapper input:focus, .search-input-wrapper select:focus {
+.search-input-wrapper input:focus,
+.search-input-wrapper select:focus {
     outline: none;
     border-color: var(--color-accent);
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
@@ -160,7 +170,7 @@
 }
 
 .fleet-header .section-label {
-    color: var(--color-accent);
+    color: var(--color-primary);
     font-size: 12px;
     font-weight: 700;
     text-transform: uppercase;
@@ -217,11 +227,11 @@
 }
 
 .coming-soon-badge {
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
     color: #ffffff;
     padding: 12px 32px;
     border-radius: var(--radius-full);
-    border: 1px solid rgba(255,255,255,0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     font-weight: 600;
     font-size: 13px;
     text-transform: uppercase;
@@ -231,7 +241,7 @@
 }
 
 .coming-soon-badge:hover {
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
