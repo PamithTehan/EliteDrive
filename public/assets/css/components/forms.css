@@ -38,3 +38,7 @@ select.input {
     padding: var(--space-md);
     text-align: center;
 }
+
+input[type="checkbox"] {
+    accent-color: var(--color-primary);
+}
