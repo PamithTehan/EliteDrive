@@ -1,12 +1,55 @@
-body { font-family: var(--font-family); color: var(--color-on-surface); }
-.headline-xl { font-size: 48px; font-weight: 700; line-height: 56px; letter-spacing: -0.02em; }
-.headline-lg { font-size: 32px; font-weight: 600; line-height: 40px; letter-spacing: -0.01em; }
-.headline-md { font-size: 20px; font-weight: 600; line-height: 28px; }
-.body-lg { font-size: 18px; line-height: 28px; }
-.body-md { font-size: 16px; line-height: 24px; }
-.label-md { font-size: 14px; font-weight: 500; line-height: 20px; letter-spacing: 0.05em; text-transform: uppercase; }
-.label-sm { font-size: 12px; font-weight: 600; line-height: 16px; }
+body {
+  font-family: var(--font-family);
+  color: var(--color-on-surface);
+}
+
+.headline-xl {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 56px;
+  letter-spacing: -0.02em;
+}
+
+.headline-lg {
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 40px;
+  letter-spacing: -0.01em;
+}
+
+.headline-md {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+.body-lg {
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.body-md {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.label-md {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.label-sm {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+}
 
 @media (max-width: 768px) {
-  .headline-lg { font-size: 24px; line-height: 32px; }
+  .headline-lg {
+    font-size: 24px;
+    line-height: 32px;
+  }
 }
