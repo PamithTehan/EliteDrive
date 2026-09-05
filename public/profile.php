@@ -88,33 +88,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $successMsg = 'Your password has been changed successfully.';
         }
-    } elseif ($action === 'update_driver_settings' && !empty($user['is_driver'])) {
-        $dailyFee = floatval($_POST['daily_fee'] ?? 25.00);
-        $transmissionPref = $_POST['transmission_preference'] ?? 'Both';
-        $drivingPref = $_POST['driving_preference'] ?? 'any_vehicle';
+    } elseif ($action === 'update_roles') {
+        $isBorrower = isset($_POST['role_borrower']) ? 1 : 0;
+        $isOwner = isset($_POST['role_owner']) ? 1 : 0;
+        $isDriver = isset($_POST['role_driver']) ? 1 : 0;
 
-        if ($dailyFee < 20.00 || $dailyFee > 35.00) {
-            $errorMsg = 'Driver daily fee must be between $20.00 and $35.00 per day.';
-        } elseif (!in_array($transmissionPref, ['Manual', 'Auto', 'Both'], true)) {
-            $errorMsg = 'Invalid transmission preference selected.';
-        } elseif (!in_array($drivingPref, ['any_vehicle', 'own_vehicles'], true)) {
-            $errorMsg = 'Invalid driving preference selected.';
+        // Ensure they have at least one role
+        if (!$isBorrower && !$isOwner && !$isDriver && empty($user['is_admin'])) {
+            $errorMsg = 'You must select at least one role to continue using EliteDrive.';
         } else {
-            $stmtUpdDriver = $db->prepare("
-                INSERT INTO drivers (user_id, daily_fee, transmission_preference, driving_preference)
-                VALUES (?, ?, ?, ?)
-                ON DUPLICATE KEY UPDATE 
-                    daily_fee = VALUES(daily_fee),
-                    transmission_preference = VALUES(transmission_preference),
-                    driving_preference = VALUES(driving_preference)
-            ");
-            $stmtUpdDriver->execute([$userId, $dailyFee, $transmissionPref, $drivingPref]);
+            // Validate driver settings if driver is selected
+            if ($isDriver) {
+                $dailyFee = floatval($_POST['daily_fee'] ?? 25.00);
+                $transmissionPref = $_POST['transmission_preference'] ?? 'Both';
+                $drivingPref = $_POST['driving_preference'] ?? 'any_vehicle';
 
-            // Re-fetch driver
-            $stmtDriver->execute([$userId]);
-            $driver = $stmtDriver->fetch();
+                if ($dailyFee < 20.00 || $dailyFee > 35.00) {
+                    $errorMsg = 'Driver daily fee must be between $20.00 and $35.00 per day.';
+                } elseif (!in_array($transmissionPref, ['Manual', 'Auto', 'Both'], true)) {
+                    $errorMsg = 'Invalid transmission preference selected.';
+                } elseif (!in_array($drivingPref, ['any_vehicle', 'own_vehicles'], true)) {
+                    $errorMsg = 'Invalid driving preference selected.';
+                }
+            }
 
-            $successMsg = 'Driver rates and transmission preferences updated successfully.';
+            if (!$errorMsg) {
+                // Update roles
+                $upd = $db->prepare("UPDATE users SET is_borrower = ?, is_owner = ?, is_driver = ? WHERE id = ?");
+                $upd->execute([$isBorrower, $isOwner, $isDriver, $userId]);
+
+                if ($isDriver) {
+                    $stmtUpdDriver = $db->prepare("
+                        INSERT INTO drivers (user_id, daily_fee, transmission_preference, driving_preference)
+                        VALUES (?, ?, ?, ?)
+                        ON DUPLICATE KEY UPDATE 
+                            daily_fee = VALUES(daily_fee),
+                            transmission_preference = VALUES(transmission_preference),
+                            driving_preference = VALUES(driving_preference)
+                    ");
+                    $stmtUpdDriver->execute([$userId, $dailyFee, $transmissionPref, $drivingPref]);
+                }
+
+                // Refresh session and user data
+                $stmt->execute([$userId]);
+                $user = $stmt->fetch();
+                loginUser($user);
+
+                if ($isDriver) {
+                    $stmtDriver = $db->prepare("SELECT * FROM drivers WHERE user_id = ?");
+                    $stmtDriver->execute([$userId]);
+                    $driver = $stmtDriver->fetch();
+                } else {
+                    $driver = null;
+                }
+
+                $successMsg = 'Account roles and preferences updated successfully.';
+            }
         }
     }
 }
@@ -248,24 +277,43 @@ require_once __DIR__ . '/../includes/partials/head.php';
                     </form>
                 </div>
 
-                <!-- 2. Driver Settings (Only shown for registered drivers) -->
-                <?php if (!empty($user['is_driver'])): ?>
-                    <div class="settings-card">
-                        <div class="settings-card-header">
-                            <span class="material-symbols-outlined">drive_eta</span>
-                            <div>
-                                <h2>Driver Preferences & Rates</h2>
-                                <p>Set your daily hire fee and transmission driving capabilities.</p>
+                <!-- 2. Account Roles & Driver Settings -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <span class="material-symbols-outlined">badge</span>
+                        <div>
+                            <h2>Account Roles & Preferences</h2>
+                            <p>Manage how you use EliteDrive and configure your driver settings.</p>
+                        </div>
+                    </div>
+
+                    <form method="POST" action="<?= baseUrl('/profile.php') ?>">
+                        <input type="hidden" name="action" value="update_roles">
+
+                        <div class="form-field">
+                            <label class="form-label" style="font-weight: 500; margin-bottom: 12px; display: block;">How will you use EliteDrive? (Select all that apply)</label>
+                            <div class="role-options" style="display: flex; flex-direction: column; gap: 12px; margin-top: 8px;">
+                                <label class="role-option" style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                                    <input type="checkbox" name="role_borrower" value="1" <?= !empty($user['is_borrower']) ? 'checked' : '' ?> style="width: auto; height: auto;">
+                                    <span>I want to rent vehicles</span>
+                                </label>
+                                <label class="role-option" style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                                    <input type="checkbox" name="role_owner" value="1" <?= !empty($user['is_owner']) ? 'checked' : '' ?> style="width: auto; height: auto;">
+                                    <span>I want to list my vehicles for rent</span>
+                                </label>
+                                <label class="role-option" style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                                    <input type="checkbox" name="role_driver" id="role_driver" value="1" <?= !empty($user['is_driver']) ? 'checked' : '' ?> style="width: auto; height: auto;">
+                                    <span>I want to be a hired driver</span>
+                                </label>
                             </div>
                         </div>
 
-                        <form method="POST" action="<?= baseUrl('/profile.php') ?>">
-                            <input type="hidden" name="action" value="update_driver_settings">
-
+                        <div id="driver-settings-group" style="display: <?= !empty($user['is_driver']) ? 'block' : 'none' ?>; border-top: 1px solid var(--color-outline); padding-top: 24px; margin-top: 24px;">
+                            <h3 style="font-size: 16px; margin-bottom: 16px; color: var(--color-text-primary);">Driver Preferences & Rates</h3>
                             <div class="form-grid-2">
                                 <div class="form-field">
                                     <label for="daily_fee">Driver Daily Fee ($/day)</label>
-                                    <input type="number" id="daily_fee" name="daily_fee" min="20" max="35" step="0.50" value="<?= number_format($driver['daily_fee'] ?? 25.00, 2, '.', '') ?>" required>
+                                    <input type="number" id="daily_fee" name="daily_fee" min="20" max="35" step="0.50" value="<?= number_format($driver['daily_fee'] ?? 25.00, 2, '.', '') ?>" <?= !empty($user['is_driver']) ? 'required' : '' ?>>
                                     <div class="field-hint">Permitted fee range is $20.00 – $35.00 per day.</div>
                                 </div>
 
@@ -308,15 +356,15 @@ require_once __DIR__ . '/../includes/partials/head.php';
                                     </span>
                                 </div>
                             <?php endif; ?>
+                        </div>
 
-                            <div class="form-actions">
-                                <button type="submit" class="btn-save">
-                                    <span class="material-symbols-outlined" style="font-size:18px;">save</span> Save Driver Settings
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                <?php endif; ?>
+                        <div class="form-actions" style="margin-top: 24px;">
+                            <button type="submit" class="btn-save">
+                                <span class="material-symbols-outlined" style="font-size:18px;">save</span> Save Roles & Settings
+                            </button>
+                        </div>
+                    </form>
+                </div>
 
                 <!-- 3. Security & Password -->
                 <div class="settings-card">
@@ -359,5 +407,25 @@ require_once __DIR__ . '/../includes/partials/head.php';
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const roleDriver = document.getElementById('role_driver');
+    const driverSettings = document.getElementById('driver-settings-group');
+    const dailyFee = document.getElementById('daily_fee');
+
+    if (roleDriver && driverSettings) {
+        roleDriver.addEventListener('change', function() {
+            if (this.checked) {
+                driverSettings.style.display = 'block';
+                if (dailyFee) dailyFee.required = true;
+            } else {
+                driverSettings.style.display = 'none';
+                if (dailyFee) dailyFee.required = false;
+            }
+        });
+    }
+});
+</script>
 
 <?php require_once __DIR__ . '/../includes/partials/footer.php'; ?>
