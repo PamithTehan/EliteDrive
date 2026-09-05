@@ -86,10 +86,25 @@
     letter-spacing: 0.5px;
 }
 
-.role-badge.borrower { background: #e0f2fe; color: #0369a1; }
-.role-badge.driver { background: #fef3c7; color: #92400e; }
-.role-badge.owner { background: #dcfce7; color: #166534; }
-.role-badge.admin { background: #fee2e2; color: #991b1b; }
+.role-badge.borrower {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+.role-badge.driver {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.role-badge.owner {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.role-badge.admin {
+    background: #fee2e2;
+    color: #991b1b;
+}
 
 .profile-stats-divider {
     border: 0;
@@ -289,7 +304,7 @@
     .profile-layout {
         grid-template-columns: 1fr;
     }
-    
+
     .profile-user-card {
         position: static;
     }
