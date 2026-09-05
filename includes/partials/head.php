@@ -22,7 +22,7 @@
     <?php endforeach; ?>
 </head>
 <body>
-    <header class="site-header" style="display:flex; justify-content:space-between; align-items:center; padding: 16px 32px; border-bottom: 1px solid var(--color-outline); background: white;">
+    <header class="site-header">
         <div class="logo">
             <a href="<?= baseUrl('/') ?>" class="headline-md" style="color:var(--color-text); text-decoration:none;">EliteDrive</a>
         </div>
