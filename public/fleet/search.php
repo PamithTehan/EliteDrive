@@ -249,7 +249,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             return `
             <div class="fleet-card">
                 <div class="fleet-card-image">
-                    <div class="fleet-badge">${escapeHtml(v.category)}</div>
+                    ${(v.category || '').split(',').map(c => c.trim()).filter(c => c).map(c => `<div class="fleet-badge" style="display:inline-block; margin-right: 4px;">${escapeHtml(c)}</div>`).join('')}
                     ${imgHtml}
                 </div>
                 <div class="fleet-card-body">

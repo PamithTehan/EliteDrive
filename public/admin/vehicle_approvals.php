@@ -78,7 +78,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                 <tr data-id="${r.id}">
                     <td>${escapeHtml(r.owner_name)}</td>
                     <td>${escapeHtml(r.make)} ${escapeHtml(r.model)}</td>
-                    <td><span class="badge badge-${r.category.toLowerCase()}">${escapeHtml(r.category)}</span></td>
+                    <td>${(r.category || '').split(',').map(c => c.trim()).filter(c => c).map(c => `<span class="badge badge-${c.toLowerCase()}" style="margin-right: 4px;">${escapeHtml(c)}</span>`).join('')}</td>
                     <td>$${escapeHtml(r.daily_rate)}/day</td>
                     <td>
                         <button class="btn btn-primary btn-approve" data-id="${r.id}" style="padding: 4px 12px; font-size: 12px;">Approve</button>

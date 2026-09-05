@@ -14,7 +14,7 @@ $inquiryId = $_POST['inquiry_id'] ?? null;
 $response = trim($_POST['response'] ?? '');
 $csrfToken = $_POST['csrf_token'] ?? '';
 
-if (!verifyCsrfToken($csrfToken)) {
+if (!csrfCheck($csrfToken)) {
     http_response_code(403);
     exit("Invalid CSRF token");
 }

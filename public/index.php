@@ -112,7 +112,16 @@ require_once __DIR__ . '/../includes/partials/head.php';
         <?php foreach ($featuredVehicles as $v): ?>
             <div class="fleet-card">
                 <div class="fleet-card-image">
-                    <div class="fleet-badge"><?= escapeHtml($v['category']) ?></div>
+                    <?php 
+                        $cats = explode(',', $v['category']);
+                        foreach($cats as $cat): 
+                            if(trim($cat)):
+                    ?>
+                        <div class="fleet-badge"><?= escapeHtml(trim($cat)) ?></div>
+                    <?php 
+                            endif;
+                        endforeach; 
+                    ?>
                     <?php if (!empty($v['photo_path'])): ?>
                         <?php $imgUrl = strpos($v['photo_path'], 'http') === 0 ? $v['photo_path'] : baseUrl($v['photo_path']); ?>
                         <img src="<?= escapeHtml($imgUrl) ?>" alt="Vehicle">

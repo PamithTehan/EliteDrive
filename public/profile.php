@@ -145,6 +145,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $successMsg = 'Account roles and preferences updated successfully.';
             }
         }
+    } elseif ($action === 'upload_license') {
+        $licenseNumber = trim($_POST['license_number'] ?? '');
+        $expiryDate = $_POST['expiry_date'] ?? '';
+        $format = $_POST['upload_format'] ?? 'pdf';
+        
+        if (!$licenseNumber || !$expiryDate) {
+            $errorMsg = 'License number and expiry date are required.';
+        } else {
+            $db->beginTransaction();
+            try {
+                $stmt = $db->prepare('INSERT INTO driving_licenses (user_id, license_number, expiry_date, upload_format, status) VALUES (?, ?, ?, ?, ?)');
+                $stmt->execute([$userId, $licenseNumber, $expiryDate, $format, 'pending']);
+                $licenseId = $db->lastInsertId();
+                
+                $uploadDir = __DIR__ . '/../storage/licenses/';
+                if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+                
+                if ($format === 'pdf') {
+                    if (empty($_FILES['license_pdf']['name'])) {
+                        throw new Exception("Please upload a PDF document.");
+                    }
+                    $filename = time() . '_' . basename($_FILES['license_pdf']['name']);
+                    move_uploaded_file($_FILES['license_pdf']['tmp_name'], $uploadDir . $filename);
+                    $stmt = $db->prepare('INSERT INTO driving_license_pdfs (license_id, file_path) VALUES (?, ?)');
+                    $stmt->execute([$licenseId, 'licenses/' . $filename]);
+                } else {
+                    if (empty($_FILES['license_front']['name']) || empty($_FILES['license_back']['name'])) {
+                        throw new Exception("Please upload both front and back images.");
+                    }
+                    $frontName = time() . '_front_' . basename($_FILES['license_front']['name']);
+                    $backName = time() . '_back_' . basename($_FILES['license_back']['name']);
+                    
+                    move_uploaded_file($_FILES['license_front']['tmp_name'], $uploadDir . $frontName);
+                    move_uploaded_file($_FILES['license_back']['tmp_name'], $uploadDir . $backName);
+                    
+                    $stmt = $db->prepare('INSERT INTO driving_license_images (license_id, front_image_path, back_image_path) VALUES (?, ?, ?)');
+                    $stmt->execute([$licenseId, 'licenses/' . $frontName, 'licenses/' . $backName]);
+                }
+                
+                $db->commit();
+                $successMsg = "License uploaded successfully. Please wait for admin verification.";
+                
+                // Refresh license var
+                $stmtLicense = $db->prepare("SELECT * FROM driving_licenses WHERE user_id = ? ORDER BY id DESC LIMIT 1");
+                $stmtLicense->execute([$userId]);
+                $license = $stmtLicense->fetch();
+            } catch (Exception $e) {
+                $db->rollBack();
+                $errorMsg = $e->getMessage();
+            }
+        }
     }
 }
 
@@ -366,7 +417,176 @@ require_once __DIR__ . '/../includes/partials/head.php';
                     </form>
                 </div>
 
-                <!-- 3. Security & Password -->
+                <!-- 3. Driving License Upload -->
+                <?php if (!empty($user['is_driver'])): ?>
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <span class="material-symbols-outlined">id_card</span>
+                        <div>
+                            <h2>Driving License Verification</h2>
+                            <p>Upload your valid driving license to accept trips.</p>
+                        </div>
+                    </div>
+                    
+                    <?php if ($license && $license['status'] === 'pending'): ?>
+                        <div class="alert-profile warning" style="margin-bottom: 24px;">
+                            <span class="material-symbols-outlined" style="font-size:20px;">info</span>
+                            <span>Your license is currently under review by an admin.</span>
+                        </div>
+                    <?php elseif ($license && $license['status'] === 'verified'): ?>
+                        <div class="alert-profile success" style="margin-bottom: 24px;">
+                            <span class="material-symbols-outlined" style="font-size:20px;">check_circle</span>
+                            <span>Your license has been verified. You are ready to drive!</span>
+                        </div>
+                    <?php elseif ($license && $license['status'] === 'rejected'): ?>
+                        <div class="alert-profile error" style="margin-bottom: 24px;">
+                            <span class="material-symbols-outlined" style="font-size:20px;">error</span>
+                            <span><strong>License rejected:</strong> <?= escapeHtml($license['rejection_reason'] ?: 'No reason provided') ?>. Please upload again.</span>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (!$license || $license['status'] === 'rejected'): ?>
+                    <form method="POST" action="<?= baseUrl('/profile.php') ?>" enctype="multipart/form-data">
+                        <input type="hidden" name="action" value="upload_license">
+
+                        <div class="form-grid-2">
+                            <div class="form-field">
+                                <label for="license_number">License Number</label>
+                                <input type="text" id="license_number" name="license_number" class="input" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="expiry_date">Expiry Date</label>
+                                <input type="date" id="expiry_date" name="expiry_date" class="input" required>
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <label class="form-label" style="display:block; margin-bottom: 8px;">Upload Format</label>
+                            <div style="display: flex; gap: var(--space-md);">
+                                <label><input type="radio" name="upload_format" value="pdf" checked> PDF Document</label>
+                                <label><input type="radio" name="upload_format" value="image"> Front & Back Images</label>
+                            </div>
+                        </div>
+
+                        <!-- PDF Upload Zone -->
+                        <div id="pdf-zone-container" style="margin-bottom: 16px;">
+                            <div class="drop-zone" id="pdf-drop-zone" style="border: 2px dashed var(--color-outline); border-radius: var(--radius-md); padding: 32px; text-align: center; cursor: pointer;">
+                                <div class="drop-zone-icon" style="font-size: 32px; color: var(--color-secondary); margin-bottom: 8px;">📄</div>
+                                <div class="drop-zone-text" id="pdf-drop-zone-text" style="color: var(--color-secondary);">
+                                    Drag and drop your PDF license here or click to browse
+                                </div>
+                                <input type="file" name="license_pdf" id="pdf-file-input" accept=".pdf" style="display:none;">
+                            </div>
+                        </div>
+
+                        <!-- Image Upload Zones -->
+                        <div id="image-zone-container" style="display: none; gap: var(--space-md); grid-template-columns: 1fr 1fr; margin-bottom: 16px;">
+                            <div class="drop-zone" id="front-drop-zone" style="border: 2px dashed var(--color-outline); border-radius: var(--radius-md); padding: 32px; text-align: center; cursor: pointer;">
+                                <div class="drop-zone-icon" style="font-size: 32px; color: var(--color-secondary); margin-bottom: 8px;">🖼️</div>
+                                <div class="drop-zone-text" id="front-drop-zone-text" style="color: var(--color-secondary);">
+                                    Front Image<br><small>Drag or click</small>
+                                </div>
+                                <input type="file" name="license_front" id="front-file-input" accept=".jpg,.jpeg,.png" style="display:none;">
+                            </div>
+                            
+                            <div class="drop-zone" id="back-drop-zone" style="border: 2px dashed var(--color-outline); border-radius: var(--radius-md); padding: 32px; text-align: center; cursor: pointer;">
+                                <div class="drop-zone-icon" style="font-size: 32px; color: var(--color-secondary); margin-bottom: 8px;">🖼️</div>
+                                <div class="drop-zone-text" id="back-drop-zone-text" style="color: var(--color-secondary);">
+                                    Back Image<br><small>Drag or click</small>
+                                </div>
+                                <input type="file" name="license_back" id="back-file-input" accept=".jpg,.jpeg,.png" style="display:none;">
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-save">
+                                <span class="material-symbols-outlined" style="font-size:18px;">upload</span> Upload License
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <script>
+                        // Toggle format visibility
+                        const formatRadios = document.querySelectorAll('input[name="upload_format"]');
+                        const pdfContainer = document.getElementById('pdf-zone-container');
+                        const imageContainer = document.getElementById('image-zone-container');
+                        
+                        const pdfInput = document.getElementById('pdf-file-input');
+                        const frontInput = document.getElementById('front-file-input');
+                        const backInput = document.getElementById('back-file-input');
+
+                        if (formatRadios.length) {
+                            formatRadios.forEach(radio => {
+                                radio.addEventListener('change', (e) => {
+                                    if (e.target.value === 'pdf') {
+                                        pdfContainer.style.display = 'block';
+                                        imageContainer.style.display = 'none';
+                                        pdfInput.required = true;
+                                        if (frontInput) frontInput.required = false;
+                                        if (backInput) backInput.required = false;
+                                    } else {
+                                        pdfContainer.style.display = 'none';
+                                        imageContainer.style.display = 'grid';
+                                        pdfInput.required = false;
+                                        if (frontInput) frontInput.required = true;
+                                        if (backInput) backInput.required = true;
+                                    }
+                                });
+                            });
+                            
+                            // Set initial required state
+                            if (pdfInput) pdfInput.required = true;
+
+                            // Setup Drop Zones Helper
+                            function setupDropZone(zoneId, inputId, textId, defaultText) {
+                                const zone = document.getElementById(zoneId);
+                                const input = document.getElementById(inputId);
+                                const text = document.getElementById(textId);
+                                if (!zone || !input || !text) return;
+
+                                zone.addEventListener('click', () => input.click());
+
+                                zone.addEventListener('dragover', (e) => {
+                                    e.preventDefault();
+                                    zone.classList.add('dragover');
+                                });
+
+                                zone.addEventListener('dragleave', () => {
+                                    zone.classList.remove('dragover');
+                                });
+
+                                zone.addEventListener('drop', (e) => {
+                                    e.preventDefault();
+                                    zone.classList.remove('dragover');
+                                    if (e.dataTransfer.files.length) {
+                                        input.files = e.dataTransfer.files;
+                                        updateText();
+                                    }
+                                });
+
+                                input.addEventListener('change', updateText);
+
+                                function updateText() {
+                                    if (input.files.length > 0) {
+                                        text.innerHTML = `<strong>Selected:</strong><br>${input.files[0].name}`;
+                                        text.style.color = 'var(--color-primary)';
+                                    } else {
+                                        text.innerHTML = defaultText;
+                                        text.style.color = 'var(--color-secondary)';
+                                    }
+                                }
+                            }
+
+                            setupDropZone('pdf-drop-zone', 'pdf-file-input', 'pdf-drop-zone-text', 'Drag and drop your PDF license here or click to browse');
+                            setupDropZone('front-drop-zone', 'front-file-input', 'front-drop-zone-text', 'Front Image<br><small>Drag or click</small>');
+                            setupDropZone('back-drop-zone', 'back-file-input', 'back-drop-zone-text', 'Back Image<br><small>Drag or click</small>');
+                        }
+                    </script>
+                    <?php endif; ?>
+                </div>
+                <?php endif; ?>
+
+                <!-- 4. Security & Password -->
                 <div class="settings-card">
                     <div class="settings-card-header">
                         <span class="material-symbols-outlined">lock</span>

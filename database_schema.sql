@@ -61,7 +61,7 @@ CREATE TABLE vehicles (
     owner_id INT NOT NULL,
     make VARCHAR(50) NOT NULL,
     model VARCHAR(50) NOT NULL,
-    category ENUM('Premium', 'Luxury', 'Budget', 'Offroad', 'Electric') NOT NULL,
+    category SET('Premium', 'Luxury', 'Budget', 'Offroad', 'Electric') NOT NULL,
     daily_rate DECIMAL(10, 2) NOT NULL,
     location VARCHAR(255) NOT NULL,
     transmission ENUM('Auto', 'Manual') NOT NULL DEFAULT 'Auto',
