@@ -144,3 +144,15 @@ CREATE TABLE rejection_logs (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (rejected_by) REFERENCES users(id) ON DELETE SET NULL
 );
+
+CREATE TABLE inquiries (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL,
+    subject VARCHAR(50) NOT NULL,
+    message TEXT NOT NULL,
+    status ENUM('pending', 'responded', 'closed') DEFAULT 'pending',
+    admin_response TEXT NULL,
+    responded_at TIMESTAMP NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

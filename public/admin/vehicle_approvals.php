@@ -21,6 +21,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                     <li><a href="<?= baseUrl('/admin/vehicle_approvals.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start; font-weight: bold;">Vehicle Approvals</a></li>
                     <li><a href="<?= baseUrl('/admin/verification_queue.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">Verification Queue</a></li>
                     <li><a href="<?= baseUrl('/admin/driver_assignments.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">Driver Assignments</a></li>
+                    <li><a href="<?= baseUrl('/admin/inquiries.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">Inquiries</a></li>
                 </ul>
             </div>
         </div>
