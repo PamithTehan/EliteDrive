@@ -7,6 +7,24 @@ requireRole('owner');
 $user = currentUser();
 $error = '';
 $success = '';
+$db = getDb();
+$vehicleId = (int)($_GET['id'] ?? 0);
+$isEdit = $vehicleId > 0;
+$vehicle = null;
+$existingPhotos = [];
+
+if ($isEdit) {
+    $stmt = $db->prepare('SELECT * FROM vehicles WHERE id = ? AND owner_id = ?');
+    $stmt->execute([$vehicleId, $user['id']]);
+    $vehicle = $stmt->fetch();
+    if (!$vehicle) {
+        die('Vehicle not found or you do not have permission to edit it.');
+    }
+    
+    $stmtPhotos = $db->prepare('SELECT * FROM vehicle_photos WHERE vehicle_id = ? ORDER BY is_primary DESC, id ASC');
+    $stmtPhotos->execute([$vehicleId]);
+    $existingPhotos = $stmtPhotos->fetchAll();
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrfCheck($_POST['csrf'] ?? '')) {
@@ -27,16 +45,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$make || !$model || !$category || !$dailyRate || !$location) {
             $error = 'Please fill in all required fields.';
         } else {
-            $db = getDb();
-            $stmt = $db->prepare('INSERT INTO vehicles (owner_id, make, model, category, daily_rate, location, transmission, mileage, km_rate, yom, yor, description, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "pending_review")');
             try {
-                $stmt->execute([$user['id'], $make, $model, $category, $dailyRate, $location, $transmission, $mileage, $kmRate, $yom, $yor, $description]);
-                $vehicleId = $db->lastInsertId();
+                if ($isEdit) {
+                    $stmt = $db->prepare('UPDATE vehicles SET make=?, model=?, category=?, daily_rate=?, location=?, transmission=?, mileage=?, km_rate=?, yom=?, yor=?, description=? WHERE id=? AND owner_id=?');
+                    $stmt->execute([$make, $model, $category, $dailyRate, $location, $transmission, $mileage, $kmRate, $yom, $yor, $description, $vehicleId, $user['id']]);
+                    $success = 'Vehicle updated successfully.';
+                } else {
+                    $stmt = $db->prepare('INSERT INTO vehicles (owner_id, make, model, category, daily_rate, location, transmission, mileage, km_rate, yom, yor, description, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "pending_review")');
+                    $stmt->execute([$user['id'], $make, $model, $category, $dailyRate, $location, $transmission, $mileage, $kmRate, $yom, $yor, $description]);
+                    $vehicleId = $db->lastInsertId();
+                    $success = 'Vehicle added successfully and is pending admin review.';
+                }
 
                 if (!empty($_FILES['photos']['name'][0])) {
                     $uploadDir = __DIR__ . '/../../public/assets/uploads/vehicles/';
                     if (!is_dir($uploadDir)) {
                         mkdir($uploadDir, 0755, true);
+                    }
+                    if ($isEdit) {
+                        $stmtDel = $db->prepare('DELETE FROM vehicle_photos WHERE vehicle_id = ?');
+                        $stmtDel->execute([$vehicleId]);
                     }
                     $isPrimary = 1;
                     foreach ($_FILES['photos']['tmp_name'] as $index => $tmpName) {
@@ -54,8 +82,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
                     }
                 }
-
-                $success = 'Vehicle added successfully and is pending admin review.';
             } catch (Exception $e) {
                 $error = 'Failed to add vehicle.';
             }
@@ -84,7 +110,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
     
     <main class="dashboard-content" style="grid-column: 2 / 4;">
         <div class="form-container">
-            <h1 class="headline-lg">Add a Vehicle</h1>
+            <h1 class="headline-lg"><?= $isEdit ? 'Edit Vehicle' : 'Add a Vehicle' ?></h1>
             
             <?php if ($error): ?>
                 <div class="alert alert-error"><?= escapeHtml($error) ?></div>
@@ -93,28 +119,29 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                 <div class="alert alert-success"><?= escapeHtml($success) ?></div>
             <?php endif; ?>
             
-            <form method="POST" action="<?= baseUrl('/owner/vehicle_form.php') ?>" enctype="multipart/form-data">
+            <form method="POST" action="<?= baseUrl('/owner/vehicle_form.php' . ($isEdit ? '?id='.$vehicleId : '')) ?>" enctype="multipart/form-data">
                 <input type="hidden" name="csrf" value="<?= csrfToken() ?>">
                 
                 <div class="grid grid-2">
                     <div class="form-group">
                         <label class="form-label" for="make">Make</label>
-                        <input type="text" id="make" name="make" class="input" required placeholder="e.g. Tesla">
+                        <input type="text" id="make" name="make" class="input" required placeholder="e.g. Tesla" value="<?= escapeHtml($vehicle['make'] ?? '') ?>">
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="model">Model</label>
-                        <input type="text" id="model" name="model" class="input" required placeholder="e.g. Model 3">
+                        <input type="text" id="model" name="model" class="input" required placeholder="e.g. Model 3" value="<?= escapeHtml($vehicle['model'] ?? '') ?>">
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label class="form-label">Categories (Select all that apply)</label>
                     <div style="display: flex; gap: var(--space-md); flex-wrap: wrap;">
-                        <label><input type="checkbox" name="category[]" value="Premium"> Premium</label>
-                        <label><input type="checkbox" name="category[]" value="Luxury"> Luxury</label>
-                        <label><input type="checkbox" name="category[]" value="Budget"> Budget</label>
-                        <label><input type="checkbox" name="category[]" value="Offroad"> Offroad</label>
-                        <label><input type="checkbox" name="category[]" value="Electric"> Electric</label>
+                        <?php $cats = explode(',', $vehicle['category'] ?? ''); ?>
+                        <label><input type="checkbox" name="category[]" value="Premium" <?= in_array('Premium', $cats) ? 'checked' : '' ?>> Premium</label>
+                        <label><input type="checkbox" name="category[]" value="Luxury" <?= in_array('Luxury', $cats) ? 'checked' : '' ?>> Luxury</label>
+                        <label><input type="checkbox" name="category[]" value="Budget" <?= in_array('Budget', $cats) ? 'checked' : '' ?>> Budget</label>
+                        <label><input type="checkbox" name="category[]" value="Offroad" <?= in_array('Offroad', $cats) ? 'checked' : '' ?>> Offroad</label>
+                        <label><input type="checkbox" name="category[]" value="Electric" <?= in_array('Electric', $cats) ? 'checked' : '' ?>> Electric</label>
                     </div>
                 </div>
                 
@@ -122,45 +149,45 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                     <div class="form-group">
                         <label class="form-label" for="transmission">Transmission</label>
                         <select id="transmission" name="transmission" class="input" required>
-                            <option value="Auto">Auto</option>
-                            <option value="Manual">Manual</option>
+                            <option value="Auto" <?= ($vehicle['transmission'] ?? '') === 'Auto' ? 'selected' : '' ?>>Auto</option>
+                            <option value="Manual" <?= ($vehicle['transmission'] ?? '') === 'Manual' ? 'selected' : '' ?>>Manual</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="yom">Year of Manufacture (YOM)</label>
-                        <input type="number" id="yom" name="yom" class="input" required min="1900" max="2100" placeholder="e.g. 2022">
+                        <input type="number" id="yom" name="yom" class="input" required min="1900" max="2100" placeholder="e.g. 2022" value="<?= escapeHtml($vehicle['yom'] ?? date('Y')) ?>">
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="yor">Year of Registration (YOR)</label>
-                        <input type="number" id="yor" name="yor" class="input" required min="1900" max="2100" placeholder="e.g. 2023">
+                        <input type="number" id="yor" name="yor" class="input" required min="1900" max="2100" placeholder="e.g. 2023" value="<?= escapeHtml($vehicle['yor'] ?? date('Y')) ?>">
                     </div>
                 </div>
 
                 <div class="grid grid-2">
                     <div class="form-group">
                         <label class="form-label" for="mileage">Mileage (Total km)</label>
-                        <input type="number" id="mileage" name="mileage" class="input" required min="0" placeholder="e.g. 15000">
+                        <input type="number" id="mileage" name="mileage" class="input" required min="0" placeholder="e.g. 15000" value="<?= escapeHtml($vehicle['mileage'] ?? '') ?>">
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="km_rate">Efficiency (km/l or km/charge)</label>
-                        <input type="number" id="km_rate" name="km_rate" class="input" required min="0" step="0.1" placeholder="e.g. 15.5">
+                        <input type="number" id="km_rate" name="km_rate" class="input" required min="0" step="0.1" placeholder="e.g. 15.5" value="<?= escapeHtml($vehicle['km_rate'] ?? '') ?>">
                     </div>
                 </div>
                 
                 <div class="grid grid-2">
                     <div class="form-group">
                         <label class="form-label" for="daily_rate">Daily Rate ($)</label>
-                        <input type="number" id="daily_rate" name="daily_rate" class="input" required min="0" step="0.01">
+                        <input type="number" id="daily_rate" name="daily_rate" class="input" required min="0" step="0.01" value="<?= escapeHtml($vehicle['daily_rate'] ?? '') ?>">
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="location">Location</label>
-                        <input type="text" id="location" name="location" class="input" required placeholder="City or Zip">
+                        <input type="text" id="location" name="location" class="input" required placeholder="City or Zip" value="<?= escapeHtml($vehicle['location'] ?? '') ?>">
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label class="form-label" for="description">Description</label>
-                    <textarea id="description" name="description" class="input" rows="4" placeholder="Optional details about the vehicle..."></textarea>
+                    <textarea id="description" name="description" class="input" rows="4" placeholder="Optional details about the vehicle..."><?= escapeHtml($vehicle['description'] ?? '') ?></textarea>
                 </div>
                 
                 <div class="form-group">
@@ -170,11 +197,16 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                         <input type="file" id="photos" name="photos[]" multiple accept="image/jpeg,image/png,image/webp" style="display: none;">
                         <button type="button" class="btn btn-secondary" onclick="document.getElementById('photos').click()" style="margin-top: 10px;">Browse Files</button>
                     </div>
-                    <div id="file-preview-list" style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;"></div>
+                    <div id="file-preview-list" style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
+                        <?php foreach ($existingPhotos as $photo): ?>
+                            <?php $imgUrl = strpos($photo['photo_path'], 'http') === 0 ? $photo['photo_path'] : baseUrl($photo['photo_path']); ?>
+                            <img src="<?= escapeHtml($imgUrl) ?>" style="width: 80px; height: 80px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--color-border);" class="existing-photo">
+                        <?php endforeach; ?>
+                    </div>
                     <p class="body-sm" style="color:var(--color-secondary); margin-top: 4px;">You can select multiple photos. The first photo will be the primary image.</p>
                 </div>
                 
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Submit for Approval</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%;"><?= $isEdit ? 'Update Vehicle' : 'Submit for Approval' ?></button>
             </form>
         </div>
     </main>
@@ -232,7 +264,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function handleFiles(files) {
-        previewList.innerHTML = '';
+        // Clear existing photos only if new files are selected
+        if (files.length > 0) {
+            previewList.innerHTML = '';
+        }
         [...files].forEach(file => {
             if (file.type.startsWith('image/')) {
                 let reader = new FileReader();
