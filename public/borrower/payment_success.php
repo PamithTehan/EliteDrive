@@ -12,13 +12,21 @@ if (!$bookingId) {
     die('Invalid booking ID.');
 }
 
-// Get the session ID from the DB
-$stmt = $db->prepare('SELECT id, stripe_session_id, booking_id FROM payments WHERE booking_id = ? AND status = "pending"');
+// Get the payment from the DB regardless of status to debug
+$stmt = $db->prepare('SELECT id, stripe_session_id, booking_id, status FROM payments WHERE booking_id = ?');
 $stmt->execute([$bookingId]);
 $payment = $stmt->fetch();
 
-if (!$payment || empty($payment['stripe_session_id'])) {
-    die('Payment not found or already processed.');
+if (!$payment) {
+    die("Payment for Booking ID {$bookingId} does not exist in the database.");
+}
+
+if ($payment['status'] !== 'pending') {
+    die("Payment was found, but its status is '{$payment['status']}' instead of 'pending'. It might have already been processed or cancelled.");
+}
+
+if (empty($payment['stripe_session_id'])) {
+    die("Payment is pending, but stripe_session_id is missing in the database!");
 }
 
 $sessionId = $payment['stripe_session_id'];
