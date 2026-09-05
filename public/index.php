@@ -48,9 +48,11 @@ require_once __DIR__ . '/../includes/partials/head.php';
                             <span class="material-symbols-outlined">directions_car</span>
                             <select name="category">
                                 <option value="">All Classes</option>
-                                <option value="Premium">Premium</option>
                                 <option value="Luxury">Luxury</option>
+                                <option value="Premium">Premium</option>
+                                <option value="Luxury">Off-Road</option>
                                 <option value="Electric">Electric</option>
+                                <option value="Electric">Budget</option>
                             </select>
                         </div>
                     </div>
@@ -61,7 +63,6 @@ require_once __DIR__ . '/../includes/partials/head.php';
             </form>
         </div>
     </div>
-    <div class="hero-footer-text">EXPLORE LUXURY RENTALS</div>
 </div>
 
 <div class="features-banner">

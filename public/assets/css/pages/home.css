@@ -1,6 +1,6 @@
 .home-hero {
     position: relative;
-    background-image: linear-gradient(to right, rgba(15, 23, 42, 0.88) 0%, rgba(15, 23, 42, 0.3) 100%), url('/assets/images/paul-kansonkho-9xjHQvdMi4c-unsplash.jpg');
+    background-image: linear-gradient(to right, rgba(15, 23, 42, 0.88) 0%, rgba(15, 23, 42, 0.3) 100%), url('../../images/paul-kansonkho-9xjHQvdMi4c-unsplash%20(1).jpg');
     background-size: cover;
     background-position: center;
     padding: 120px 0 80px;
@@ -31,7 +31,7 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-    max-width: 860px;
+    max-width: 645px;
 }
 
 .search-widget-row {
