@@ -50,7 +50,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                         <div class="card-body">
                             <h3 class="headline-md"><?= escapeHtml($v['make'] . ' ' . $v['model']) ?></h3>
                             <div class="card-specs">
-                                <span><?= escapeHtml($v['category']) ?></span>
+                                <span><?= escapeHtml(str_replace(',', ', ', $v['category'])) ?></span>
                                 <span>$<?= escapeHtml($v['daily_rate']) ?>/day</span>
                             </div>
                             <div style="margin-top: var(--space-sm);">
