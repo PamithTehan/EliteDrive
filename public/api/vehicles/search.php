@@ -11,7 +11,7 @@ try {
     $maxPrice = $_GET['max_price'] ?? '';
     $pickupDate = $_GET['pickup_date'] ?? null;
     $returnDate = $_GET['return_date'] ?? null;
-    $query = $_GET['q'] ?? '';
+    $query = trim($_GET['q'] ?? '');
 
     if ($pickupDate) {
         $pickupDate = explode('T', $pickupDate)[0] . ' 00:00:00';
@@ -27,7 +27,8 @@ try {
     $params = [];
 
     if ($query) {
-        $sql .= " AND (v.make LIKE ? OR v.model LIKE ?)";
+        $sql .= " AND (v.make LIKE ? OR v.model LIKE ? OR CONCAT(v.make, ' ', v.model) LIKE ?)";
+        $params[] = "%$query%";
         $params[] = "%$query%";
         $params[] = "%$query%";
     }
