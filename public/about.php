@@ -10,7 +10,7 @@ $stmtRev = $db->prepare('
     JOIN users u ON r.reviewer_id = u.id
     WHERE r.target_type = "platform"
     ORDER BY r.created_at DESC
-    LIMIT 3
+    LIMIT 10
 ');
 $stmtRev->execute();
 $platformReviews = $stmtRev->fetchAll();
@@ -81,21 +81,106 @@ require_once __DIR__ . '/../includes/partials/head.php';
             <h2 class="headline-lg">What Our Clients Say</h2>
             <p class="body-md" style="color:var(--color-secondary);">Experiences shared by the EliteDrive community.</p>
         </div>
-        <div class="grid grid-3" style="gap: 24px;">
-            <?php foreach ($platformReviews as $rev): ?>
-                <div class="card" style="padding: var(--space-lg); border-radius: var(--radius-md);">
-                    <div style="margin-bottom: 12px; color:#f59e0b; font-size: 20px;">
-                        <?= str_repeat('★', $rev['rating']) ?><?= str_repeat('☆', 5 - $rev['rating']) ?>
+        <div class="reviews-slider-wrapper" style="position: relative; overflow: hidden; padding: 10px 0;">
+            <style>
+                .slider-btn { opacity: 0; transition: opacity 0.3s ease; }
+                .reviews-slider-wrapper:hover .slider-btn { opacity: 1; }
+            </style>
+            <div class="reviews-track" id="reviewsTrack" style="display: flex; gap: 24px; will-change: transform;">
+                <?php foreach ($platformReviews as $rev): ?>
+                    <div class="card" style="min-width: calc((100% - 48px) / 3); max-width: calc((100% - 48px) / 3); flex-shrink: 0; padding: var(--space-lg); border-radius: var(--radius-md); box-sizing: border-box;">
+                        <div style="margin-bottom: 12px; color:#f59e0b; font-size: 20px;">
+                            <?= str_repeat('★', $rev['rating']) ?><?= str_repeat('☆', 5 - $rev['rating']) ?>
+                        </div>
+                        <?php if ($rev['comment']): ?>
+                            <p class="body-md" style="font-style: italic; margin-bottom: 16px;">"<?= nl2br(escapeHtml($rev['comment'])) ?>"</p>
+                        <?php endif; ?>
+                        <div>
+                            <strong class="body-md"><?= escapeHtml($rev['reviewer_name']) ?></strong>
+                            <div class="body-sm" style="color:var(--color-secondary);"><?= escapeHtml(date('M Y', strtotime($rev['created_at']))) ?></div>
+                        </div>
                     </div>
-                    <?php if ($rev['comment']): ?>
-                        <p class="body-md" style="font-style: italic; margin-bottom: 16px;">"<?= nl2br(escapeHtml($rev['comment'])) ?>"</p>
-                    <?php endif; ?>
-                    <div>
-                        <strong class="body-md"><?= escapeHtml($rev['reviewer_name']) ?></strong>
-                        <div class="body-sm" style="color:var(--color-secondary);"><?= escapeHtml(date('M Y', strtotime($rev['created_at']))) ?></div>
-                    </div>
-                </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            </div>
+            
+            <?php if (count($platformReviews) > 3): ?>
+            <button id="prevReview" class="btn slider-btn" style="position: absolute; top: 50%; left: 0; transform: translateY(-50%); z-index: 10; padding: 12px; background: var(--color-surface); border: 1px solid var(--color-outline); border-radius: 50%; box-shadow: 0 4px 6px rgba(0,0,0,0.1); font-weight: bold; cursor: pointer;">&lt;</button>
+            <button id="nextReview" class="btn slider-btn" style="position: absolute; top: 50%; right: 0; transform: translateY(-50%); z-index: 10; padding: 12px; background: var(--color-surface); border: 1px solid var(--color-outline); border-radius: 50%; box-shadow: 0 4px 6px rgba(0,0,0,0.1); font-weight: bold; cursor: pointer;">&gt;</button>
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const wrapper = document.querySelector('.reviews-slider-wrapper');
+                    const track = document.getElementById('reviewsTrack');
+                    const prevBtn = document.getElementById('prevReview');
+                    const nextBtn = document.getElementById('nextReview');
+                    let autoSlideInterval;
+                    let isAnimating = false;
+
+                    function goNext() {
+                        if (isAnimating) return;
+                        isAnimating = true;
+                        
+                        const slideWidth = track.children[0].offsetWidth + 24; // width + gap
+                        track.style.transition = 'transform 0.3s ease-in-out';
+                        track.style.transform = `translateX(-${slideWidth}px)`;
+
+                        setTimeout(() => {
+                            track.style.transition = 'none';
+                            track.appendChild(track.children[0]);
+                            track.style.transform = 'translateX(0)';
+                            isAnimating = false;
+                        }, 300);
+                    }
+
+                    function goPrev() {
+                        if (isAnimating) return;
+                        isAnimating = true;
+                        
+                        const slideWidth = track.children[0].offsetWidth + 24;
+                        track.style.transition = 'none';
+                        track.insertBefore(track.lastElementChild, track.children[0]);
+                        track.style.transform = `translateX(-${slideWidth}px)`;
+
+                        // Force reflow
+                        void track.offsetWidth;
+
+                        track.style.transition = 'transform 0.3s ease-in-out';
+                        track.style.transform = 'translateX(0)';
+                        
+                        setTimeout(() => {
+                            isAnimating = false;
+                        }, 300);
+                    }
+
+                    nextBtn.addEventListener('click', () => {
+                        goNext();
+                        resetInterval();
+                    });
+
+                    prevBtn.addEventListener('click', () => {
+                        goPrev();
+                        resetInterval();
+                    });
+
+                    function startInterval() {
+                        autoSlideInterval = setInterval(goNext, 2500);
+                    }
+
+                    function stopInterval() {
+                        clearInterval(autoSlideInterval);
+                    }
+
+                    function resetInterval() {
+                        stopInterval();
+                        startInterval();
+                    }
+
+                    wrapper.addEventListener('mouseenter', stopInterval);
+                    wrapper.addEventListener('mouseleave', startInterval);
+
+                    startInterval();
+                });
+            </script>
+            <?php endif; ?>
         </div>
     </div>
 </section>
