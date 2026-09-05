@@ -8,7 +8,13 @@ $user = currentUser();
 $db = getDb();
 
 // Fetch vehicles owned by this user
-$stmt = $db->prepare('SELECT * FROM vehicles WHERE owner_id = ? ORDER BY created_at DESC');
+$stmt = $db->prepare('
+    SELECT v.*, p.photo_path 
+    FROM vehicles v 
+    LEFT JOIN vehicle_photos p ON v.id = p.vehicle_id AND p.is_primary = 1 
+    WHERE v.owner_id = ? 
+    ORDER BY v.created_at DESC
+');
 $stmt->execute([$user['id']]);
 $vehicles = $stmt->fetchAll();
 
@@ -47,6 +53,10 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             <div class="grid grid-2">
                 <?php foreach ($vehicles as $v): ?>
                     <div class="card">
+                        <?php if (!empty($v['photo_path'])): ?>
+                            <?php $imgUrl = strpos($v['photo_path'], 'http') === 0 ? $v['photo_path'] : baseUrl($v['photo_path']); ?>
+                            <img src="<?= escapeHtml($imgUrl) ?>" alt="Vehicle Photo" style="width: 100%; height: 200px; object-fit: cover; border-top-left-radius: var(--radius-md); border-top-right-radius: var(--radius-md);">
+                        <?php endif; ?>
                         <div class="card-body">
                             <h3 class="headline-md"><?= escapeHtml($v['make'] . ' ' . $v['model']) ?></h3>
                             <div class="card-specs">
@@ -63,6 +73,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                                 };
                                 ?>
                                 <span class="badge <?= $badgeClass ?>"><?= escapeHtml($v['status']) ?></span>
+                                <a href="<?= baseUrl('/owner/vehicle_form.php?id=' . $v['id']) ?>" class="btn btn-ghost" style="padding: 4px 12px; font-size: 13px; margin-left: 8px;">Edit</a>
                             </div>
                             <?php if ($v['status'] === 'rejected' && !empty($v['rejection_reason'])): ?>
                                 <div class="alert alert-error" style="margin-top: var(--space-sm); font-size: 13px; padding: 8px 12px;">
