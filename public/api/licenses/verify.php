@@ -31,12 +31,18 @@ if (!$id || !in_array($decision, $validDecisions, true)) {
 $db = getDb();
 $user = currentUser();
 
-$stmt = $db->prepare('UPDATE driving_licenses SET status = ?, reviewed_by = ?, reviewed_at = NOW() WHERE id = ?');
-$stmt->execute([$decision, $user['id'], $id]);
+$rejectionReason = ($decision === 'rejected') ? $reason : null;
+
+$stmt = $db->prepare('UPDATE driving_licenses SET status = ?, reviewed_by = ?, reviewed_at = NOW(), rejection_reason = ? WHERE id = ?');
+$stmt->execute([$decision, $user['id'], $rejectionReason, $id]);
 
 if ($decision === 'rejected' && $reason) {
-    $logStmt = $db->prepare('INSERT INTO rejection_logs (entity_type, entity_id, reason, rejected_by) VALUES (?, ?, ?, ?)');
-    $logStmt->execute(['license', $id, $reason, $user['id']]);
+    try {
+        $logStmt = $db->prepare('INSERT INTO rejection_logs (entity_type, entity_id, reason, rejected_by) VALUES (?, ?, ?, ?)');
+        $logStmt->execute(['license', $id, $reason, $user['id']]);
+    } catch (Exception $e) {
+        // Optional audit log fallback
+    }
 }
 
 echo json_encode(['ok' => true]);

@@ -14,9 +14,11 @@ function onArrangementChange(e) {
 }
 
 async function loadAvailableDrivers() {
-  const vehicleId = document.querySelector('[name="vehicle_id"]').value;
-  const pickupDate = document.querySelector('[name="pickup_date"]').value;
-  const returnDate = document.querySelector('[name="return_date"]').value;
+  const vehicleIdInput = document.querySelector('[name="vehicle_id"]');
+  if (!vehicleIdInput) return;
+  const vehicleId = vehicleIdInput.value;
+  const pickupDate = document.querySelector('[name="pickup_date"]')?.value || '';
+  const returnDate = document.querySelector('[name="return_date"]')?.value || '';
   
   try {
       const baseUrl = window.appBaseUrl || '';
@@ -29,13 +31,20 @@ async function loadAvailableDrivers() {
       const drivers = await res.json();
       const select = document.querySelector('#driver-select');
       
-      if (drivers.length === 0) {
-          select.innerHTML = '<option value="">No drivers available for these dates</option>';
+      if (!select) return;
+
+      if (!drivers || drivers.length === 0) {
+          select.innerHTML = '<option value="">No compatible drivers available for these dates</option>';
           return;
       }
       
       let options = '<option value="">Let admin assign a driver</option>';
-      options += drivers.map(d => `<option value="${d.id}">${escapeHtml(d.full_name)}</option>`).join('');
+      options += drivers.map(d => {
+          const fee = d.daily_fee ? `$${parseFloat(d.daily_fee).toFixed(2)}/day` : '';
+          const trans = d.transmission_preference ? ` (${d.transmission_preference})` : '';
+          const label = `${escapeHtml(d.full_name)}${fee ? ' - ' + fee : ''}${trans}`;
+          return `<option value="${d.id}">${label}</option>`;
+      }).join('');
       select.innerHTML = options;
   } catch (err) {
       console.error('Failed to load drivers', err);
@@ -49,6 +58,7 @@ document.querySelector('[name="pickup_date"]')?.addEventListener('change', () =>
         loadAvailableDrivers();
     }
 });
+
 document.querySelector('[name="return_date"]')?.addEventListener('change', () => {
     if (document.querySelector('input[name="driver_arrangement"]:checked')?.value === 'hired') {
         loadAvailableDrivers();

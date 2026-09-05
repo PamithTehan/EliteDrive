@@ -7,6 +7,7 @@ header('Content-Type: application/json');
 try {
     $db = getDb();
     $category = $_GET['category'] ?? '';
+    $transmission = $_GET['transmission'] ?? '';
     $maxPrice = $_GET['max_price'] ?? '';
     $pickupDate = $_GET['pickup_date'] ?? null;
     $returnDate = $_GET['return_date'] ?? null;
@@ -19,7 +20,7 @@ try {
         $returnDate = explode('T', $returnDate)[0] . ' 23:59:59';
     }
 
-    $sql = "SELECT v.id, v.make, v.model, v.category, v.daily_rate, p.photo_path 
+    $sql = "SELECT v.id, v.make, v.model, v.category, v.daily_rate, v.transmission, v.mileage, v.km_rate, v.yom, v.yor, p.photo_path 
             FROM vehicles v 
             LEFT JOIN vehicle_photos p ON v.id = p.vehicle_id AND p.is_primary = 1 
             WHERE v.status = 'approved'";
@@ -38,6 +39,10 @@ try {
         foreach ($categories as $cat) {
             $params[] = trim($cat);
         }
+    }
+    if ($transmission && in_array(strtolower($transmission), ['auto', 'manual'], true)) {
+        $sql .= " AND LOWER(v.transmission) = ?";
+        $params[] = strtolower($transmission);
     }
     if ($maxPrice && is_numeric($maxPrice)) {
         $sql .= " AND v.daily_rate <= ?";

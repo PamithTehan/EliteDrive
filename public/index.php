@@ -6,7 +6,7 @@ require_once __DIR__ . '/../includes/functions.php';
 // Fetch top 2 premium vehicles for the "Our Selection" grid
 $db = getDb();
 $stmt = $db->query("
-    SELECT v.id, v.make, v.model, v.category, v.daily_rate, p.photo_path 
+    SELECT v.id, v.make, v.model, v.category, v.daily_rate, v.transmission, v.mileage, v.km_rate, v.yom, v.yor, p.photo_path 
     FROM vehicles v 
     LEFT JOIN vehicle_photos p ON v.id = p.vehicle_id AND p.is_primary = 1 
     WHERE v.status = 'approved' 
@@ -134,9 +134,15 @@ require_once __DIR__ . '/../includes/partials/head.php';
                         </div>
                     </div>
                     <div class="fleet-specs">
-                        <div class="spec-item"><span class="material-symbols-outlined" style="font-size:16px;">local_gas_station</span> <?= escapeHtml($v['category']) ?></div>
-                        <div class="spec-item"><span class="material-symbols-outlined" style="font-size:16px;">group</span> <?= escapeHtml($v['seating_capacity'] ?? '5') ?> Seats</div>
-                        <div class="spec-item"><span class="material-symbols-outlined" style="font-size:16px;">settings</span> <?= escapeHtml($v['transmission'] ?? 'Auto') ?></div>
+                        <?php 
+                            $isElectric = $v['category'] === 'Electric';
+                            $rateUnit = $isElectric ? 'km/charge' : 'km/l';
+                            $rateIcon = $isElectric ? 'electric_car' : 'local_gas_station';
+                            $transIcon = $v['transmission'] === 'Manual' ? 'account_tree' : 'settings';
+                        ?>
+                        <div class="spec-item"><span class="material-symbols-outlined" style="font-size:16px;"><?= $rateIcon ?></span> <?= escapeHtml($v['km_rate']) ?> <?= $rateUnit ?></div>
+                        <div class="spec-item"><span class="material-symbols-outlined" style="font-size:16px;">speed</span> <?= escapeHtml($v['mileage']) ?> km</div>
+                        <div class="spec-item"><span class="material-symbols-outlined" style="font-size:16px;"><?= $transIcon ?></span> <?= escapeHtml($v['transmission']) ?></div>
                     </div>
                     <div class="fleet-actions">
                         <a href="<?= baseUrl('/fleet/detail.php?id=' . $v['id']) ?>" class="btn-outline">Details</a>

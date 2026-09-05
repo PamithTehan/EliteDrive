@@ -1,0 +1,300 @@
+/* profile.css */
+
+.profile-page-hero {
+    background-color: #f8fafc;
+    border-bottom: 1px solid var(--color-outline);
+    padding: 40px 0 32px;
+    margin-bottom: 36px;
+}
+
+.profile-page-hero h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--color-primary);
+}
+
+.profile-page-hero p {
+    color: var(--color-secondary);
+    font-size: 14px;
+}
+
+.profile-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 32px;
+    align-items: start;
+    padding-bottom: 60px;
+}
+
+/* User Card */
+.profile-user-card {
+    background: white;
+    border: 1px solid var(--color-outline);
+    border-radius: var(--radius-lg);
+    padding: 32px 24px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+    position: sticky;
+    top: 24px;
+}
+
+.profile-avatar-circle {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+    color: white;
+    font-size: 28px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.15);
+    text-transform: uppercase;
+}
+
+.profile-user-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 4px;
+}
+
+.profile-user-email {
+    font-size: 13px;
+    color: var(--color-secondary);
+    margin-bottom: 16px;
+    word-break: break-all;
+}
+
+.profile-role-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.role-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.role-badge.borrower { background: #e0f2fe; color: #0369a1; }
+.role-badge.driver { background: #fef3c7; color: #92400e; }
+.role-badge.owner { background: #dcfce7; color: #166534; }
+.role-badge.admin { background: #fee2e2; color: #991b1b; }
+
+.profile-stats-divider {
+    border: 0;
+    border-top: 1px solid var(--color-outline);
+    margin: 20px 0;
+}
+
+.profile-meta-list {
+    text-align: left;
+    font-size: 13px;
+    color: var(--color-secondary);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.profile-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile-meta-item .material-symbols-outlined {
+    font-size: 18px;
+    color: var(--color-secondary);
+}
+
+/* Settings Panels */
+.profile-content-area {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.settings-card {
+    background: white;
+    border: 1px solid var(--color-outline);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+}
+
+.settings-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--color-outline);
+}
+
+.settings-card-header .material-symbols-outlined {
+    font-size: 24px;
+    color: var(--color-primary);
+}
+
+.settings-card-header h2 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin: 0;
+}
+
+.settings-card-header p {
+    font-size: 12px;
+    color: var(--color-secondary);
+    margin-top: 2px;
+}
+
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form-field {
+    margin-bottom: 16px;
+}
+
+.form-field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: 6px;
+}
+
+.form-field input,
+.form-field select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--color-outline);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    background: white;
+    color: var(--color-text);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+    border-color: black;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+}
+
+.form-field input:disabled {
+    background: #f8fafc;
+    color: var(--color-secondary);
+    cursor: not-allowed;
+}
+
+.form-field .field-hint {
+    font-size: 11px;
+    color: var(--color-secondary);
+    margin-top: 4px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.btn-save {
+    background: black;
+    color: white;
+    padding: 10px 24px;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-save:hover {
+    background: #27272a;
+}
+
+/* Radio buttons & toggle options */
+.radio-options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+}
+
+.radio-card-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 1px solid var(--color-outline);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.radio-card-label:hover {
+    background: #f8fafc;
+}
+
+.radio-card-label input[type="radio"] {
+    accent-color: black;
+    margin: 0;
+}
+
+/* Alert Notification */
+.alert-profile {
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.alert-profile.success {
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+.alert-profile.error {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+@media (max-width: 860px) {
+    .profile-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .profile-user-card {
+        position: static;
+    }
+
+    .form-grid-2 {
+        grid-template-columns: 1fr;
+    }
+}

@@ -8,18 +8,12 @@ $user = currentUser();
 $db = getDb();
 
 // Check license status
-$stmt = $db->prepare('SELECT id, status FROM driving_licenses WHERE user_id = ? ORDER BY created_at DESC LIMIT 1');
+$stmt = $db->prepare('SELECT id, status, rejection_reason FROM driving_licenses WHERE user_id = ? ORDER BY created_at DESC LIMIT 1');
 $stmt->execute([$user['id']]);
 $licenseRow = $stmt->fetch();
 $licenseStatus = $licenseRow ? $licenseRow['status'] : null;
 $licenseId = $licenseRow ? $licenseRow['id'] : null;
-
-$rejectionReason = '';
-if ($licenseStatus === 'rejected' && $licenseId) {
-    $rStmt = $db->prepare('SELECT reason FROM rejection_logs WHERE entity_type = ? AND entity_id = ? ORDER BY created_at DESC LIMIT 1');
-    $rStmt->execute(['license', $licenseId]);
-    $rejectionReason = $rStmt->fetchColumn() ?: 'No reason provided.';
-}
+$rejectionReason = ($licenseStatus === 'rejected') ? ($licenseRow['rejection_reason'] ?: 'No reason provided.') : '';
 
 $error = '';
 $success = '';
@@ -73,6 +67,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// Fetch driver profile settings
+$dStmt = $db->prepare('SELECT daily_fee, transmission_preference, driving_preference FROM drivers WHERE user_id = ?');
+$dStmt->execute([$user['id']]);
+$driverProfile = $dStmt->fetch() ?: ['daily_fee' => 25.00, 'transmission_preference' => 'Both', 'driving_preference' => 'any_vehicle'];
+
 $extraCss = ['dashboard'];
 require_once __DIR__ . '/../../includes/partials/head.php';
 ?>
@@ -82,7 +81,17 @@ require_once __DIR__ . '/../../includes/partials/head.php';
         <div class="card">
             <div class="card-body stack-sm">
                 <h2 class="headline-md"><?= escapeHtml($user['full_name']) ?></h2>
-                <p class="body-md">Driver Dashboard</p>
+                <p class="body-md" style="color:var(--color-secondary);">Driver Dashboard</p>
+                <div style="background:var(--color-surface); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-outline); margin: var(--space-sm) 0;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom: 6px; font-size: 13px;">
+                        <span style="color:var(--color-secondary);">Daily Fee:</span>
+                        <strong>$<?= number_format($driverProfile['daily_fee'], 2) ?>/day</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; font-size: 13px;">
+                        <span style="color:var(--color-secondary);">Transmission:</span>
+                        <strong><?= escapeHtml($driverProfile['transmission_preference']) ?></strong>
+                    </div>
+                </div>
                 <hr style="border:0; border-top: 1px solid var(--color-outline); margin: var(--space-md) 0;">
                 <ul class="stack-sm" style="list-style:none; padding:0;">
                     <li><a href="<?= baseUrl('/driver/dashboard.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start; font-weight: bold;">Overview</a></li>

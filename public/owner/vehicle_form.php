@@ -18,14 +18,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $dailyRate = $_POST['daily_rate'] ?? '';
         $location = trim($_POST['location'] ?? '');
         $description = trim($_POST['description'] ?? '');
+        $transmission = $_POST['transmission'] ?? 'Auto';
+        $mileage = (int)($_POST['mileage'] ?? 0);
+        $kmRate = (float)($_POST['km_rate'] ?? 0);
+        $yom = (int)($_POST['yom'] ?? date('Y'));
+        $yor = (int)($_POST['yor'] ?? date('Y'));
 
         if (!$make || !$model || !$category || !$dailyRate || !$location) {
             $error = 'Please fill in all required fields.';
         } else {
             $db = getDb();
-            $stmt = $db->prepare('INSERT INTO vehicles (owner_id, make, model, category, daily_rate, location, description, status) VALUES (?, ?, ?, ?, ?, ?, ?, "pending_review")');
+            $stmt = $db->prepare('INSERT INTO vehicles (owner_id, make, model, category, daily_rate, location, transmission, mileage, km_rate, yom, yor, description, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "pending_review")');
             try {
-                $stmt->execute([$user['id'], $make, $model, $category, $dailyRate, $location, $description]);
+                $stmt->execute([$user['id'], $make, $model, $category, $dailyRate, $location, $transmission, $mileage, $kmRate, $yom, $yor, $description]);
                 $vehicleId = $db->lastInsertId();
 
                 if (!empty($_FILES['photos']['name'][0])) {
@@ -110,7 +115,37 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                         <option value="Luxury">Luxury</option>
                         <option value="Budget">Budget</option>
                         <option value="Offroad">Offroad</option>
+                        <option value="Electric">Electric</option>
                     </select>
+                </div>
+                
+                <div class="grid grid-3">
+                    <div class="form-group">
+                        <label class="form-label" for="transmission">Transmission</label>
+                        <select id="transmission" name="transmission" class="input" required>
+                            <option value="Auto">Auto</option>
+                            <option value="Manual">Manual</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="yom">Year of Manufacture (YOM)</label>
+                        <input type="number" id="yom" name="yom" class="input" required min="1900" max="2100" placeholder="e.g. 2022">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="yor">Year of Registration (YOR)</label>
+                        <input type="number" id="yor" name="yor" class="input" required min="1900" max="2100" placeholder="e.g. 2023">
+                    </div>
+                </div>
+
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label class="form-label" for="mileage">Mileage (Total km)</label>
+                        <input type="number" id="mileage" name="mileage" class="input" required min="0" placeholder="e.g. 15000">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="km_rate">Efficiency (km/l or km/charge)</label>
+                        <input type="number" id="km_rate" name="km_rate" class="input" required min="0" step="0.1" placeholder="e.g. 15.5">
+                    </div>
                 </div>
                 
                 <div class="grid grid-2">

@@ -29,6 +29,15 @@ function calculatePrice(array $booking, PDO $db): float {
     $stmt->execute([$booking['vehicle_id']]);
     $dailyRate = (float) $stmt->fetchColumn();
 
+    $driverDailyFee = 0.0;
+    if (!empty($booking['assigned_driver_id']) && ($booking['driver_arrangement'] ?? '') === 'hired') {
+        $stmtD = $db->prepare('SELECT daily_fee FROM drivers WHERE user_id = ?');
+        $stmtD->execute([$booking['assigned_driver_id']]);
+        $driverDailyFee = (float) ($stmtD->fetchColumn() ?: 0.0);
+    }
+
+    $effectiveDailyRate = $dailyRate + $driverDailyFee;
+
     $pickup = new DateTime($booking['pickup_date']);
     $return = new DateTime($booking['return_date']);
     
@@ -43,11 +52,53 @@ function calculatePrice(array $booking, PDO $db): float {
     $chargeBlock = intdiv($borrowPeriodInHours, 4);
     $uncompletedChargeBlock = ($borrowPeriodInHours % 4 > 0) ? 1 : 0;
     
-    $chargeForDayQuarter = $dailyRate / 4;
+    $chargeForDayQuarter = $effectiveDailyRate / 4;
     
     $chargeTotal = ($chargeBlock + $uncompletedChargeBlock) * $chargeForDayQuarter;
     
     return $chargeTotal;
+}
+
+function isVehicleAvailable(int $vehicleId, string $pickupDate, string $returnDate, PDO $db): bool {
+    $stmt = $db->prepare("
+        SELECT COUNT(*) FROM bookings 
+        WHERE vehicle_id = ? 
+          AND status NOT IN ('cancelled', 'rejected') 
+          AND pickup_date < ? 
+          AND return_date > ?
+    ");
+    $stmt->execute([$vehicleId, $returnDate, $pickupDate]);
+    return ((int)$stmt->fetchColumn()) === 0;
+}
+
+function isDriverAvailable(int $driverId, string $pickupDate, string $returnDate, PDO $db): bool {
+    $stmt = $db->prepare("
+        SELECT COUNT(*) FROM bookings 
+        WHERE assigned_driver_id = ? 
+          AND status NOT IN ('cancelled', 'rejected') 
+          AND pickup_date < ? 
+          AND return_date > ?
+    ");
+    $stmt->execute([$driverId, $returnDate, $pickupDate]);
+    return ((int)$stmt->fetchColumn()) === 0;
+}
+
+function isDriverTransmissionCompatible(int $driverId, int $vehicleId, PDO $db): bool {
+    $stmt = $db->prepare('
+        SELECT d.transmission_preference, v.transmission 
+        FROM drivers d 
+        JOIN vehicles v ON v.id = ? 
+        WHERE d.user_id = ?
+    ');
+    $stmt->execute([$vehicleId, $driverId]);
+    $row = $stmt->fetch();
+    if (!$row) return false;
+
+    $driverPref = $row['transmission_preference'];
+    $vehicleTrans = $row['transmission'];
+
+    if ($driverPref === 'Both') return true;
+    return strcasecmp($driverPref, $vehicleTrans) === 0;
 }
 
 /**

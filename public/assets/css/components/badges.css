@@ -3,6 +3,7 @@
 .badge-luxury  { background: #001a42; color: #fff; }
 .badge-budget  { background: #dcfce7; color: #14532d; }
 .badge-offroad { background: #fef3c7; color: #78350f; }
+.badge-electric { background: #cffafe; color: #0e7490; }
 .badge-status-verified  { background: #dcfce7; color: #14532d; }
 .badge-status-pending   { background: #fef9c3; color: #713f12; }
 .badge-status-rejected  { background: #fee2e2; color: #7f1d1d; }

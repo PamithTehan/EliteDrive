@@ -66,11 +66,15 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                         </label>
                     </div>
                     
-                    <div class="filter-group">
+                        <div class="filter-group">
                         <div class="filter-group-title">Transmission</div>
                         <div class="toggle-group">
                             <label>
-                                <input type="radio" name="transmission" value="auto" checked>
+                                <input type="radio" name="transmission" value="" checked>
+                                <span class="toggle-btn">All</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="transmission" value="auto">
                                 <span class="toggle-btn">Auto</span>
                             </label>
                             <label>
@@ -94,59 +98,45 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                 </div>
             </div>
             
-            <div class="pagination">
-                <div class="page-btn outline"><span class="material-symbols-outlined" style="font-size:18px;">chevron_left</span></div>
-                <div class="page-btn active">1</div>
-                <div class="page-btn">2</div>
-                <div class="page-btn">3</div>
-                <div class="page-btn outline"><span class="material-symbols-outlined" style="font-size:18px;">chevron_right</span></div>
+            <div class="pagination-wrapper" id="pagination-wrapper" style="display: none;">
+                <div class="pagination-info-group">
+                    <div id="pagination-summary">Showing 0 of 0 vehicles</div>
+                    <div class="per-page-selector">
+                        <label for="per-page-select">Per page:</label>
+                        <select id="per-page-select" class="per-page-dropdown" onchange="changePerPage(this.value)">
+                            <option value="6">6</option>
+                            <option value="10" selected>10</option>
+                            <option value="14">14</option>
+                            <option value="all">All</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="pagination" id="pagination-controls">
+                    <!-- Dynamic page buttons -->
+                </div>
             </div>
         </main>
     </div>
 </div>
 
-<div class="trust-bar">
-    <div class="container grid grid-4">
-        <div class="trust-item">
-            <span class="material-symbols-outlined">verified_user</span>
-            <div class="trust-text">
-                <h4>Fully Insured</h4>
-                <p>Comprehensive coverage included</p>
-            </div>
-        </div>
-        <div class="trust-item">
-            <span class="material-symbols-outlined">support_agent</span>
-            <div class="trust-text">
-                <h4>24/7 Support</h4>
-                <p>Round-the-clock roadside help</p>
-            </div>
-        </div>
-        <div class="trust-item">
-            <span class="material-symbols-outlined">star</span>
-            <div class="trust-text">
-                <h4>Premium Fleet</h4>
-                <p>Vehicles under 2 years old</p>
-            </div>
-        </div>
-        <div class="trust-item">
-            <span class="material-symbols-outlined">cancel</span>
-            <div class="trust-text">
-                <h4>Free Cancellation</h4>
-                <p>Flexible booking policies</p>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script>
     const resultsGrid = document.getElementById('results-grid');
+    const paginationWrapper = document.getElementById('pagination-wrapper');
+    const paginationSummary = document.getElementById('pagination-summary');
+    const paginationControls = document.getElementById('pagination-controls');
+
+    let allVehicles = [];
+    let currentPage = 1;
+    let perPage = 10;
 
     function clearFilters() {
         document.getElementById('filter-q').value = '';
         document.getElementById('filter-pickup').value = '';
         document.getElementById('filter-return').value = '';
         document.querySelectorAll('input[name="category"]').forEach(cb => cb.checked = false);
-        document.querySelector('input[name="transmission"][value="auto"]').checked = true;
+        const allTransRadio = document.querySelector('input[name="transmission"][value=""]');
+        if (allTransRadio) allTransRadio.checked = true;
         loadVehicles();
     }
 
@@ -154,6 +144,8 @@ require_once __DIR__ . '/../../includes/partials/head.php';
         const q = document.getElementById('filter-q').value;
         const pickupDate = document.getElementById('filter-pickup').value;
         const returnDate = document.getElementById('filter-return').value;
+        const transRadio = document.querySelector('input[name="transmission"]:checked');
+        const transmission = transRadio ? transRadio.value : '';
         
         // Get all checked categories
         const checkedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(cb => cb.value);
@@ -164,6 +156,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             const params = new URLSearchParams();
             if (q) params.append('q', q);
             if (categoryParam) params.append('category', categoryParam);
+            if (transmission) params.append('transmission', transmission);
             if (pickupDate && returnDate) {
                 params.append('pickup_date', pickupDate);
                 params.append('return_date', returnDate);
@@ -171,65 +164,19 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             
             const res = await fetch(url + params.toString());
             if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-            const vehicles = await res.json();
+            const data = await res.json();
             
-            if (vehicles.error) {
-                throw new Error(vehicles.error);
+            if (data.error) {
+                throw new Error(data.error);
             }
             
-            if (!Array.isArray(vehicles) || vehicles.length === 0) {
-                resultsGrid.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: white; border-radius: var(--radius-lg); border: 1px solid var(--color-outline);">
-                        <p style="color:var(--color-secondary);">No vehicles found matching your criteria.</p>
-                    </div>`;
-                return;
-            }
-            
-            resultsGrid.innerHTML = vehicles.map(v => {
-                const img = v.photo_path ? (v.photo_path.startsWith('http') ? v.photo_path : `<?= baseUrl('/') ?>${v.photo_path}`) : '';
-                const imgHtml = img ? `<img src="${escapeHtml(img)}" alt="Vehicle">` : `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#ccc;">[No Image]</div>`;
-                
-                return `
-                <div class="fleet-card">
-                    <div class="fleet-card-image">
-                        <div class="fleet-badge">${escapeHtml(v.category)}</div>
-                        ${imgHtml}
-                    </div>
-                    <div class="fleet-card-body">
-                        <div class="fleet-title-row">
-                            <div class="fleet-title-info">
-                                <h3>${escapeHtml(v.make)} ${escapeHtml(v.model)}</h3>
-                                <p>Premium ${escapeHtml(v.category)}</p>
-                            </div>
-                            <div class="fleet-price">
-                                <div class="amount">$${escapeHtml(v.daily_rate)}</div>
-                                <div class="period">per day</div>
-                            </div>
-                        </div>
-                        <div class="fleet-specs">
-                            <div class="spec-item">
-                                <span class="material-symbols-outlined">speed</span>
-                                <span>450km Range</span>
-                            </div>
-                            <div class="spec-item">
-                                <span class="material-symbols-outlined">group</span>
-                                <span>5 Seats</span>
-                            </div>
-                            <div class="spec-item">
-                                <span class="material-symbols-outlined">settings</span>
-                                <span>Automatic</span>
-                            </div>
-                        </div>
-                        <div class="fleet-actions">
-                            <a href="<?= baseUrl('/fleet/detail.php') ?>?id=${v.id}" class="btn-dark">View Details</a>
-                        </div>
-                    </div>
-                </div>
-                `;
-            }).join('');
+            allVehicles = Array.isArray(data) ? data : [];
+            currentPage = 1;
+            renderPagination();
             
         } catch (e) {
             console.error("Fetch error:", e);
+            paginationWrapper.style.display = 'none';
             resultsGrid.innerHTML = `
                 <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: #ffebee; border-radius: var(--radius-lg); border: 1px solid #ffcdd2; color: #c62828;">
                     <p>Error loading vehicles. Please check the server connection and try again.</p>
@@ -237,10 +184,193 @@ require_once __DIR__ . '/../../includes/partials/head.php';
         }
     }
 
+    function changePerPage(val) {
+        perPage = val === 'all' ? 'all' : parseInt(val, 10);
+        currentPage = 1;
+        renderPagination();
+    }
+
+    function goToPage(page) {
+        currentPage = page;
+        renderPagination();
+        
+        // Smooth scroll to top of fleet search grid
+        const mainElem = document.querySelector('main');
+        if (mainElem) {
+            mainElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    function renderPagination() {
+        const totalItems = allVehicles.length;
+
+        if (totalItems === 0) {
+            paginationWrapper.style.display = 'none';
+            resultsGrid.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: white; border-radius: var(--radius-lg); border: 1px solid var(--color-outline);">
+                    <p style="color:var(--color-secondary);">No vehicles found matching your criteria.</p>
+                </div>`;
+            return;
+        }
+
+        paginationWrapper.style.display = 'flex';
+
+        const totalPages = perPage === 'all' ? 1 : Math.ceil(totalItems / perPage);
+        if (currentPage > totalPages) currentPage = totalPages;
+        if (currentPage < 1) currentPage = 1;
+
+        let startIndex = 0;
+        let endIndex = totalItems;
+
+        if (perPage !== 'all') {
+            startIndex = (currentPage - 1) * perPage;
+            endIndex = Math.min(startIndex + perPage, totalItems);
+        }
+
+        const visibleVehicles = allVehicles.slice(startIndex, endIndex);
+
+        // Update Summary
+        if (perPage === 'all' || totalItems <= perPage) {
+            paginationSummary.textContent = `Showing all ${totalItems} vehicle${totalItems === 1 ? '' : 's'}`;
+        } else {
+            paginationSummary.textContent = `Showing ${startIndex + 1}–${endIndex} of ${totalItems} vehicles`;
+        }
+
+        // Render Vehicle Cards
+        resultsGrid.innerHTML = visibleVehicles.map(v => {
+            const img = v.photo_path ? (v.photo_path.startsWith('http') ? v.photo_path : `<?= baseUrl('/') ?>${v.photo_path}`) : '';
+            const imgHtml = img ? `<img src="${escapeHtml(img)}" alt="Vehicle">` : `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#ccc;">[No Image]</div>`;
+            
+            const isElectric = v.category === 'Electric';
+            const rateUnit = isElectric ? 'km/charge' : 'km/l';
+            const rateIcon = isElectric ? 'electric_car' : 'local_gas_station';
+            const transIcon = v.transmission === 'Manual' ? 'account_tree' : 'settings';
+
+            return `
+            <div class="fleet-card">
+                <div class="fleet-card-image">
+                    <div class="fleet-badge">${escapeHtml(v.category)}</div>
+                    ${imgHtml}
+                </div>
+                <div class="fleet-card-body">
+                    <div class="fleet-title-row">
+                        <div class="fleet-title-info">
+                            <h3>${escapeHtml(v.make)} ${escapeHtml(v.model)}</h3>
+                            <p>YOM: ${escapeHtml(v.yom || '')}</p>
+                        </div>
+                        <div class="fleet-price">
+                            <div class="amount">$${escapeHtml(v.daily_rate)}</div>
+                            <div class="period">per day</div>
+                        </div>
+                    </div>
+                    <div class="fleet-specs">
+                        <div class="spec-item">
+                            <span class="material-symbols-outlined">${rateIcon}</span>
+                            <span>${escapeHtml(v.km_rate || '')} ${rateUnit}</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="material-symbols-outlined">speed</span>
+                            <span>${escapeHtml(v.mileage || '')} km</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="material-symbols-outlined">${transIcon}</span>
+                            <span>${escapeHtml(v.transmission || '')}</span>
+                        </div>
+                    </div>
+                    <div class="fleet-actions">
+                        <a href="<?= baseUrl('/fleet/detail.php') ?>?id=${v.id}" class="btn-dark">View Details</a>
+                    </div>
+                </div>
+            </div>
+            `;
+        }).join('');
+
+        // Render Pagination Controls
+        if (totalPages <= 1) {
+            paginationControls.innerHTML = '';
+            return;
+        }
+
+        let controlsHtml = '';
+
+        // Previous button
+        const prevDisabled = currentPage === 1 ? 'disabled' : '';
+        controlsHtml += `
+            <div class="page-btn ${prevDisabled}" onclick="${currentPage > 1 ? `goToPage(${currentPage - 1})` : ''}" title="Previous Page">
+                <span class="material-symbols-outlined" style="font-size:18px;">chevron_left</span>
+            </div>
+        `;
+
+        // Page buttons with pagination algorithm
+        const pages = getPageNumbers(currentPage, totalPages);
+        pages.forEach(p => {
+            if (p === '...') {
+                controlsHtml += `<span class="page-ellipsis">...</span>`;
+            } else {
+                const isActive = p === currentPage ? 'active' : '';
+                controlsHtml += `
+                    <div class="page-btn ${isActive}" onclick="goToPage(${p})">${p}</div>
+                `;
+            }
+        });
+
+        // Next button
+        const nextDisabled = currentPage === totalPages ? 'disabled' : '';
+        controlsHtml += `
+            <div class="page-btn ${nextDisabled}" onclick="${currentPage < totalPages ? `goToPage(${currentPage + 1})` : ''}" title="Next Page">
+                <span class="material-symbols-outlined" style="font-size:18px;">chevron_right</span>
+            </div>
+        `;
+
+        paginationControls.innerHTML = controlsHtml;
+    }
+
+    function getPageNumbers(current, total) {
+        if (total <= 7) {
+            return Array.from({ length: total }, (_, i) => i + 1);
+        }
+
+        const pages = [];
+        if (current <= 4) {
+            for (let i = 1; i <= 5; i++) pages.push(i);
+            pages.push('...');
+            pages.push(total);
+        } else if (current >= total - 3) {
+            pages.push(1);
+            pages.push('...');
+            for (let i = total - 4; i <= total; i++) pages.push(i);
+        } else {
+            pages.push(1);
+            pages.push('...');
+            for (let i = current - 1; i <= current + 1; i++) pages.push(i);
+            pages.push('...');
+            pages.push(total);
+        }
+        return pages;
+    }
+
     function escapeHtml(str) {
         if (!str) return '';
         return str.toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     }
+
+    // Live filtering for Search Vehicle (debounced) and Transmission
+    let searchDebounceTimer = null;
+    const filterQInput = document.getElementById('filter-q');
+    if (filterQInput) {
+        filterQInput.addEventListener('input', () => {
+            clearTimeout(searchDebounceTimer);
+            searchDebounceTimer = setTimeout(() => {
+                loadVehicles();
+            }, 250);
+        });
+    }
+
+    document.querySelectorAll('input[name="transmission"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+            loadVehicles();
+        });
+    });
 
     // Auto-populate from URL if present (from homepage)
     window.addEventListener('DOMContentLoaded', () => {
@@ -251,6 +381,11 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             const cat = urlParams.get('category');
             const cb = document.querySelector(`input[name="category"][value="${cat}"]`);
             if (cb) cb.checked = true;
+        }
+        if (urlParams.has('transmission')) {
+            const trans = urlParams.get('transmission');
+            const rb = document.querySelector(`input[name="transmission"][value="${trans}"]`);
+            if (rb) rb.checked = true;
         }
         loadVehicles();
     });

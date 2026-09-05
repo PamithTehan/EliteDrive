@@ -7,16 +7,30 @@ header('Content-Type: application/json');
 $db = getDb();
 $pickupDate = $_GET['pickup_date'] ?? null;
 $returnDate = $_GET['return_date'] ?? null;
+$vehicleId = !empty($_GET['vehicle_id']) ? (int)$_GET['vehicle_id'] : null;
+$transmission = $_GET['transmission'] ?? null;
 
 if ($pickupDate) $pickupDate = str_replace('T', ' ', $pickupDate);
 if ($returnDate) $returnDate = str_replace('T', ' ', $returnDate);
 
-$sql = "SELECT d.user_id as id, u.full_name
+// If vehicle_id is provided, look up its transmission
+if ($vehicleId && !$transmission) {
+    $vStmt = $db->prepare('SELECT transmission FROM vehicles WHERE id = ?');
+    $vStmt->execute([$vehicleId]);
+    $transmission = $vStmt->fetchColumn() ?: null;
+}
+
+$sql = "SELECT d.user_id as id, u.full_name, d.daily_fee, d.transmission_preference
         FROM drivers d
         JOIN users u ON u.id = d.user_id
         JOIN driving_licenses dl ON dl.user_id = d.user_id
         WHERE dl.status = 'verified' AND dl.expiry_date > NOW()";
 $params = [];
+
+if ($transmission) {
+    $sql .= " AND (d.transmission_preference = 'Both' OR d.transmission_preference = ?)";
+    $params[] = $transmission;
+}
 
 if ($pickupDate && $returnDate) {
     $sql .= " AND NOT EXISTS (
@@ -29,6 +43,8 @@ if ($pickupDate && $returnDate) {
     $params[] = $returnDate;
     $params[] = $pickupDate;
 }
+
+$sql .= " ORDER BY u.full_name ASC";
 
 $stmt = $db->prepare($sql);
 $stmt->execute($params);
