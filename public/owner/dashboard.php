@@ -63,6 +63,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                                 };
                                 ?>
                                 <span class="badge <?= $badgeClass ?>"><?= escapeHtml($v['status']) ?></span>
+                                <a href="<?= baseUrl('/owner/vehicle_form.php?id=' . $v['id']) ?>" class="btn btn-ghost" style="padding: 4px 12px; font-size: 13px; margin-left: 8px;">Edit</a>
                             </div>
                             <?php if ($v['status'] === 'rejected' && !empty($v['rejection_reason'])): ?>
                                 <div class="alert alert-error" style="margin-top: var(--space-sm); font-size: 13px; padding: 8px 12px;">
