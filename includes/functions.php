@@ -24,39 +24,76 @@ function getVehicleOwnerId(int $vehicleId, PDO $db): ?int {
     return $stmt->fetchColumn() ?: null;
 }
 
-function calculatePrice(array $booking, PDO $db): float {
+function calculateRentalBreakdown(array $booking, PDO $db): array {
+    $breakdown = [
+        'vehicle_daily_rate' => 0.0,
+        'driver_daily_fee' => 0.0,
+        'effective_daily_rate' => 0.0,
+        'total_days' => 0,
+        'remaining_blocks' => 0,
+        'total_blocks' => 0,
+        'block_rate' => 0.0,
+        'grace_period_applied' => false,
+        'total_price' => 0.0
+    ];
+
+    if (empty($booking['vehicle_id']) || empty($booking['pickup_date']) || empty($booking['return_date'])) {
+        return $breakdown;
+    }
+
     $stmt = $db->prepare('SELECT daily_rate FROM vehicles WHERE id = ?');
     $stmt->execute([$booking['vehicle_id']]);
-    $dailyRate = (float) $stmt->fetchColumn();
+    $breakdown['vehicle_daily_rate'] = (float) $stmt->fetchColumn();
 
-    $driverDailyFee = 0.0;
     if (!empty($booking['assigned_driver_id']) && ($booking['driver_arrangement'] ?? '') === 'hired') {
         $stmtD = $db->prepare('SELECT daily_fee FROM drivers WHERE user_id = ?');
         $stmtD->execute([$booking['assigned_driver_id']]);
-        $driverDailyFee = (float) ($stmtD->fetchColumn() ?: 0.0);
+        $breakdown['driver_daily_fee'] = (float) ($stmtD->fetchColumn() ?: 0.0);
     }
 
-    $effectiveDailyRate = $dailyRate + $driverDailyFee;
+    $breakdown['effective_daily_rate'] = $breakdown['vehicle_daily_rate'] + $breakdown['driver_daily_fee'];
+    $breakdown['block_rate'] = $breakdown['effective_daily_rate'] / 4; // 6-hour blocks (4 per day)
 
     $pickup = new DateTime($booking['pickup_date']);
     $return = new DateTime($booking['return_date']);
-    
     $diffSeconds = $return->getTimestamp() - $pickup->getTimestamp();
+
     if ($diffSeconds <= 0) {
-        return 0.0;
+        return $breakdown;
     }
 
-    // Convert to full hours (rounding up any partial hour)
-    $borrowPeriodInHours = (int) ceil($diffSeconds / 3600);
+    // 1-Hour Grace Period Logic
+    $totalMinutes = ceil($diffSeconds / 60);
     
-    $chargeBlock = intdiv($borrowPeriodInHours, 6);
-    $uncompletedChargeBlock = ($borrowPeriodInHours % 6 > 0) ? 1 : 0;
+    // If they go over a multiple of 6 hours by less than 60 minutes, we waive it.
+    // To do this, we just subtract 60 minutes from the total duration, with a minimum of 1 minute.
+    $billableMinutes = max(1, $totalMinutes - 60);
+    if ($totalMinutes > 60 && $totalMinutes > $billableMinutes) {
+        $breakdown['grace_period_applied'] = true;
+    }
     
-    $chargeForDayQuarter = $effectiveDailyRate / 4; // Since a day has 24 hours, a 6-hour block is 1/4th of a day.
+    $billableHours = ceil($billableMinutes / 60);
     
-    $chargeTotal = ($chargeBlock + $uncompletedChargeBlock) * $chargeForDayQuarter;
+    // Full 24-hour days
+    $breakdown['total_days'] = floor($billableHours / 24);
     
-    return $chargeTotal;
+    // Remaining hours are converted into 6-hour blocks
+    $remainingHours = $billableHours % 24;
+    $breakdown['remaining_blocks'] = ceil($remainingHours / 6);
+    
+    // Total blocks across the whole period (just for display if needed)
+    $breakdown['total_blocks'] = ($breakdown['total_days'] * 4) + $breakdown['remaining_blocks'];
+    
+    // Calculate price: (Full Days * Daily Rate) + (Remaining Blocks * Block Rate)
+    $breakdown['total_price'] = ($breakdown['total_days'] * $breakdown['effective_daily_rate']) + 
+                                ($breakdown['remaining_blocks'] * $breakdown['block_rate']);
+
+    return $breakdown;
+}
+
+function calculatePrice(array $booking, PDO $db): float {
+    $breakdown = calculateRentalBreakdown($booking, $db);
+    return $breakdown['total_price'];
 }
 
 function isVehicleAvailable(int $vehicleId, string $pickupDate, string $returnDate, PDO $db): bool {
