@@ -150,8 +150,11 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                                     <?php endif; ?>
                                 </div>
                             <?php elseif ($b['status'] === 'pending_payment'): ?>
-                                <div class="alert alert-warning" style="margin-top: var(--space-md); margin-bottom: 0; background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; padding: var(--space-sm); border-radius: var(--radius-sm);">
-                                    <strong>Payment Required:</strong> Your booking is awaiting payment. If you cancelled the payment, you may cancel this booking and try again.
+                                <div class="alert alert-warning" style="margin-top: var(--space-md); margin-bottom: 0; background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; padding: var(--space-sm); border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <strong>Payment Required:</strong> Your booking is awaiting payment.
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" onclick="payBooking(<?= $b['id'] ?>)">Pay Now</button>
                                 </div>
                             <?php endif; ?>
                             
@@ -188,6 +191,27 @@ require_once __DIR__ . '/../../includes/partials/head.php';
     
     document.addEventListener('DOMContentLoaded', () => {
     });
+    
+    async function payBooking(bookingId) {
+        const formData = new FormData();
+        formData.append('csrf', csrfToken);
+        formData.append('booking_id', bookingId);
+        
+        try {
+            const res = await fetch('<?= baseUrl('/api/bookings/pay.php') ?>', { method: 'POST', body: formData });
+            if (res.ok) {
+                const data = await res.json();
+                if (data.stripe_url) {
+                    window.location.href = data.stripe_url;
+                }
+            } else {
+                const data = await res.json();
+                alert(data.error || 'Failed to initialize payment.');
+            }
+        } catch (e) {
+            alert('Network error');
+        }
+    }
     
     async function reportDispute(bookingId) {
         const reason = prompt("What is the reason for this dispute? (e.g. Damage, No Show)");

@@ -106,9 +106,57 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                 </div>
             </div>
             
-            <hr style="border:0; border-top: 1px solid var(--color-outline); margin: var(--space-md) 0;">
+            <?php
+            // Calculate breakdown
+            $pickup = new DateTime($pickupDate);
+            $return = new DateTime($returnDate);
+            $diffSeconds = $return->getTimestamp() - $pickup->getTimestamp();
+            $borrowPeriodInHours = (int) ceil($diffSeconds / 3600);
+            $chargeBlock = intdiv($borrowPeriodInHours, 6);
+            $uncompletedChargeBlock = ($borrowPeriodInHours % 6 > 0) ? 1 : 0;
+            $totalBlocks = $chargeBlock + $uncompletedChargeBlock;
             
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: var(--space-lg);">
+            $vehicleDailyRate = (float)$vehicle['daily_rate'];
+            $driverDailyFee = 0.0;
+            if ($driverArrangement === 'hired' && $driverId && isset($driverData['daily_fee'])) {
+                $driverDailyFee = (float)$driverData['daily_fee'];
+            }
+            $effectiveDailyRate = $vehicleDailyRate + $driverDailyFee;
+            $chargeForDayQuarter = $effectiveDailyRate / 4;
+            ?>
+            
+            <div style="background-color: #f8fafc; padding: var(--space-md); border-radius: var(--radius-md); margin-bottom: var(--space-lg);">
+                <h3 class="label-md" style="margin-bottom: var(--space-sm); color: var(--color-primary);">Invoice Breakdown</h3>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                    <span class="body-sm" style="color: var(--color-secondary);">Vehicle Daily Rate</span>
+                    <span class="body-sm">$<?= number_format($vehicleDailyRate, 2) ?></span>
+                </div>
+                
+                <?php if ($driverDailyFee > 0): ?>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                    <span class="body-sm" style="color: var(--color-secondary);">Driver Daily Fee</span>
+                    <span class="body-sm">$<?= number_format($driverDailyFee, 2) ?></span>
+                </div>
+                <?php endif; ?>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px dashed var(--color-outline); padding-bottom: 8px;">
+                    <span class="body-sm" style="color: var(--color-secondary); font-weight: 600;">Effective Daily Rate</span>
+                    <span class="body-sm" style="font-weight: 600;">$<?= number_format($effectiveDailyRate, 2) ?></span>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                    <span class="body-sm" style="color: var(--color-secondary);">Rental Duration</span>
+                    <span class="body-sm"><?= $borrowPeriodInHours ?> hours</span>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                    <span class="body-sm" style="color: var(--color-secondary);">Chargeable Blocks (6-hour periods)</span>
+                    <span class="body-sm"><?= $totalBlocks ?> &times; $<?= number_format($chargeForDayQuarter, 2) ?></span>
+                </div>
+            </div>
+            
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: var(--space-lg); border-top: 2px solid var(--color-outline); padding-top: var(--space-md);">
                 <h3 class="headline-md">Total Price</h3>
                 <h3 class="headline-lg" style="color:var(--color-primary);">$<?= number_format($price, 2) ?></h3>
             </div>
