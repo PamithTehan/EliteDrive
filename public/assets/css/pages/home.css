@@ -133,7 +133,7 @@
     height: 48px;
     border-radius: 50%;
     background: #e0e7ff;
-    color: var(--color-accent);
+    color: var(--color-primary);
     display: flex;
     align-items: center;
     justify-content: center;
