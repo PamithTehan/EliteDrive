@@ -58,6 +58,9 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                         <a href="<?= baseUrl('/admin/inquiries.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
                             <span class="material-symbols-outlined">contact_support</span> Inquiries
                         </a>
+                        <a href="<?= baseUrl('/admin/management.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
+                            <span class="material-symbols-outlined">manage_accounts</span> System Management
+                        </a>
                     </div>
                 </div>
             </aside>
