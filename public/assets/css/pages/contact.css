@@ -1,18 +1,24 @@
 .contact-page {
-    background-color: #f8fafc; /* light gray/blue background */
-    padding: 60px 0;
+    background-color: var(--color-surface);
+    padding: 48px 0 64px;
     min-height: calc(100vh - 80px);
 }
 
 .contact-header {
-    margin-bottom: 48px;
+    margin-bottom: 40px;
+}
+
+.contact-header h1 {
+    color: var(--color-primary);
+    margin-bottom: 12px;
 }
 
 .contact-card {
-    background: white;
+    background: #ffffff;
     border-radius: var(--radius-lg);
     border: 1px solid var(--color-outline);
     padding: 32px;
+    box-shadow: var(--shadow-sm);
 }
 
 .info-item {
@@ -27,11 +33,11 @@
 }
 
 .info-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    background-color: #dbeafe; /* light blue */
-    color: #1e40af; /* dark blue */
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background-color: #dbeafe;
+    color: #1e40af;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -39,25 +45,27 @@
 }
 
 .emergency-card {
-    background-color: #111827;
-    color: white;
+    background-color: var(--color-primary);
+    color: #ffffff;
     border-radius: var(--radius-lg);
     padding: 24px;
     display: flex;
     align-items: flex-start;
     gap: 16px;
     margin-top: 24px;
+    box-shadow: var(--shadow-md);
 }
 
 .emergency-icon {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: rgba(255,255,255,0.2);
+    background-color: rgba(255,255,255,0.15);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    color: #ffffff;
 }
 
 .social-icons {
@@ -69,19 +77,21 @@
 .social-btn {
     width: 40px;
     height: 40px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     border: 1px solid var(--color-outline);
-    background: white;
+    background: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-text);
+    color: var(--color-secondary);
     text-decoration: none;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
 }
 
 .social-btn:hover {
     background: var(--color-surface);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
 }
 
 .form-group {
@@ -93,6 +103,7 @@
     margin-bottom: 8px;
     font-size: 14px;
     font-weight: 500;
+    color: var(--color-primary);
 }
 
 .contact-input {
@@ -102,20 +113,24 @@
     border-radius: var(--radius-sm);
     font-size: 15px;
     font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .contact-input:focus {
     outline: none;
-    border-color: var(--color-primary);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
 }
 
 .map-section {
     position: relative;
     width: 100%;
-    height: 400px;
+    height: 360px;
     border-radius: var(--radius-lg);
     overflow: hidden;
     margin-top: 48px;
+    border: 1px solid var(--color-outline);
+    box-shadow: var(--shadow-sm);
 }
 
 .map-bg {
@@ -129,16 +144,23 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 64px;
-    height: 64px;
-    background: white;
+    width: 56px;
+    height: 56px;
+    background: #ffffff;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    box-shadow: var(--shadow-lg);
+    color: var(--color-accent);
 }
 
 .map-pin .material-symbols-outlined {
-    font-size: 32px;
+    font-size: 28px;
+}
+
+@media (max-width: 768px) {
+    .contact-page .grid-2 {
+        grid-template-columns: 1fr;
+    }
 }

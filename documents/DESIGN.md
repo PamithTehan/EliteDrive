@@ -1,53 +1,36 @@
 ---
 name: Executive Fleet Narrative
 colors:
-  surface: '#f7f9fb'
-  surface-dim: '#d8dadc'
-  surface-bright: '#f7f9fb'
+  surface: '#f8fafc'
+  surface-dim: '#e2e8f0'
+  surface-bright: '#ffffff'
   surface-container-lowest: '#ffffff'
-  surface-container-low: '#f2f4f6'
-  surface-container: '#eceef0'
-  surface-container-high: '#e6e8ea'
-  surface-container-highest: '#e0e3e5'
-  on-surface: '#191c1e'
-  on-surface-variant: '#45464d'
-  inverse-surface: '#2d3133'
-  inverse-on-surface: '#eff1f3'
-  outline: '#76777d'
-  outline-variant: '#c6c6cd'
-  surface-tint: '#565e74'
-  primary: '#000000'
+  surface-container-low: '#f8fafc'
+  surface-container: '#f1f5f9'
+  surface-container-high: '#e2e8f0'
+  surface-container-highest: '#cbd5e1'
+  on-surface: '#0f172a'
+  on-surface-variant: '#334155'
+  inverse-surface: '#0f172a'
+  inverse-on-surface: '#f8fafc'
+  outline: '#e2e8f0'
+  outline-variant: '#cbd5e1'
+  primary: '#0f172a'
   on-primary: '#ffffff'
-  primary-container: '#131b2e'
-  on-primary-container: '#7c839b'
-  inverse-primary: '#bec6e0'
-  secondary: '#515f74'
+  primary-container: '#1e293b'
+  on-primary-container: '#cbd5e1'
+  secondary: '#334155'
   on-secondary: '#ffffff'
-  secondary-container: '#d5e3fd'
-  on-secondary-container: '#57657b'
-  tertiary: '#000000'
-  on-tertiary: '#ffffff'
-  tertiary-container: '#001a42'
-  on-tertiary-container: '#3980f4'
+  accent: '#3b82f6'
+  on-accent: '#ffffff'
   error: '#ba1a1a'
   on-error: '#ffffff'
   error-container: '#ffdad6'
   on-error-container: '#93000a'
-  primary-fixed: '#dae2fd'
-  primary-fixed-dim: '#bec6e0'
-  on-primary-fixed: '#131b2e'
-  on-primary-fixed-variant: '#3f465c'
-  secondary-fixed: '#d5e3fd'
-  secondary-fixed-dim: '#b9c7e0'
-  on-secondary-fixed: '#0d1c2f'
-  on-secondary-fixed-variant: '#3a485c'
-  tertiary-fixed: '#d8e2ff'
-  tertiary-fixed-dim: '#adc6ff'
-  on-tertiary-fixed: '#001a42'
-  on-tertiary-fixed-variant: '#004395'
-  background: '#f7f9fb'
-  on-background: '#191c1e'
-  surface-variant: '#e0e3e5'
+  success: '#1a7f37'
+  on-success: '#ffffff'
+  success-container: '#dcfce7'
+  on-success-container: '#14532d'
 typography:
   headline-xl:
     fontFamily: Inter
@@ -71,6 +54,11 @@ typography:
     fontSize: 20px
     fontWeight: '600'
     lineHeight: 28px
+  headline-sm:
+    fontFamily: Inter
+    fontSize: 16px
+    fontWeight: '600'
+    lineHeight: 24px
   body-lg:
     fontFamily: Inter
     fontSize: 18px
@@ -78,100 +66,185 @@ typography:
     lineHeight: 28px
   body-md:
     fontFamily: Inter
-    fontSize: 16px
+    fontSize: 15px
     fontWeight: '400'
     lineHeight: 24px
+  body-sm:
+    fontFamily: Inter
+    fontSize: 13px
+    fontWeight: '400'
+    lineHeight: 20px
   label-md:
     fontFamily: Inter
     fontSize: 14px
     fontWeight: '500'
     lineHeight: 20px
     letterSpacing: 0.05em
+    textTransform: uppercase
   label-sm:
     fontFamily: Inter
     fontSize: 12px
     fontWeight: '600'
     lineHeight: 16px
+    letterSpacing: 0.03em
 rounded:
-  sm: 0.125rem
-  DEFAULT: 0.25rem
-  md: 0.375rem
-  lg: 0.5rem
-  xl: 0.75rem
+  sm: 4px
+  md: 8px
+  lg: 12px
+  xl: 16px
   full: 9999px
 spacing:
-  container-max: 1280px
+  container-max: 1360px
   gutter: 24px
-  margin-desktop: 64px
-  margin-mobile: 20px
-  stack-sm: 8px
-  stack-md: 16px
-  stack-lg: 32px
+  margin-desktop: 32px
+  margin-tablet: 24px
+  margin-mobile: 16px
+  space-xs: 4px
+  space-sm: 8px
+  space-md: 16px
+  space-lg: 24px
+  space-xl: 48px
+  space-2xl: 80px
 ---
 
-## Brand & Style
+# EliteDrive Design System Specification
 
-The design system is engineered for a premium car rental experience that balances high-end sophistication with seamless utility. The brand personality is authoritative yet accessible, targeting discerning travelers and professionals who value efficiency and transparency. 
+## 1. Brand Identity & Aesthetic Direction
 
-The aesthetic direction is **Corporate / Modern** with a focus on high-performance precision. It leverages generous whitespace and a rigid structural alignment to evoke a sense of reliability and luxury. The emotional goal is to provide the user with absolute confidence in the quality of the fleet and the ease of the booking process.
+The **EliteDrive** design system is engineered to provide a high-performance, executive car rental marketplace experience. The brand balances **contemporary minimalism** with **automotive luxury and precision**.
 
-## Colors
+- **Personality**: Authoritative, sleek, trustworthy, and frictionless.
+- **Aesthetic Direction**: *Executive Fleet Narrative* — deep midnight navy contrasts against clean off-white surfaces, accented by crisp electric blue calls-to-action and refined slate typography.
+- **Visual Rhythm**: Generous yet efficient spacing, clean 1px borders, tonal card surfaces, subtle hover elevations, and responsive typography built on the **Inter** typeface.
 
-The palette is anchored by a deep navy (Primary) and slate gray (Secondary), providing a stable, high-contrast foundation that feels institutional and secure. 
+---
 
-- **Primary (#0F172A):** Used for navigation, headings, and high-level containers to establish authority.
-- **Secondary (#334155):** Reserved for subtext, icons, and supporting structural elements.
-- **Accent (#3B82F6):** An electric blue used exclusively for primary calls-to-action (CTAs) and interactive states to drive conversion.
-- **Neutral (#F8FAFC):** A clean, off-white background color that prevents eye strain and provides a canvas for the darker brand colors to pop.
+## 2. Color System
 
-## Typography
+| Token | Hex | Usage |
+| :--- | :--- | :--- |
+| `--color-primary` | `#0F172A` | Deep Navy: Headings, primary containers, active tab highlights, logo, and core accents. |
+| `--color-secondary` | `#334155` | Slate Gray: Secondary body text, icon tints, subtitles, inactive nav links, and metadata. |
+| `--color-accent` | `#3B82F6` | Electric Blue: Interactive buttons, focus rings, primary CTAs, active status toggles. |
+| `--color-surface` | `#F8FAFC` | Off-White Background: Clean backdrop preventing glare and making white cards stand out. |
+| `--color-outline` | `#E2E8F0` | Subtle Border: 1px divider for cards, inputs, tables, and section separators. |
+| `--color-success` | `#1A7F37` | Forest Green: Verified driver licenses, confirmed bookings, approved vehicles. |
+| `--color-error` | `#BA1A1A` | Deep Crimson: Form validation alerts, rejection notices, cancellation badges. |
 
-The design system utilizes **Inter** exclusively to leverage its exceptional legibility and systematic feel. 
+---
 
-Headlines use tight letter-spacing and bold weights to convey a sense of premium precision. Body text is optimized for readability with generous line heights. Labels utilize uppercase tracking for "Trust Badges" and technical specifications of the vehicles, creating a clear distinction between editorial content and data points.
+## 3. Typography System
 
-## Layout & Spacing
+EliteDrive exclusively utilizes **Inter** via Google Fonts for clean legibility across devices.
 
-This design system follows a **Fluid Grid** model with a maximum container width of 1280px for desktop. 
+- **`headline-xl` (48px / 700 / -0.02em)**: Hero titles on Home, Fleet, About, FAQs, and Contact pages.
+- **`headline-lg` (32px / 600 / -0.01em)**: Section headings, modal titles, and major card group titles.
+- **`headline-md` (20px / 600)**: Card titles, vehicle make & model names, and widget headers.
+- **`headline-sm` (16px / 600)**: Sub-headers, accordion trigger titles, and sidebar section headers.
+- **`body-lg` (18px / 400 / 28px line-height)**: Hero lead paragraphs and introductory copy.
+- **`body-md` (15px / 400 / 24px line-height)**: Primary reading text, descriptions, and form labels.
+- **`body-sm` (13px / 400 / 20px line-height)**: Helper hints, caption text, and table subtext.
+- **`label-md` (14px / 500 / uppercase + 0.05em tracking)**: Category tags, trust pill headers, and section overlines.
+- **`label-sm` (12px / 600 / 0.03em tracking)**: Vehicle specification tags (Seats, Transmission, Fuel, Km Rate).
 
-- **Desktop:** 12-column grid with 24px gutters. Content is centered with 64px outer margins to ensure a premium, spacious feel.
-- **Tablet:** 8-column grid with 24px gutters and 40px margins.
-- **Mobile:** 4-column grid with 16px gutters and 20px margins. 
+---
 
-Vertical spacing (stacking) follows an 8px base unit. Hero sections and car listings should use `stack-lg` to separate distinct car categories, while form inputs use `stack-sm` for tight logical grouping.
+## 4. Layout, Grid & Screen Margins
 
-## Elevation & Depth
+To ensure maximum content readability and an expansive visual feel on high-resolution screens without squeezing page content, **screen side margins are optimized and reduced**:
 
-To maintain a clean and professional look, depth is achieved through **Tonal Layers** and **Low-contrast Outlines** rather than heavy shadows.
+- **Max Container Width (`--container-max`)**: `1360px` (centered via `margin-inline: auto`).
+- **Desktop Side Margins (`--margin-desktop`)**: `32px` outer padding (reduced from 64px for a sleeker, wide-screen experience).
+- **Tablet Side Margins (`--margin-tablet`)**: `24px` outer padding (`768px – 1024px` viewports).
+- **Mobile Side Margins (`--margin-mobile`)**: `16px` outer padding (`< 768px` viewports).
+- **Fluid Grid**:
+  - `grid-4`: 4 columns desktop → 2 columns tablet → 1 column mobile.
+  - `grid-3`: 3 columns desktop → 1 column mobile.
+  - `grid-2`: 2 columns desktop → 1 column mobile.
+  - Faceted layouts (Fleet & FAQs): `280px` / `300px` fixed-width sidebar + `1fr` flexible content area with a `24px` - `32px` gap.
 
-- **Level 0 (Base):** Neutral background (#F8FAFC).
-- **Level 1 (Cards/Forms):** White surfaces with a 1px border in a very light slate (#E2E8F0).
-- **Level 2 (Interactive/Hover):** A subtle, ultra-diffused ambient shadow (0px 4px 20px rgba(15, 23, 42, 0.05)) is applied only when a car listing card is hovered to indicate interactivity.
-- **Dividers:** Use 1px solid lines in #F1F5F9 for subtle separation within lists.
+---
 
-## Shapes
+## 5. Elevation, Shapes & Depth
 
-The design system uses **Soft** roundedness (4px - 12px) to reflect the sleek lines of modern automotive design.
+- **Base Surface (Level 0)**: `#F8FAFC` page background.
+- **Card Surface (Level 1)**: Pure white `#FFFFFF` surface with `1px solid var(--color-outline)` and `var(--radius-lg) (12px)` or `var(--radius-md) (8px)` corners.
+- **Hover & Active (Level 2)**: Subtle ambient drop shadow `box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08)` and smooth `-2px` Y-axis lift on vehicle cards and interactive elements.
+- **Corner Radiuses**:
+  - `4px` (`--radius-sm`): Buttons, input fields, badges, and segmented toggles.
+  - `8px` (`--radius-md`): Sidebar menus, icon pods, alert cards, and accordion items.
+  - `12px` (`--radius-lg`): Large cards, search widgets, modal dialogs, and hero image frames.
+  - `9999px` (`--radius-full`): Avatar badges, pill tags, and pagination buttons.
 
-- **Inputs and Buttons:** 4px (default) for a crisp, professional look.
-- **Car Listing Cards:** 8px (large) to soften the layout and create a sophisticated container for photography.
-- **Badges/Tags:** 12px (extra-large) to differentiate status indicators (e.g., "Available", "Premium") from structural elements.
+---
 
-## Components
+## 6. Page-by-Page Architectural & Visual Blueprint
 
-### Search Forms
-Search bars should be treated as high-priority "Hero" components. Use a horizontal layout on desktop with integrated iconography (calendar, location pin) and a prominent Electric Blue CTA button. Use a 1px slate border and white background for input fields.
+### A. Fleet Search & Catalog (`public/fleet/search.php`)
+- **Hero Header**: Clean off-white header with `headline-xl` title and concise fleet description.
+- **Faceted Sidebar Filter**:
+  - Sticky sidebar container with real-time text query box with integrated search icon.
+  - Pick-up and Return date pickers with calendar icons.
+  - Multi-select Category filter chips (Electric, Luxury, Off-road, Sedan, SUV, Sports).
+  - Radio transmission selector (All, Automatic, Manual) with instant live filtering.
+  - Price range slider and reset buttons.
+- **Vehicle Grid & Cards**:
+  - High-res vehicle image with aspect ratio containment, category badge pill, and daily rate tag.
+  - Make & Model in `headline-md`.
+  - Specs list with icon pods (Seats, Transmission, Fuel/Electric, Km Rate).
+  - "Book Now" (Electric Blue primary) & "View Details" action buttons.
+- **Dynamic Pagination**:
+  - Per-page dropdown selector (`6`, `10`, `14`, `All`).
+  - Active page numbers with rounded pill styling, smart ellipsis (`...`) for large sets, and Prev/Next controls.
 
-### Car Listing Cards
-Cards feature a high-resolution vehicle image on a clean white background. Price should be highlighted using `headline-md` in Navy. Specifications (transmission, fuel, seats) should be displayed using `label-sm` with subtle monochrome icons.
+### B. About Us (`public/about.php`)
+- **Hero Banner**: Full-bleed photographic background with a high-contrast dark gradient overlay (`rgba(0,0,0,0.8) → rgba(0,0,0,0.3)`), showcasing the "Our Identity" overline in `label-md` and headline in white.
+- **Brand Story Section**: Dual-column layout pairing corporate story with a framed showroom photograph featuring an overlapping floating **"15+ Years of Excellence"** badge (`#1a1a2e`).
+- **Core Values**: 3-column grid of white cards featuring soft blue icon containers (`#e0e7ff`), Material Symbols (`verified`, `support_agent`, `bolt`), and crisp value descriptions.
+- **Team Showcase**: Grid of team profiles with subtle grayscale-to-color hover transition (`filter: grayscale(100%) → 0%`).
 
-### Buttons
-- **Primary:** Electric Blue background, white text, 4px corner radius. Bold weight.
-- **Secondary:** Transparent background, Navy 1px border, Navy text.
-- **Ghost:** No border or background, Slate text, used for "View Details" or "Cancel".
+### C. Frequently Asked Questions (`public/faqs.php`)
+- **Hero Header**: Centered white banner with `headline-xl` and subtitle lead paragraph.
+- **Interactive Dual-Column Layout**:
+  - **Category Tab Sidebar**: Vertical category list (General Booking, Our Fleet, Insurance & Protection, Policies & Requirements) with dark active state (`#000000` or `#0f172a`).
+  - **Accordion List**: White card items with clean 1px borders, smooth chevron rotation (`transform: rotate(180deg)`), and animated disclosure of answer paragraphs.
 
-### Trust Badges
-Small, horizontal layout items featuring a verified icon and `label-md` text. These should be placed near booking CTAs and in the footer to reinforce security and service quality.
+### D. Contact Us & Concierge (`public/contact.php`)
+- **Header**: Clear `headline-xl` title with dedicated concierge support lead text.
+- **Contact Info & Concierge Card**:
+  - Icon-pod list for Email, 24/7 Phone Support, and Global Headquarters in New York.
+  - **Emergency Roadside Banner**: Dark `#111827` alert box with emergency icon and 24/7 dispatch instructions.
+  - Social media icon pods with hover state transitions.
+- **Contact Form**: Structured 2-column input fields (Name, Email, Subject, Message) with smooth focus borders and primary blue submit button.
+- **Location Map Section**: Full-width curved banner with integrated center pin and location tooltip.
 
-### Lists & Filters
-Filters use a "Sidebar" approach with checkboxes. Checkboxes are custom-styled: Navy when active with a 2px stroke, ensuring they feel integrated into the premium theme.
+### E. Home & Landing Page (`public/index.php`)
+- **Hero Section**: Cinematic background hero with dark overlay and bold value proposition.
+- **Floating Quick-Booking Widget**: 4-column search bar (Pick-up location, Pick-up date, Return date, Car Class dropdown) with elevated shadow and direct redirect to the Fleet search.
+- **Vehicle Category Carousel & Featured Fleet**: Highlighting top luxury and electric additions with dynamic status badges.
+
+### F. User Portal & Management (`profile.php`, `admin/*`, `owner/*`, `driver/*`, `borrower/*`)
+- **Account Roles & Preferences**: Interactive multi-role selection (Borrower, Owner, Driver) allowing dynamic profile upgrades.
+- **Driver Rates & Transmission Settings**: Dynamically revealed fee slider ($20 - $35/day) and transmission capability selectors (Manual, Auto, Both).
+- **Verification Queues & Dashboards**: Consistent 12-column dashboard grids, verified status pills (Verified, Pending, Rejected), and drag-and-drop file upload zones.
+
+---
+
+## 7. Component Library Guidelines
+
+### Buttons (`components/buttons.css`)
+- **`.btn-primary`**: Background `#3B82F6`, white text, 4px border radius. Hover: `brightness(0.95)`.
+- **`.btn-secondary`**: Transparent background, 1px `#0F172A` border, `#0F172A` text.
+- **`.btn-ghost`**: Transparent background, `#334155` text, subtle hover highlight.
+- **`.btn-danger`**: Background `#BA1A1A`, white text.
+
+### Badges & Status Pills (`components/badges.css`)
+- **Verified / Approved**: Green background `#DCFCE7`, text `#14532D`.
+- **Pending / In Review**: Amber background `#FEF3C7`, text `#92400E`.
+- **Rejected / Suspended**: Red background `#FEE2E2`, text `#991B1B`.
+- **Role Badges**: Distinct soft-colored pills for Admin (Purple), Owner (Emerald), Driver (Blue), Borrower (Slate).
+
+### Forms & Input Controls (`components/forms.css`)
+- **Inputs & Selects**: 1px solid `#E2E8F0`, 4px radius, 10px 12px padding, font 15px.
+- **Focus State**: `outline: 2px solid #3B82F6; outline-offset: 1px;`.
+- **Checkbox & Radio**: Native or styled with `accent-color: #0F172A` or `#3B82F6`.

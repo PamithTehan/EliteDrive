@@ -1,48 +1,77 @@
 .about-hero {
-    background-image: linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 100%), url('https://images.unsplash.com/photo-1603386329225-868f9b1ee6c9?q=80&w=2069&auto=format&fit=crop');
+    background-image: linear-gradient(to right, rgba(15, 23, 42, 0.88) 0%, rgba(15, 23, 42, 0.4) 100%), url('https://images.unsplash.com/photo-1603386329225-868f9b1ee6c9?q=80&w=2069&auto=format&fit=crop');
     background-size: cover;
     background-position: center;
-    padding: 120px 0;
+    padding: 100px 0;
 }
 
 .section-padding {
-    padding: 80px 0;
+    padding: 64px 0;
+}
+
+@media (max-width: 768px) {
+    .about-hero {
+        padding: 64px 0;
+    }
+    .section-padding {
+        padding: 48px 0;
+    }
 }
 
 .years-badge {
     position: absolute;
-    bottom: -20px;
-    left: -20px;
-    background-color: #1a1a2e;
-    padding: 32px;
+    bottom: -16px;
+    left: -16px;
+    background-color: var(--color-primary);
+    padding: 24px 32px;
     border-radius: var(--radius-md);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    box-shadow: var(--shadow-lg);
 }
 
 .value-card {
     padding: 32px;
     text-align: left;
     border: 1px solid var(--color-outline);
-    background-color: white;
+    background-color: #ffffff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.value-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
 .value-card .icon-wrapper {
     width: 48px;
     height: 48px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     background-color: #e0e7ff;
-    color: var(--color-primary);
+    color: var(--color-accent);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
+}
+
+.team-card {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid var(--color-outline);
+    box-shadow: var(--shadow-sm);
 }
 
 .team-card img {
     filter: grayscale(100%);
-    transition: filter 0.3s ease;
+    transition: filter 0.3s ease, transform 0.3s ease;
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
 }
 
 .team-card:hover img {
     filter: grayscale(0%);
+    transform: scale(1.02);
 }
