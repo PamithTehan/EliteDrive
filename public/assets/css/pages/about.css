@@ -13,6 +13,7 @@
     .about-hero {
         padding: 64px 0;
     }
+
     .section-padding {
         padding: 48px 0;
     }
@@ -48,7 +49,7 @@
     height: 48px;
     border-radius: var(--radius-md);
     background-color: #e0e7ff;
-    color: var(--color-accent);
+    color: var(--color-primary);
     display: flex;
     align-items: center;
     justify-content: center;

@@ -111,7 +111,15 @@
 }
 
 @media (max-width: 768px) {
-    .faq-hero h1 { font-size: 2rem; }
-    .faq-hero { padding: 48px 0 32px; }
-    .faq-content .grid { grid-template-columns: 1fr !important; }
+    .faq-hero h1 {
+        font-size: 2rem;
+    }
+
+    .faq-hero {
+        padding: 48px 0 32px;
+    }
+
+    .faq-content .grid {
+        grid-template-columns: 1fr !important;
+    }
 }

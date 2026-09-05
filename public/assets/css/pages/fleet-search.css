@@ -71,7 +71,7 @@
 
 .search-input-box input:focus {
     border-color: var(--color-accent);
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--color-primary);
     outline-offset: 1px;
 }
 
@@ -133,7 +133,7 @@
     transition: background 0.2s, color 0.2s;
 }
 
-.toggle-group input[type="radio"]:checked + .toggle-btn {
+.toggle-group input[type="radio"]:checked+.toggle-btn {
     background: #e2e8f0;
     color: var(--color-primary);
     font-weight: 600;
@@ -185,8 +185,8 @@
 }
 
 @media (max-width: 900px) {
-    .vehicle-grid { 
-        grid-template-columns: 1fr; 
+    .vehicle-grid {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -208,14 +208,18 @@
 
 .fleet-card-image {
     position: relative;
+    width: 100%;
     aspect-ratio: 16/10;
     background: #f1f5f9;
+    overflow: hidden;
+    flex-shrink: 0;
 }
 
 .fleet-card-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
 }
 
 .fleet-badge {
@@ -381,7 +385,7 @@
 }
 
 .per-page-dropdown:focus {
-    border-color: var(--color-accent);
+    border-color: var(--color-primary);
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
 }
 
@@ -442,29 +446,29 @@
     }
 }
 
-.detail-hero { 
-    background: var(--color-surface); 
-    aspect-ratio: 21/9; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
+.detail-hero {
+    background: var(--color-surface);
+    aspect-ratio: 21/9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: var(--radius-lg);
     margin: 24px var(--margin-desktop);
     overflow: hidden;
 }
 
-.detail-content { 
-    margin-top: -48px; 
-    position: relative; 
-    z-index: 10; 
+.detail-content {
+    margin-top: -48px;
+    position: relative;
+    z-index: 10;
 }
 
-.booking-card { 
-    background: #ffffff; 
-    padding: var(--space-lg); 
-    border-radius: var(--radius-lg); 
-    border: 1px solid var(--color-outline); 
-    box-shadow: var(--shadow-lg); 
-    position: sticky; 
-    top: var(--space-md); 
+.booking-card {
+    background: #ffffff;
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-outline);
+    box-shadow: var(--shadow-lg);
+    position: sticky;
+    top: var(--space-md);
 }

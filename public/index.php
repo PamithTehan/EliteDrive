@@ -11,11 +11,11 @@ $stmt = $db->query("
     LEFT JOIN vehicle_photos p ON v.id = p.vehicle_id AND p.is_primary = 1 
     WHERE v.status = 'approved' 
     ORDER BY v.created_at DESC 
-    LIMIT 2
+    LIMIT 3
 ");
 $featuredVehicles = $stmt->fetchAll();
 
-$extraCss = ['home'];
+$extraCss = ['home', 'fleet-search'];
 require_once __DIR__ . '/../includes/partials/head.php';
 ?>
 
@@ -27,13 +27,7 @@ require_once __DIR__ . '/../includes/partials/head.php';
         <div class="search-widget">
             <form action="<?= baseUrl('/fleet/search.php') ?>" method="GET" style="margin:0;">
                 <div class="search-widget-row">
-                    <div class="search-field">
-                        <label>Pick-up Location</label>
-                        <div class="search-input-wrapper">
-                            <span class="material-symbols-outlined">location_on</span>
-                            <input type="text" placeholder="City or Airport">
-                        </div>
-                    </div>
+
                     <div class="search-field">
                         <label>Pick-up Date</label>
                         <div class="search-input-wrapper">
@@ -54,9 +48,11 @@ require_once __DIR__ . '/../includes/partials/head.php';
                             <span class="material-symbols-outlined">directions_car</span>
                             <select name="category">
                                 <option value="">All Classes</option>
-                                <option value="Premium">Premium</option>
                                 <option value="Luxury">Luxury</option>
+                                <option value="Premium">Premium</option>
+                                <option value="Luxury">Off-Road</option>
                                 <option value="Electric">Electric</option>
+                                <option value="Electric">Budget</option>
                             </select>
                         </div>
                     </div>
@@ -67,7 +63,6 @@ require_once __DIR__ . '/../includes/partials/head.php';
             </form>
         </div>
     </div>
-    <div class="hero-footer-text">EXPLORE LUXURY RENTALS</div>
 </div>
 
 <div class="features-banner">
@@ -106,14 +101,14 @@ require_once __DIR__ . '/../includes/partials/head.php';
     <div class="fleet-header">
         <div>
             <div class="section-label">Our Selection</div>
-            <h2>Our Premium Fleet</h2>
+            <h2>Our Fleet</h2>
         </div>
         <a href="<?= baseUrl('/fleet/search.php') ?>" class="view-all-link">
             View All Vehicles <span class="material-symbols-outlined">chevron_right</span>
         </a>
     </div>
 
-    <div class="grid grid-2">
+    <div class="grid grid-3">
         <?php foreach ($featuredVehicles as $v): ?>
             <div class="fleet-card">
                 <div class="fleet-card-image">
@@ -145,7 +140,6 @@ require_once __DIR__ . '/../includes/partials/head.php';
                         <div class="spec-item"><span class="material-symbols-outlined" style="font-size:16px;"><?= $transIcon ?></span> <?= escapeHtml($v['transmission']) ?></div>
                     </div>
                     <div class="fleet-actions">
-                        <a href="<?= baseUrl('/fleet/detail.php?id=' . $v['id']) ?>" class="btn-outline">Details</a>
                         <a href="<?= baseUrl('/fleet/detail.php?id=' . $v['id']) ?>" class="btn-dark">Reserve Now</a>
                     </div>
                 </div>
