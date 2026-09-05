@@ -161,9 +161,14 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                             <?php 
                                 $showReview = ($b['status'] === 'completed');
                                 $showCancel = !in_array($b['status'], ['completed', 'cancelled', 'rejected', 'reviewed']);
+                                $showInvoice = !in_array($b['status'], ['cancelled', 'rejected', 'pending_payment']);
                             ?>
-                            <?php if ($showReview || $showCancel): ?>
+                            <?php if ($showReview || $showCancel || $showInvoice): ?>
                                 <div style="margin-top: var(--space-md); border-top: 1px solid var(--color-outline); padding-top: var(--space-sm);">
+                                    <?php if ($showInvoice): ?>
+                                        <a href="<?= baseUrl('/borrower/invoice.php?booking_id=' . $b['id'] . '&print=1') ?>" target="_blank" class="btn btn-ghost" style="padding: 4px 12px; font-size: 14px; color: var(--color-primary);">Download Invoice</a>
+                                    <?php endif; ?>
+                                    
                                     <?php if ($showReview): ?>
                                         <a href="<?= baseUrl('/review.php?booking_id=' . $b['id']) ?>" class="btn btn-ghost" style="padding: 4px 12px; font-size: 14px;">Leave Review</a>
                                         <button class="btn btn-ghost" onclick="reportDispute(<?= $b['id'] ?>)" style="padding: 4px 12px; font-size: 14px; color: var(--color-error);">Report Dispute</button>
