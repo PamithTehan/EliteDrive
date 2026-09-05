@@ -47,9 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             try {
                 if ($isEdit) {
-                    $stmt = $db->prepare('UPDATE vehicles SET make=?, model=?, category=?, daily_rate=?, location=?, transmission=?, mileage=?, km_rate=?, yom=?, yor=?, description=? WHERE id=? AND owner_id=?');
+                    $stmt = $db->prepare('UPDATE vehicles SET make=?, model=?, category=?, daily_rate=?, location=?, transmission=?, mileage=?, km_rate=?, yom=?, yor=?, description=?, status="pending_review" WHERE id=? AND owner_id=?');
                     $stmt->execute([$make, $model, $category, $dailyRate, $location, $transmission, $mileage, $kmRate, $yom, $yor, $description, $vehicleId, $user['id']]);
-                    $success = 'Vehicle updated successfully.';
+                    $success = 'Vehicle updated successfully and is pending admin review.';
                 } else {
                     $stmt = $db->prepare('INSERT INTO vehicles (owner_id, make, model, category, daily_rate, location, transmission, mileage, km_rate, yom, yor, description, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "pending_review")');
                     $stmt->execute([$user['id'], $make, $model, $category, $dailyRate, $location, $transmission, $mileage, $kmRate, $yom, $yor, $description]);
@@ -62,11 +62,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if (!is_dir($uploadDir)) {
                         mkdir($uploadDir, 0755, true);
                     }
-                    if ($isEdit) {
-                        $stmtDel = $db->prepare('DELETE FROM vehicle_photos WHERE vehicle_id = ?');
-                        $stmtDel->execute([$vehicleId]);
+                    if ($isEdit && !empty($_POST['delete_photos']) && is_array($_POST['delete_photos'])) {
+                        foreach ($_POST['delete_photos'] as $delId) {
+                            $stmtDel = $db->prepare('DELETE FROM vehicle_photos WHERE id = ? AND vehicle_id = ?');
+                            $stmtDel->execute([(int)$delId, $vehicleId]);
+                        }
                     }
-                    $isPrimary = 1;
+                    
+                    $hasPhotos = false;
+                    if ($isEdit) {
+                        $stmtChk = $db->prepare('SELECT COUNT(*) FROM vehicle_photos WHERE vehicle_id = ?');
+                        $stmtChk->execute([$vehicleId]);
+                        $hasPhotos = $stmtChk->fetchColumn() > 0;
+                    }
+                    $isPrimary = $hasPhotos ? 0 : 1;
                     foreach ($_FILES['photos']['tmp_name'] as $index => $tmpName) {
                         if ($_FILES['photos']['error'][$index] === UPLOAD_ERR_OK) {
                             $ext = strtolower(pathinfo($_FILES['photos']['name'][$index], PATHINFO_EXTENSION));
@@ -200,7 +209,10 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                     <div id="file-preview-list" style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
                         <?php foreach ($existingPhotos as $photo): ?>
                             <?php $imgUrl = strpos($photo['photo_path'], 'http') === 0 ? $photo['photo_path'] : baseUrl($photo['photo_path']); ?>
-                            <img src="<?= escapeHtml($imgUrl) ?>" style="width: 80px; height: 80px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--color-border);" class="existing-photo">
+                            <div style="position:relative; display:inline-block;" class="existing-photo-wrapper" id="photo-<?= $photo['id'] ?>">
+                                <img src="<?= escapeHtml($imgUrl) ?>" style="width: 80px; height: 80px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--color-border);" class="existing-photo">
+                                <button type="button" onclick="removeExistingPhoto(<?= $photo['id'] ?>)" style="position:absolute; top:-5px; right:-5px; background:var(--color-error); color:white; border:none; border-radius:50%; width:20px; height:20px; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center;" title="Remove Photo">&times;</button>
+                            </div>
                         <?php endforeach; ?>
                     </div>
                     <p class="body-sm" style="color:var(--color-secondary); margin-top: 4px;">You can select multiple photos. The first photo will be the primary image.</p>
@@ -264,9 +276,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function handleFiles(files) {
-        // Clear existing photos only if new files are selected
+        // Clear new photo previews if new ones selected
         if (files.length > 0) {
-            previewList.innerHTML = '';
+            Array.from(previewList.children).forEach(child => {
+                if (!child.classList.contains('existing-photo-wrapper')) {
+                    child.remove();
+                }
+            });
         }
         [...files].forEach(file => {
             if (file.type.startsWith('image/')) {
@@ -285,6 +301,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    
+    window.removeExistingPhoto = function(id) {
+        if(confirm('Are you sure you want to remove this photo? It will be permanently deleted when you save the form.')) {
+            document.getElementById('photo-' + id).style.display = 'none';
+            let input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'delete_photos[]';
+            input.value = id;
+            document.querySelector('form').appendChild(input);
+        }
+    };
 });
 </script>
 
