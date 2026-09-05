@@ -23,6 +23,17 @@ if (!$vehicle) {
     exit('Vehicle not found.');
 }
 
+// Fetch reviews for this vehicle
+$stmtRev = $db->prepare('
+    SELECT r.rating, r.comment, r.created_at, u.full_name as reviewer_name
+    FROM reviews r
+    JOIN users u ON r.reviewer_id = u.id
+    WHERE r.target_type = "vehicle" AND r.target_id = ?
+    ORDER BY r.created_at DESC
+');
+$stmtRev->execute([$id]);
+$reviews = $stmtRev->fetchAll();
+
 $stmtPhotos = $db->prepare('SELECT photo_path FROM vehicle_photos WHERE vehicle_id = ? ORDER BY is_primary DESC, id ASC');
 $stmtPhotos->execute([$id]);
 $allPhotos = $stmtPhotos->fetchAll(PDO::FETCH_COLUMN);
@@ -116,6 +127,31 @@ $titleColor = "color: white;";
                 </script>
                 <?php endif; ?>
             </div>
+        </div>
+        
+        <!-- Reviews Section -->
+        <div style="margin-top: var(--space-xl);">
+            <h2 class="headline-md" style="margin-bottom: var(--space-md);">Vehicle Reviews</h2>
+            <?php if (empty($reviews)): ?>
+                <p class="body-md" style="color:var(--color-secondary);">No reviews yet for this vehicle.</p>
+            <?php else: ?>
+                <div class="stack-md">
+                    <?php foreach ($reviews as $rev): ?>
+                        <div class="card" style="padding: var(--space-md); border-radius: var(--radius-sm); border: 1px solid var(--color-outline);">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+                                <strong class="body-md"><?= escapeHtml($rev['reviewer_name']) ?></strong>
+                                <span class="body-sm" style="color:var(--color-secondary);"><?= escapeHtml(date('M d, Y', strtotime($rev['created_at']))) ?></span>
+                            </div>
+                            <div style="margin-bottom: 8px; color:#f59e0b; font-size: 18px;">
+                                <?= str_repeat('★', $rev['rating']) ?><?= str_repeat('☆', 5 - $rev['rating']) ?>
+                            </div>
+                            <?php if ($rev['comment']): ?>
+                                <p class="body-md"><?= nl2br(escapeHtml($rev['comment'])) ?></p>
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
         </div>
     </main>
     

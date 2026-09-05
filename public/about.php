@@ -3,6 +3,18 @@ require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/functions.php';
 
+$db = getDb();
+$stmtRev = $db->prepare('
+    SELECT r.rating, r.comment, r.created_at, u.full_name as reviewer_name
+    FROM reviews r
+    JOIN users u ON r.reviewer_id = u.id
+    WHERE r.target_type = "platform"
+    ORDER BY r.created_at DESC
+    LIMIT 3
+');
+$stmtRev->execute();
+$platformReviews = $stmtRev->fetchAll();
+
 $extraCss = ['about'];
 require_once __DIR__ . '/../includes/partials/head.php';
 ?>
@@ -58,7 +70,36 @@ require_once __DIR__ . '/../includes/partials/head.php';
             </div>
         </div>
     </div>
+        </div>
+    </div>
 </section>
+
+<?php if (!empty($platformReviews)): ?>
+<section class="about-reviews section-padding">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 48px;">
+            <h2 class="headline-lg">What Our Clients Say</h2>
+            <p class="body-md" style="color:var(--color-secondary);">Experiences shared by the EliteDrive community.</p>
+        </div>
+        <div class="grid grid-3" style="gap: 24px;">
+            <?php foreach ($platformReviews as $rev): ?>
+                <div class="card" style="padding: var(--space-lg); border-radius: var(--radius-md);">
+                    <div style="margin-bottom: 12px; color:#f59e0b; font-size: 20px;">
+                        <?= str_repeat('★', $rev['rating']) ?><?= str_repeat('☆', 5 - $rev['rating']) ?>
+                    </div>
+                    <?php if ($rev['comment']): ?>
+                        <p class="body-md" style="font-style: italic; margin-bottom: 16px;">"<?= nl2br(escapeHtml($rev['comment'])) ?>"</p>
+                    <?php endif; ?>
+                    <div>
+                        <strong class="body-md"><?= escapeHtml($rev['reviewer_name']) ?></strong>
+                        <div class="body-sm" style="color:var(--color-secondary);"><?= escapeHtml(date('M Y', strtotime($rev['created_at']))) ?></div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
 
 <section class="about-team section-padding">
     <div class="container">
