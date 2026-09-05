@@ -1,6 +1,6 @@
 .home-hero {
     position: relative;
-    background-image: linear-gradient(to right, rgba(15, 23, 42, 0.88) 0%, rgba(15, 23, 42, 0.3) 100%), url('https://images.unsplash.com/photo-1503371060933-662589083321?q=80&w=2070&auto=format&fit=crop');
+    background-image: linear-gradient(to right, rgba(15, 23, 42, 0.88) 0%, rgba(15, 23, 42, 0.3) 100%), url('/assets/images/paul-kansonkho-9xjHQvdMi4c-unsplash.jpg');
     background-size: cover;
     background-position: center;
     padding: 120px 0 80px;
@@ -36,7 +36,7 @@
 
 .search-widget-row {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 16px;
 }
 
