@@ -83,7 +83,7 @@ require_once __DIR__ . '/../includes/partials/head.php';
         </div>
         <div class="reviews-slider-wrapper" style="position: relative; overflow: hidden; padding: 10px 0;">
             <style>
-                .slider-btn { opacity: 0; transition: opacity 0.3s ease; }
+                .slider-btn { opacity: 0; transition: opacity 0.5s ease; }
                 .reviews-slider-wrapper:hover .slider-btn { opacity: 1; }
             </style>
             <div class="reviews-track" id="reviewsTrack" style="display: flex; gap: 24px; will-change: transform;">
