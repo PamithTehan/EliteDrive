@@ -27,13 +27,7 @@ require_once __DIR__ . '/../includes/partials/head.php';
         <div class="search-widget">
             <form action="<?= baseUrl('/fleet/search.php') ?>" method="GET" style="margin:0;">
                 <div class="search-widget-row">
-                    <div class="search-field">
-                        <label>Pick-up Location</label>
-                        <div class="search-input-wrapper">
-                            <span class="material-symbols-outlined">location_on</span>
-                            <input type="text" placeholder="City or Airport">
-                        </div>
-                    </div>
+
                     <div class="search-field">
                         <label>Pick-up Date</label>
                         <div class="search-input-wrapper">
