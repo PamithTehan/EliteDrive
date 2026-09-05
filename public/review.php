@@ -27,20 +27,28 @@ if (!$booking) {
     die('Booking not found or not authorized.');
 }
 
-if (!in_array($booking['status'], ['completed', 'confirmed'])) {
-    die('You can only review completed or confirmed bookings.');
-}
-
-// Check if already reviewed to prevent duplicate submissions
-$stmtChk = $db->prepare('SELECT COUNT(*) FROM reviews WHERE booking_id = ? AND reviewer_id = ?');
-$stmtChk->execute([$bookingId, $user['id']]);
-if ($stmtChk->fetchColumn() > 0) {
-    $alreadyReviewed = true;
-} else {
-    $alreadyReviewed = false;
+if ($booking['status'] !== 'completed' && $booking['status'] !== 'reviewed') {
+    die('You can only review completed bookings.');
 }
 
 $hasDriver = !empty($booking['driver_user_id']) && $booking['driver_arrangement'] === 'hired';
+
+// Fetch existing reviews for this booking
+$stmtChk = $db->prepare('SELECT target_type FROM reviews WHERE booking_id = ? AND reviewer_id = ?');
+$stmtChk->execute([$bookingId, $user['id']]);
+$existingReviews = $stmtChk->fetchAll(PDO::FETCH_COLUMN);
+
+$platformDone = in_array('platform', $existingReviews);
+$vehicleDone = in_array('vehicle', $existingReviews);
+$driverDone = in_array('driver', $existingReviews);
+
+$allDone = $platformDone && $vehicleDone && (!$hasDriver || $driverDone);
+
+if ($allDone && $booking['status'] !== 'reviewed') {
+    $stmtUpdate = $db->prepare('UPDATE bookings SET status = "reviewed" WHERE id = ?');
+    $stmtUpdate->execute([$bookingId]);
+    $booking['status'] = 'reviewed';
+}
 
 $extraCss = ['dashboard', 'forms'];
 require_once __DIR__ . '/../includes/partials/head.php';
@@ -52,27 +60,29 @@ require_once __DIR__ . '/../includes/partials/head.php';
         Share your experience for booking <strong><?= escapeHtml($booking['make'] . ' ' . $booking['model']) ?></strong>.
     </p>
 
-    <?php if ($alreadyReviewed): ?>
+    <?php if ($allDone): ?>
         <div class="alert alert-success">
-            You have already submitted a review for this booking. Thank you for your feedback!
+            You have successfully completed all reviews for this booking. Thank you for your feedback!
         </div>
         <div style="margin-top: var(--space-md);">
             <a href="<?= baseUrl('/borrower/my_bookings.php') ?>" class="btn btn-primary">Back to My Bookings</a>
         </div>
     <?php else: ?>
-        <form id="multi-review-form" method="POST">
-            <input type="hidden" name="csrf" value="<?= csrfToken() ?>">
-            <input type="hidden" name="booking_id" value="<?= $bookingId ?>">
 
-            <!-- 1. Platform Review -->
-            <div class="card" style="margin-bottom: var(--space-lg);">
-                <div class="card-body stack-md">
-                    <h2 class="headline-md">Review EliteDrive</h2>
-                    <p class="body-sm" style="color:var(--color-secondary);">How was your overall experience using our platform?</p>
+        <!-- 1. Platform Review -->
+        <?php if (!$platformDone): ?>
+        <div class="card" style="margin-bottom: var(--space-lg);">
+            <div class="card-body stack-md">
+                <h2 class="headline-md">Review EliteDrive</h2>
+                <p class="body-sm" style="color:var(--color-secondary);">How was your overall experience using our platform?</p>
+                <form class="single-review-form">
+                    <input type="hidden" name="csrf" value="<?= csrfToken() ?>">
+                    <input type="hidden" name="booking_id" value="<?= $bookingId ?>">
+                    <input type="hidden" name="target_type" value="platform">
                     
                     <div class="form-group">
                         <label class="form-label">Rating</label>
-                        <select name="platform_rating" class="input" required>
+                        <select name="rating" class="input" required>
                             <option value="">Select Rating...</option>
                             <option value="5">5 - Excellent</option>
                             <option value="4">4 - Good</option>
@@ -83,20 +93,28 @@ require_once __DIR__ . '/../includes/partials/head.php';
                     </div>
                     <div class="form-group">
                         <label class="form-label">Comment (Optional)</label>
-                        <textarea name="platform_comment" class="input" rows="3" placeholder="Tell us what you liked or how we can improve..."></textarea>
+                        <textarea name="comment" class="input" rows="3" placeholder="Tell us what you liked or how we can improve..."></textarea>
                     </div>
-                </div>
+                    <button type="submit" class="btn btn-primary">Submit Platform Review</button>
+                </form>
             </div>
+        </div>
+        <?php endif; ?>
 
-            <!-- 2. Vehicle Review -->
-            <div class="card" style="margin-bottom: var(--space-lg);">
-                <div class="card-body stack-md">
-                    <h2 class="headline-md">Review Vehicle</h2>
-                    <p class="body-sm" style="color:var(--color-secondary);">How was the <?= escapeHtml($booking['make'] . ' ' . $booking['model']) ?>?</p>
+        <!-- 2. Vehicle Review -->
+        <?php if (!$vehicleDone): ?>
+        <div class="card" style="margin-bottom: var(--space-lg);">
+            <div class="card-body stack-md">
+                <h2 class="headline-md">Review Vehicle</h2>
+                <p class="body-sm" style="color:var(--color-secondary);">How was the <?= escapeHtml($booking['make'] . ' ' . $booking['model']) ?>?</p>
+                <form class="single-review-form">
+                    <input type="hidden" name="csrf" value="<?= csrfToken() ?>">
+                    <input type="hidden" name="booking_id" value="<?= $bookingId ?>">
+                    <input type="hidden" name="target_type" value="vehicle">
                     
                     <div class="form-group">
                         <label class="form-label">Rating</label>
-                        <select name="vehicle_rating" class="input" required>
+                        <select name="rating" class="input" required>
                             <option value="">Select Rating...</option>
                             <option value="5">5 - Excellent</option>
                             <option value="4">4 - Good</option>
@@ -107,21 +125,28 @@ require_once __DIR__ . '/../includes/partials/head.php';
                     </div>
                     <div class="form-group">
                         <label class="form-label">Comment (Optional)</label>
-                        <textarea name="vehicle_comment" class="input" rows="3" placeholder="How was the condition and performance?"></textarea>
+                        <textarea name="comment" class="input" rows="3" placeholder="How was the condition and performance?"></textarea>
                     </div>
-                </div>
+                    <button type="submit" class="btn btn-primary">Submit Vehicle Review</button>
+                </form>
             </div>
+        </div>
+        <?php endif; ?>
 
-            <!-- 3. Driver Review -->
-            <?php if ($hasDriver): ?>
-            <div class="card" style="margin-bottom: var(--space-lg);">
-                <div class="card-body stack-md">
-                    <h2 class="headline-md">Review Driver</h2>
-                    <p class="body-sm" style="color:var(--color-secondary);">How was your hired driver?</p>
+        <!-- 3. Driver Review -->
+        <?php if ($hasDriver && !$driverDone): ?>
+        <div class="card" style="margin-bottom: var(--space-lg);">
+            <div class="card-body stack-md">
+                <h2 class="headline-md">Review Driver</h2>
+                <p class="body-sm" style="color:var(--color-secondary);">How was your hired driver?</p>
+                <form class="single-review-form">
+                    <input type="hidden" name="csrf" value="<?= csrfToken() ?>">
+                    <input type="hidden" name="booking_id" value="<?= $bookingId ?>">
+                    <input type="hidden" name="target_type" value="driver">
                     
                     <div class="form-group">
                         <label class="form-label">Rating</label>
-                        <select name="driver_rating" class="input" required>
+                        <select name="rating" class="input" required>
                             <option value="">Select Rating...</option>
                             <option value="5">5 - Excellent</option>
                             <option value="4">4 - Good</option>
@@ -132,43 +157,47 @@ require_once __DIR__ . '/../includes/partials/head.php';
                     </div>
                     <div class="form-group">
                         <label class="form-label">Comment (Optional)</label>
-                        <textarea name="driver_comment" class="input" rows="3" placeholder="How was their driving and professionalism?"></textarea>
+                        <textarea name="comment" class="input" rows="3" placeholder="How was their driving and professionalism?"></textarea>
                     </div>
-                </div>
+                    <button type="submit" class="btn btn-primary">Submit Driver Review</button>
+                </form>
             </div>
-            <?php endif; ?>
+        </div>
+        <?php endif; ?>
 
-            <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 16px; padding: 12px;">Submit All Reviews</button>
-        </form>
     <?php endif; ?>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('multi-review-form');
-    if (form) {
+    const forms = document.querySelectorAll('.single-review-form');
+    forms.forEach(form => {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const formData = new FormData(form);
+            const btn = form.querySelector('button[type="submit"]');
             
             try {
-                const res = await fetch('<?= baseUrl('/api/reviews/submit_multi.php') ?>', {
+                btn.disabled = true;
+                const res = await fetch('<?= baseUrl('/api/reviews/submit_single.php') ?>', {
                     method: 'POST',
                     body: formData
                 });
                 const data = await res.json();
                 
                 if (res.ok) {
-                    alert('Reviews submitted successfully! Thank you for your feedback.');
-                    window.location.href = '<?= baseUrl('/borrower/my_bookings.php') ?>';
+                    // Reload to update the view (hide completed forms and check if all done)
+                    window.location.reload();
                 } else {
-                    alert(data.error || 'Failed to submit reviews');
+                    alert(data.error || 'Failed to submit review');
+                    btn.disabled = false;
                 }
             } catch (err) {
                 alert('An error occurred. Please try again.');
+                btn.disabled = false;
             }
         });
-    }
+    });
 });
 </script>
 
