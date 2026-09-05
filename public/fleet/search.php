@@ -387,6 +387,24 @@ require_once __DIR__ . '/../../includes/partials/head.php';
         return str.toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     }
 
+    // Live filtering for Search Vehicle (debounced) and Transmission
+    let searchDebounceTimer = null;
+    const filterQInput = document.getElementById('filter-q');
+    if (filterQInput) {
+        filterQInput.addEventListener('input', () => {
+            clearTimeout(searchDebounceTimer);
+            searchDebounceTimer = setTimeout(() => {
+                loadVehicles();
+            }, 250);
+        });
+    }
+
+    document.querySelectorAll('input[name="transmission"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+            loadVehicles();
+        });
+    });
+
     // Auto-populate from URL if present (from homepage)
     window.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
