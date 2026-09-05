@@ -145,7 +145,6 @@ require_once __DIR__ . '/../includes/partials/head.php';
                         <div class="spec-item"><span class="material-symbols-outlined" style="font-size:16px;"><?= $transIcon ?></span> <?= escapeHtml($v['transmission']) ?></div>
                     </div>
                     <div class="fleet-actions">
-                        <a href="<?= baseUrl('/fleet/detail.php?id=' . $v['id']) ?>" class="btn-outline">Details</a>
                         <a href="<?= baseUrl('/fleet/detail.php?id=' . $v['id']) ?>" class="btn-dark">Reserve Now</a>
                     </div>
                 </div>

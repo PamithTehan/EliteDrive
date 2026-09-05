@@ -278,7 +278,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                         </div>
                     </div>
                     <div class="fleet-actions">
-                        <a href="<?= baseUrl('/fleet/detail.php') ?>?id=${v.id}" class="btn-dark">View Details</a>
+                        <a href="<?= baseUrl('/fleet/detail.php') ?>?id=${v.id}" class="btn-dark">Reserve Now</a>
                     </div>
                 </div>
             </div>
