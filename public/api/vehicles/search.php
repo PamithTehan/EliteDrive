@@ -7,6 +7,7 @@ header('Content-Type: application/json');
 try {
     $db = getDb();
     $category = $_GET['category'] ?? '';
+    $transmission = $_GET['transmission'] ?? '';
     $maxPrice = $_GET['max_price'] ?? '';
     $pickupDate = $_GET['pickup_date'] ?? null;
     $returnDate = $_GET['return_date'] ?? null;
@@ -38,6 +39,10 @@ try {
         foreach ($categories as $cat) {
             $params[] = trim($cat);
         }
+    }
+    if ($transmission && in_array(strtolower($transmission), ['auto', 'manual'], true)) {
+        $sql .= " AND LOWER(v.transmission) = ?";
+        $params[] = strtolower($transmission);
     }
     if ($maxPrice && is_numeric($maxPrice)) {
         $sql .= " AND v.daily_rate <= ?";
