@@ -18,30 +18,70 @@ $stmt = $db->prepare('
 $stmt->execute([$user['id']]);
 $vehicles = $stmt->fetchAll();
 
-$extraCss = ['dashboard'];
+// User initials for avatar circle
+$initials = '';
+$parts = explode(' ', trim($user['full_name']));
+foreach ($parts as $p) {
+    if (!empty($p)) {
+        $initials .= strtoupper($p[0]);
+    }
+    if (strlen($initials) >= 2) break;
+}
+if (!$initials) $initials = 'U';
+
+$extraCss = ['profile', 'dashboard'];
 require_once __DIR__ . '/../../includes/partials/head.php';
 ?>
 
-<div class="container grid grid-3" style="margin-top: var(--space-lg); margin-bottom: var(--space-lg);">
-    <aside class="dashboard-sidebar" style="grid-column: 1 / 2;">
-        <div class="card">
-            <div class="card-body stack-sm">
-                <h2 class="headline-md"><?= escapeHtml($user['full_name']) ?></h2>
-                <p class="body-md">Owner Dashboard</p>
-                <hr style="border:0; border-top: 1px solid var(--color-outline); margin: var(--space-md) 0;">
-                <ul class="stack-sm" style="list-style:none; padding:0;">
-                    <li><a href="<?= baseUrl('/owner/dashboard.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">My Vehicles</a></li>
-                    <li><a href="<?= baseUrl('/owner/bookings.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">Bookings</a></li>
-                </ul>
-            </div>
+<div style="background-color: #f8fafc; min-height: calc(100vh - 80px); padding-bottom: 40px;">
+    <div class="profile-page-hero">
+        <div class="container">
+            <h1>Owner Dashboard</h1>
+            <p>Manage your listed vehicles and review bookings.</p>
         </div>
-    </aside>
-    
-    <main class="dashboard-content" style="grid-column: 2 / 4;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-md);">
-            <h1 class="headline-lg">My Vehicles</h1>
-            <a href="<?= baseUrl('/owner/vehicle_form.php') ?>" class="btn btn-primary">Add Vehicle</a>
-        </div>
+    </div>
+
+    <div class="container">
+        <div class="profile-layout">
+            <aside>
+                <div class="profile-user-card">
+                    <div class="profile-avatar-circle">
+                        <?= escapeHtml($initials) ?>
+                    </div>
+                    <div class="profile-user-name"><?= escapeHtml($user['full_name']) ?></div>
+                    <div class="profile-user-email"><?= escapeHtml($user['email']) ?></div>
+                    
+                    <div class="profile-role-badges">
+                        <span class="role-badge owner">Owner</span>
+                    </div>
+
+                    <hr class="profile-stats-divider">
+                    
+                    <div class="profile-meta-list" style="margin-bottom: 24px;">
+                        <a href="<?= baseUrl('/owner/dashboard.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: #e0e7ff; font-weight: 600;">
+                            <span class="material-symbols-outlined">directions_car</span> My Vehicles
+                        </a>
+                        <a href="<?= baseUrl('/owner/bookings.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
+                            <span class="material-symbols-outlined">calendar_month</span> Bookings
+                        </a>
+                    </div>
+                </div>
+            </aside>
+            
+            <div class="profile-content-area">
+                
+                <div class="settings-card">
+                    <div class="settings-card-header" style="display:flex; justify-content:space-between; align-items:center;">
+                        <div style="display:flex; align-items:center; gap: 16px;">
+                            <span class="material-symbols-outlined">directions_car</span>
+                            <div>
+                                <h2>My Vehicles</h2>
+                                <p>Manage your fleet and add new vehicles.</p>
+                            </div>
+                        </div>
+                        <a href="<?= baseUrl('/owner/vehicle_form.php') ?>" class="btn btn-primary">Add Vehicle</a>
+                    </div>
+                    <div class="settings-card-body" style="padding: 24px;">
         
         <?php if (empty($vehicles)): ?>
             <div class="card">
@@ -84,8 +124,12 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                     </div>
                 <?php endforeach; ?>
             </div>
-        <?php endif; ?>
-    </main>
+            <?php endif; ?>
+                    </div> <!-- settings-card-body -->
+                </div> <!-- settings-card -->
+            </div> <!-- profile-content-area -->
+        </div> <!-- profile-layout -->
+    </div> <!-- container -->
 </div>
 
 <?php require_once __DIR__ . '/../../includes/partials/footer.php'; ?>
