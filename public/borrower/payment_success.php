@@ -12,13 +12,21 @@ if (!$bookingId) {
     die('Invalid booking ID.');
 }
 
-// Get the session ID from the DB
-$stmt = $db->prepare('SELECT id, stripe_session_id, booking_id FROM payments WHERE booking_id = ? AND status = "pending"');
+// Get the payment from the DB regardless of status to debug
+$stmt = $db->prepare('SELECT id, stripe_session_id, booking_id, status FROM payments WHERE booking_id = ?');
 $stmt->execute([$bookingId]);
 $payment = $stmt->fetch();
 
-if (!$payment || empty($payment['stripe_session_id'])) {
-    die('Payment not found or already processed.');
+if (!$payment) {
+    die("Payment for Booking ID {$bookingId} does not exist in the database.");
+}
+
+if ($payment['status'] !== 'pending') {
+    die("Payment was found, but its status is '{$payment['status']}' instead of 'pending'. It might have already been processed or cancelled.");
+}
+
+if (empty($payment['stripe_session_id'])) {
+    die("Payment is pending, but stripe_session_id is missing in the database!");
 }
 
 $sessionId = $payment['stripe_session_id'];
@@ -76,7 +84,10 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             <p class="body-lg" style="color: var(--color-secondary); margin-bottom: var(--space-lg);">
                 Your booking has been secured and payment was processed successfully.
             </p>
-            <a href="<?= baseUrl('/borrower/my_bookings.php') ?>" class="btn btn-primary">View My Bookings</a>
+            <div style="display: flex; gap: var(--space-sm); justify-content: center; flex-wrap: wrap;">
+                <a href="<?= baseUrl('/borrower/my_bookings.php') ?>" class="btn btn-ghost">View My Bookings</a>
+                <a href="<?= baseUrl('/borrower/invoice.php?booking_id=' . $bookingId . '&print=1') ?>" target="_blank" class="btn btn-primary">Download Invoice PDF</a>
+            </div>
         </div>
     </div>
 </div>

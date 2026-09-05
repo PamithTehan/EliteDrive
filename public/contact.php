@@ -143,10 +143,13 @@ require_once __DIR__ . '/../includes/partials/head.php';
         </div>
 
         <!-- Map Section -->
-        <div class="map-section">
-            <img src="https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?q=80&w=2070&auto=format&fit=crop" class="map-bg" alt="New York Skyline">
-            <div class="map-pin">
-                <span class="material-symbols-outlined">location_on</span>
+        <div>
+            <h2 class="headline-md" style="margin-bottom: var(--space-md);">Headquarters Location</h2>
+            <div class="map-section">
+                <img src="<?= baseUrl('/assets/images/kobu-agency-FyvE6XPs5gk-unsplash.jpg') ?>" class="map-bg" alt="Map">
+                <div class="map-pin">
+                    <span class="material-symbols-outlined">location_on</span>
+                </div>
             </div>
         </div>
 

@@ -8,43 +8,111 @@ $user = currentUser();
 $db = getDb();
 
 // Fetch bookings for this user
-$stmt = $db->prepare('
+$statusFilter = $_GET['status'] ?? '';
+
+$sql = '
     SELECT b.*, v.make, v.model, v.category 
     FROM bookings b 
     JOIN vehicles v ON b.vehicle_id = v.id 
     WHERE b.borrower_id = ? 
-    ORDER BY b.created_at DESC
-');
-$stmt->execute([$user['id']]);
+';
+$params = [$user['id']];
+if ($statusFilter) {
+    $sql .= ' AND b.status = ? ';
+    $params[] = $statusFilter;
+}
+$sql .= ' ORDER BY b.created_at DESC';
+
+$stmt = $db->prepare($sql);
+$stmt->execute($params);
 $bookings = $stmt->fetchAll();
 
-$extraCss = ['dashboard'];
+// User initials for avatar circle
+$initials = '';
+$parts = explode(' ', trim($user['full_name']));
+foreach ($parts as $p) {
+    if (!empty($p)) {
+        $initials .= strtoupper($p[0]);
+    }
+    if (strlen($initials) >= 2) break;
+}
+if (!$initials) $initials = 'U';
+
+$extraCss = ['profile', 'dashboard'];
 require_once __DIR__ . '/../../includes/partials/head.php';
 ?>
 
-<div class="container grid grid-3" style="margin-top: var(--space-lg); margin-bottom: var(--space-lg);">
-    <aside class="dashboard-sidebar" style="grid-column: 1 / 2;">
-        <div class="card">
-            <div class="card-body stack-sm">
-                <h2 class="headline-md"><?= escapeHtml($user['full_name']) ?></h2>
-                <p class="body-md">Borrower Dashboard</p>
-                <hr style="border:0; border-top: 1px solid var(--color-outline); margin: var(--space-md) 0;">
-                <ul class="stack-sm" style="list-style:none; padding:0;">
-                    <li><a href="<?= baseUrl('/borrower/my_bookings.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start; font-weight: bold;">My Bookings</a></li>
-                    <li><a href="<?= baseUrl('/fleet/search.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">Find a Vehicle</a></li>
-                </ul>
-            </div>
+<div style="background-color: #f8fafc; min-height: calc(100vh - 80px); padding-bottom: 40px;">
+    <div class="profile-page-hero">
+        <div class="container">
+            <h1>Borrower Dashboard</h1>
+            <p>Manage your vehicle reservations and rentals.</p>
         </div>
-    </aside>
-    
-    <main class="dashboard-content" style="grid-column: 2 / 4;">
-        <h1 class="headline-lg" style="margin-bottom: var(--space-lg);">My Bookings</h1>
+    </div>
+
+    <div class="container">
+        <div class="profile-layout">
+            <aside>
+                <div class="profile-user-card">
+                    <div class="profile-avatar-circle">
+                        <?= escapeHtml($initials) ?>
+                    </div>
+                    <div class="profile-user-name"><?= escapeHtml($user['full_name']) ?></div>
+                    <div class="profile-user-email"><?= escapeHtml($user['email']) ?></div>
+                    
+                    <div class="profile-role-badges">
+                        <span class="role-badge borrower">Borrower</span>
+                    </div>
+
+                    <hr class="profile-stats-divider">
+                    
+                    <div class="profile-meta-list" style="margin-bottom: 24px;">
+                        <a href="<?= baseUrl('/borrower/my_bookings.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: #e0e7ff; font-weight: 600;">
+                            <span class="material-symbols-outlined">book_online</span> My Bookings
+                        </a>
+                        <a href="<?= baseUrl('/fleet/search.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
+                            <span class="material-symbols-outlined">search</span> Find a Vehicle
+                        </a>
+                    </div>
+                </div>
+            </aside>
+            
+            <div class="profile-content-area">
+                
+                <div class="settings-card">
+                    <div class="settings-card-header" style="display:flex; justify-content:space-between; align-items:center;">
+                        <div style="display:flex; align-items:center; gap: 16px;">
+                            <span class="material-symbols-outlined">book_online</span>
+                            <div>
+                                <h2>My Bookings</h2>
+                                <p>Track your upcoming, active, and past rentals.</p>
+                            </div>
+                        </div>
+            <form method="GET" action="<?= baseUrl('/borrower/my_bookings.php') ?>" style="display:flex; align-items:center; gap:8px;">
+                <label for="status" class="body-sm" style="color:var(--color-secondary);">Filter:</label>
+                <select name="status" id="status" class="input" style="padding: 6px 12px; width:auto; border-radius: var(--radius-sm);" onchange="this.form.submit()">
+                    <option value="">All Bookings</option>
+                    <option value="pending_payment" <?= $statusFilter === 'pending_payment' ? 'selected' : '' ?>>Pending Payment</option>
+                    <option value="pending_verification" <?= $statusFilter === 'pending_verification' ? 'selected' : '' ?>>Pending Verification</option>
+                    <option value="confirmed" <?= $statusFilter === 'confirmed' ? 'selected' : '' ?>>Confirmed</option>
+                    <option value="active" <?= $statusFilter === 'active' ? 'selected' : '' ?>>Active</option>
+                    <option value="completed" <?= $statusFilter === 'completed' ? 'selected' : '' ?>>Completed</option>
+                    <option value="reviewed" <?= $statusFilter === 'reviewed' ? 'selected' : '' ?>>Reviewed</option>
+                    <option value="cancelled" <?= $statusFilter === 'cancelled' ? 'selected' : '' ?>>Cancelled</option>
+                    <option value="rejected" <?= $statusFilter === 'rejected' ? 'selected' : '' ?>>Rejected</option>
+                </select>
+            </form>
+        </div>
         
         <?php if (empty($bookings)): ?>
             <div class="card">
                 <div class="card-body" style="text-align:center; padding: var(--space-lg);">
-                    <p class="body-lg" style="color:var(--color-secondary);">You don't have any bookings yet.</p>
-                    <a href="<?= baseUrl('/fleet/search.php') ?>" class="btn btn-primary" style="margin-top: var(--space-md);">Browse Fleet</a>
+                    <?php if ($statusFilter): ?>
+                        <p class="body-lg" style="color:var(--color-secondary);">You don't have any bookings with the status "<?= escapeHtml(ucwords(str_replace('_', ' ', $statusFilter))) ?>".</p>
+                    <?php else: ?>
+                        <p class="body-lg" style="color:var(--color-secondary);">You don't have any bookings yet.</p>
+                        <a href="<?= baseUrl('/fleet/search.php') ?>" class="btn btn-primary" style="margin-top: var(--space-md);">Browse Fleet</a>
+                    <?php endif; ?>
                 </div>
             </div>
         <?php else: ?>
@@ -82,23 +150,32 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                                     <?php endif; ?>
                                 </div>
                             <?php elseif ($b['status'] === 'pending_payment'): ?>
-                                <div class="alert alert-warning" style="margin-top: var(--space-md); margin-bottom: 0; background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; padding: var(--space-sm); border-radius: var(--radius-sm);">
-                                    <strong>Payment Required:</strong> Your booking is awaiting payment. If you cancelled the payment, you may cancel this booking and try again.
+                                <div class="alert alert-warning" style="margin-top: var(--space-md); margin-bottom: 0; background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; padding: var(--space-sm); border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <strong>Payment Required:</strong> Your booking is awaiting payment.
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" onclick="payBooking(<?= $b['id'] ?>)">Pay Now</button>
                                 </div>
                             <?php endif; ?>
                             
                             <?php 
-                                $showReview = in_array($b['status'], ['completed', 'confirmed']);
+                                $showReview = ($b['status'] === 'completed');
                                 $showCancel = !in_array($b['status'], ['completed', 'cancelled', 'rejected', 'reviewed']);
+                                $showInvoice = !in_array($b['status'], ['cancelled', 'rejected', 'pending_payment']);
                             ?>
-                            <?php if ($showReview || $showCancel): ?>
+                            <?php if ($showReview || $showCancel || $showInvoice): ?>
                                 <div style="margin-top: var(--space-md); border-top: 1px solid var(--color-outline); padding-top: var(--space-sm);">
+                                    <?php if ($showInvoice): ?>
+                                        <a href="<?= baseUrl('/borrower/invoice.php?booking_id=' . $b['id'] . '&print=1') ?>" target="_blank" class="btn btn-ghost" style="padding: 4px 12px; font-size: 14px; color: var(--color-primary);">Download Invoice</a>
+                                    <?php endif; ?>
+                                    
                                     <?php if ($showReview): ?>
-                                        <button class="btn btn-ghost" onclick="leaveReview(<?= $b['id'] ?>)" style="padding: 4px 12px; font-size: 14px;">Leave Review</button>
+                                        <a href="<?= baseUrl('/review.php?booking_id=' . $b['id']) ?>" class="btn btn-ghost" style="padding: 4px 12px; font-size: 14px;">Leave Review</a>
                                         <button class="btn btn-ghost" onclick="reportDispute(<?= $b['id'] ?>)" style="padding: 4px 12px; font-size: 14px; color: var(--color-error);">Report Dispute</button>
                                     <?php endif; ?>
+                                    
                                     <?php if ($showCancel): ?>
-                                        <button class="btn btn-ghost" onclick="cancelBooking(<?= $b['id'] ?>)" style="padding: 4px 12px; font-size: 14px; color: var(--color-error);">Cancel Booking</button>
+                                        <button class="btn btn-ghost" onclick="cancelBooking(<?= $b['id'] ?>)" style="padding: 4px 12px; font-size: 14px; color:var(--color-error);">Cancel</button>
                                     <?php endif; ?>
                                 </div>
                             <?php endif; ?>
@@ -106,32 +183,38 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                     </div>
                 <?php endforeach; ?>
             </div>
-        <?php endif; ?>
-    </main>
+            <?php endif; ?>
+                    </div> <!-- settings-card-body -->
+                </div> <!-- settings-card -->
+            </div> <!-- profile-content-area -->
+        </div> <!-- profile-layout -->
+    </div> <!-- container -->
 </div>
 
 <script>
     const csrfToken = "<?= csrfToken() ?>";
     
-    async function leaveReview(bookingId) {
-        const rating = prompt("Enter a rating from 1 to 5:");
-        if (!rating || isNaN(rating) || rating < 1 || rating > 5) return;
-        
-        const comment = prompt("Optional: Leave a comment for the owner:");
-        
+    document.addEventListener('DOMContentLoaded', () => {
+    });
+    
+    async function payBooking(bookingId) {
         const formData = new FormData();
         formData.append('csrf', csrfToken);
         formData.append('booking_id', bookingId);
-        formData.append('rating', rating);
-        formData.append('comment', comment || '');
-        formData.append('target_user', 'owner');
         
-        const res = await fetch('<?= baseUrl('/api/reviews/submit.php') ?>', { method: 'POST', body: formData });
-        if (res.ok) {
-            alert('Review submitted successfully!');
-        } else {
-            const data = await res.json();
-            alert(data.error || 'Failed to submit review');
+        try {
+            const res = await fetch('<?= baseUrl('/api/bookings/pay.php') ?>', { method: 'POST', body: formData });
+            if (res.ok) {
+                const data = await res.json();
+                if (data.stripe_url) {
+                    window.location.href = data.stripe_url;
+                }
+            } else {
+                const data = await res.json();
+                alert(data.error || 'Failed to initialize payment.');
+            }
+        } catch (e) {
+            alert('Network error');
         }
     }
     

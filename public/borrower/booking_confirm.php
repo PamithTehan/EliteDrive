@@ -106,9 +106,58 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                 </div>
             </div>
             
-            <hr style="border:0; border-top: 1px solid var(--color-outline); margin: var(--space-md) 0;">
+            <?php
+            // Calculate breakdown
+            $breakdown = calculateRentalBreakdown([
+                'vehicle_id' => $vehicleId,
+                'driver_arrangement' => $driverArrangement,
+                'assigned_driver_id' => $driverId ? (int)$driverId : null,
+                'pickup_date' => $pickupDate,
+                'return_date' => $returnDate
+            ], $db);
+            ?>
             
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: var(--space-lg);">
+            <div style="background-color: #f8fafc; padding: var(--space-md); border-radius: var(--radius-md); margin-bottom: var(--space-lg);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm);">
+                    <h3 class="label-md" style="margin: 0; color: var(--color-primary);">Invoice Breakdown</h3>
+                    <?php if ($breakdown['grace_period_applied']): ?>
+                        <span style="background-color: #dcfce7; color: #166534; font-size: 11px; padding: 2px 6px; border-radius: 4px; font-weight: 600;">1-Hour Grace Period Applied</span>
+                    <?php endif; ?>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                    <span class="body-sm" style="color: var(--color-secondary);">Vehicle Daily Rate</span>
+                    <span class="body-sm">$<?= number_format($breakdown['vehicle_daily_rate'], 2) ?></span>
+                </div>
+                
+                <?php if ($breakdown['driver_daily_fee'] > 0): ?>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                    <span class="body-sm" style="color: var(--color-secondary);">Driver Daily Fee</span>
+                    <span class="body-sm">$<?= number_format($breakdown['driver_daily_fee'], 2) ?></span>
+                </div>
+                <?php endif; ?>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px dashed var(--color-outline); padding-bottom: 8px;">
+                    <span class="body-sm" style="color: var(--color-secondary); font-weight: 600;">Effective Daily Rate</span>
+                    <span class="body-sm" style="font-weight: 600;">$<?= number_format($breakdown['effective_daily_rate'], 2) ?></span>
+                </div>
+                
+                <?php if ($breakdown['total_days'] > 0): ?>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                    <span class="body-sm" style="color: var(--color-secondary);">Full Days</span>
+                    <span class="body-sm"><?= $breakdown['total_days'] ?> &times; $<?= number_format($breakdown['effective_daily_rate'], 2) ?></span>
+                </div>
+                <?php endif; ?>
+                
+                <?php if ($breakdown['remaining_blocks'] > 0 || $breakdown['total_days'] === 0): ?>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                    <span class="body-sm" style="color: var(--color-secondary);">Chargeable Blocks (6-hour periods)</span>
+                    <span class="body-sm"><?= $breakdown['remaining_blocks'] ?> &times; $<?= number_format($breakdown['block_rate'], 2) ?></span>
+                </div>
+                <?php endif; ?>
+            </div>
+            
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: var(--space-lg); border-top: 2px solid var(--color-outline); padding-top: var(--space-md);">
                 <h3 class="headline-md">Total Price</h3>
                 <h3 class="headline-lg" style="color:var(--color-primary);">$<?= number_format($price, 2) ?></h3>
             </div>

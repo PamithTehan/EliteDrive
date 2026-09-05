@@ -126,7 +126,7 @@ CREATE TABLE reviews (
     booking_id INT NOT NULL,
     reviewer_id INT NOT NULL,
     target_id INT NOT NULL,
-    target_type ENUM('vehicle', 'owner', 'driver') NOT NULL,
+    target_type ENUM('vehicle', 'owner', 'driver', 'platform') NOT NULL,
     rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5),
     comment TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

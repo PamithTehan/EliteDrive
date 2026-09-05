@@ -6,32 +6,79 @@ require_once __DIR__ . '/../../includes/functions.php';
 requireRole('admin');
 $user = currentUser();
 
-$extraCss = ['dashboard'];
+// User initials for avatar circle
+$initials = '';
+$parts = explode(' ', trim($user['full_name']));
+foreach ($parts as $p) {
+    if (!empty($p)) {
+        $initials .= strtoupper($p[0]);
+    }
+    if (strlen($initials) >= 2) break;
+}
+if (!$initials) $initials = 'U';
+
+$extraCss = ['profile', 'dashboard'];
 require_once __DIR__ . '/../../includes/partials/head.php';
 ?>
 
-<div class="container grid grid-3" style="margin-top: var(--space-lg); margin-bottom: var(--space-lg);">
-    <aside class="dashboard-sidebar" style="grid-column: 1 / 2;">
-        <div class="card">
-            <div class="card-body stack-sm">
-                <h2 class="headline-md">Admin Console</h2>
-                <p class="body-md">Manage platform</p>
-                <hr style="border:0; border-top: 1px solid var(--color-outline); margin: var(--space-md) 0;">
-                <ul class="stack-sm" style="list-style:none; padding:0;">
-                    <li><a href="<?= baseUrl('/admin/vehicle_approvals.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">Vehicle Approvals</a></li>
-                    <li><a href="<?= baseUrl('/admin/verification_queue.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start; font-weight: bold;">Verification Queue</a></li>
-                    <li><a href="<?= baseUrl('/admin/driver_assignments.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">Driver Assignments</a></li>
-                    <li><a href="<?= baseUrl('/admin/inquiries.php') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start;">Inquiries</a></li>
-                </ul>
-            </div>
+<div style="background-color: #f8fafc; min-height: calc(100vh - 80px); padding-bottom: 40px;">
+    <div class="profile-page-hero">
+        <div class="container">
+            <h1>Admin Console</h1>
+            <p>Manage the platform, verify users, and approve vehicles.</p>
         </div>
-    </aside>
-    
-    <main class="dashboard-content" style="grid-column: 2 / 4;">
-        <h1 class="headline-lg">Verification Queue</h1>
-        <div class="card">
-            <div class="card-body">
-                <table class="table">
+    </div>
+
+    <div class="container">
+        <div class="profile-layout">
+            <aside>
+                <div class="profile-user-card">
+                    <div class="profile-avatar-circle">
+                        <?= escapeHtml($initials) ?>
+                    </div>
+                    <div class="profile-user-name"><?= escapeHtml($user['full_name']) ?></div>
+                    <div class="profile-user-email"><?= escapeHtml($user['email']) ?></div>
+                    
+                    <div class="profile-role-badges">
+                        <span class="role-badge admin">Admin</span>
+                    </div>
+
+                    <hr class="profile-stats-divider">
+                    
+                    <div class="profile-meta-list" style="margin-bottom: 24px;">
+                        <a href="<?= baseUrl('/admin/vehicle_approvals.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
+                            <span class="material-symbols-outlined">directions_car</span> Vehicle Approvals
+                        </a>
+                        <a href="<?= baseUrl('/admin/verification_queue.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: #e0e7ff; font-weight: 600;">
+                            <span class="material-symbols-outlined">verified</span> Verification Queue
+                        </a>
+                        <a href="<?= baseUrl('/admin/driver_assignments.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
+                            <span class="material-symbols-outlined">work</span> Driver Assignments
+                        </a>
+                        <a href="<?= baseUrl('/admin/inquiries.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
+                            <span class="material-symbols-outlined">contact_support</span> Inquiries
+                        </a>
+                        <a href="<?= baseUrl('/admin/management.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
+                            <span class="material-symbols-outlined">manage_accounts</span> System Management
+                        </a>
+                    </div>
+                </div>
+            </aside>
+            
+            <div class="profile-content-area">
+                
+                <div class="settings-card">
+                    <div class="settings-card-header" style="display:flex; justify-content:space-between; align-items:center;">
+                        <div style="display:flex; align-items:center; gap: 16px;">
+                            <span class="material-symbols-outlined">verified</span>
+                            <div>
+                                <h2>Verification Queue</h2>
+                                <p>Review driving licenses submitted by drivers.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="settings-card-body" style="padding: 24px;">
+                <table class="table" style="width: 100%;">
                     <thead>
                         <tr>
                             <th>User Name</th>
@@ -46,9 +93,11 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                         <tr><td colspan="5" style="text-align:center;">Loading...</td></tr>
                     </tbody>
                 </table>
-            </div>
-        </div>
-    </main>
+                    </div> <!-- settings-card-body -->
+                </div> <!-- settings-card -->
+            </div> <!-- profile-content-area -->
+        </div> <!-- profile-layout -->
+    </div> <!-- container -->
 </div>
 
 <!-- Document Modal -->
