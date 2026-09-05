@@ -11,11 +11,11 @@ $stmt = $db->query("
     LEFT JOIN vehicle_photos p ON v.id = p.vehicle_id AND p.is_primary = 1 
     WHERE v.status = 'approved' 
     ORDER BY v.created_at DESC 
-    LIMIT 2
+    LIMIT 3
 ");
 $featuredVehicles = $stmt->fetchAll();
 
-$extraCss = ['home'];
+$extraCss = ['home', 'fleet-search'];
 require_once __DIR__ . '/../includes/partials/head.php';
 ?>
 
@@ -106,14 +106,14 @@ require_once __DIR__ . '/../includes/partials/head.php';
     <div class="fleet-header">
         <div>
             <div class="section-label">Our Selection</div>
-            <h2>Our Premium Fleet</h2>
+            <h2>Our Fleet</h2>
         </div>
         <a href="<?= baseUrl('/fleet/search.php') ?>" class="view-all-link">
             View All Vehicles <span class="material-symbols-outlined">chevron_right</span>
         </a>
     </div>
 
-    <div class="grid grid-2">
+    <div class="grid grid-3">
         <?php foreach ($featuredVehicles as $v): ?>
             <div class="fleet-card">
                 <div class="fleet-card-image">
