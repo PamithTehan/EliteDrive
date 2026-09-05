@@ -49,10 +49,10 @@ function calculatePrice(array $booking, PDO $db): float {
     // Convert to full hours (rounding up any partial hour)
     $borrowPeriodInHours = (int) ceil($diffSeconds / 3600);
     
-    $chargeBlock = intdiv($borrowPeriodInHours, 4);
-    $uncompletedChargeBlock = ($borrowPeriodInHours % 4 > 0) ? 1 : 0;
+    $chargeBlock = intdiv($borrowPeriodInHours, 6);
+    $uncompletedChargeBlock = ($borrowPeriodInHours % 6 > 0) ? 1 : 0;
     
-    $chargeForDayQuarter = $effectiveDailyRate / 4;
+    $chargeForDayQuarter = $effectiveDailyRate / 4; // Since a day has 24 hours, a 6-hour block is 1/4th of a day.
     
     $chargeTotal = ($chargeBlock + $uncompletedChargeBlock) * $chargeForDayQuarter;
     

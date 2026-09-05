@@ -74,15 +74,8 @@ try {
     $config = require __DIR__ . '/../../../config/config.php';
     $stripeKey = $config['stripe_secret_key'] ?? '';
     
-    $successUrl = baseUrl('/borrower/payment_success.php?booking_id=' . $bookingId);
-    if (strpos($successUrl, 'http://') !== 0 && strpos($successUrl, 'https://') !== 0) {
-        $successUrl = 'http://' . ltrim($successUrl, '/');
-    }
-
-    $cancelUrl = baseUrl('/borrower/payment_cancel.php?booking_id=' . $bookingId);
-    if (strpos($cancelUrl, 'http://') !== 0 && strpos($cancelUrl, 'https://') !== 0) {
-        $cancelUrl = 'http://' . ltrim($cancelUrl, '/');
-    }
+    $successUrl = rtrim($config['base_url'], '/') . '/borrower/payment_success.php?booking_id=' . $bookingId;
+    $cancelUrl  = rtrim($config['base_url'], '/') . '/borrower/payment_cancel.php?booking_id=' . $bookingId;
     
     $stripeData = http_build_query([
         'payment_method_types[0]' => 'card',
