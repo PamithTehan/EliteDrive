@@ -63,7 +63,17 @@ $titleColor = "color: white;";
         <div class="card" style="margin-bottom: var(--space-lg);">
             <div class="card-body">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-md);">
-                    <span class="badge badge-<?= strtolower($vehicle['category']) ?>"><?= escapeHtml($vehicle['category']) ?></span>
+                    <?php 
+                        $cats = explode(',', $vehicle['category']);
+                        foreach($cats as $cat): 
+                            $cat = trim($cat);
+                            if($cat):
+                    ?>
+                        <span class="badge badge-<?= strtolower($cat) ?>"><?= escapeHtml($cat) ?></span>
+                    <?php 
+                            endif;
+                        endforeach; 
+                    ?>
                     <span class="label-md" style="color:var(--color-secondary);">Listed by <?= escapeHtml($vehicle['owner_name']) ?></span>
                 </div>
                 <h2 class="headline-md" style="margin-bottom: var(--space-sm);">About this vehicle</h2>
