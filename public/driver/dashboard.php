@@ -60,29 +60,68 @@ if ($tab === 'assignments') {
     $reviews = $stmtRev->fetchAll();
 }
 
-$extraCss = ['dashboard'];
+// User initials for avatar circle
+$initials = '';
+$parts = explode(' ', trim($user['full_name']));
+foreach ($parts as $p) {
+    if (!empty($p)) {
+        $initials .= strtoupper($p[0]);
+    }
+    if (strlen($initials) >= 2) break;
+}
+if (!$initials) $initials = 'U';
+
+$extraCss = ['profile', 'dashboard'];
 require_once __DIR__ . '/../../includes/partials/head.php';
 ?>
 
-<div class="container grid grid-3" style="margin-top: var(--space-lg); margin-bottom: var(--space-lg);">
-    <aside class="dashboard-sidebar" style="grid-column: 1 / 2;">
-        <div class="card">
-            <div class="card-body stack-sm">
-                <h2 class="headline-md"><?= escapeHtml($user['full_name']) ?></h2>
-                <p class="body-md">Driver Dashboard</p>
-                <hr style="border:0; border-top: 1px solid var(--color-outline); margin: var(--space-md) 0;">
-                <ul class="stack-sm" style="list-style:none; padding:0;">
-                    <li><a href="<?= baseUrl('/driver/dashboard.php?tab=assignments') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start; font-weight: <?= $tab === 'assignments' ? 'bold' : 'normal' ?>;">Assignments</a></li>
-                    <li><a href="<?= baseUrl('/driver/dashboard.php?tab=reviews') ?>" class="btn btn-ghost" style="width:100%; justify-content:flex-start; font-weight: <?= $tab === 'reviews' ? 'bold' : 'normal' ?>;">My Reviews</a></li>
-                </ul>
-            </div>
+<div style="background-color: #f8fafc; min-height: calc(100vh - 80px); padding-bottom: 40px;">
+    <div class="profile-page-hero">
+        <div class="container">
+            <h1>Driver Dashboard</h1>
+            <p>Manage your driving assignments and read your reviews.</p>
         </div>
-    </aside>
-    
-    <main class="dashboard-content" style="grid-column: 2 / 4;">
-        
-        <?php if ($tab === 'assignments'): ?>
-            <h1 class="headline-lg" style="margin-bottom: var(--space-lg);">My Assignments</h1>
+    </div>
+
+    <div class="container">
+        <div class="profile-layout">
+            <aside>
+                <div class="profile-user-card">
+                    <div class="profile-avatar-circle">
+                        <?= escapeHtml($initials) ?>
+                    </div>
+                    <div class="profile-user-name"><?= escapeHtml($user['full_name']) ?></div>
+                    <div class="profile-user-email"><?= escapeHtml($user['email']) ?></div>
+                    
+                    <div class="profile-role-badges">
+                        <span class="role-badge driver">Driver</span>
+                    </div>
+
+                    <hr class="profile-stats-divider">
+                    
+                    <div class="profile-meta-list" style="margin-bottom: 24px;">
+                        <a href="<?= baseUrl('/driver/dashboard.php?tab=assignments') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: <?= $tab === 'assignments' ? '#e0e7ff' : 'transparent' ?>; font-weight: <?= $tab === 'assignments' ? '600' : '400' ?>;">
+                            <span class="material-symbols-outlined">work</span> Assignments
+                        </a>
+                        <a href="<?= baseUrl('/driver/dashboard.php?tab=reviews') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: <?= $tab === 'reviews' ? '#e0e7ff' : 'transparent' ?>; font-weight: <?= $tab === 'reviews' ? '600' : '400' ?>;">
+                            <span class="material-symbols-outlined">star</span> My Reviews
+                        </a>
+                    </div>
+                </div>
+            </aside>
+            
+            <div class="profile-content-area">
+                
+                <?php if ($tab === 'assignments'): ?>
+                    <div class="settings-card">
+                        <div class="settings-card-header">
+                            <span class="material-symbols-outlined">work_history</span>
+                            <div>
+                                <h2>My Assignments</h2>
+                                <p>View upcoming and past driving assignments.</p>
+                            </div>
+                        </div>
+                        <div class="settings-card-body" style="padding: 24px;">
             
             <?php if ($licenseStatus === 'pending'): ?>
                 <div class="alert alert-warning" style="background:#fef9c3; color:#713f12; margin-bottom: var(--space-md);">
@@ -128,23 +167,34 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
+                        </div> <!-- settings-card-body -->
+                    </div> <!-- settings-card -->
+                <?php endif; ?>
 
-        <?php elseif ($tab === 'reviews'): ?>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: var(--space-md);">
-                <h1 class="headline-lg">My Reviews</h1>
-                <form method="GET" action="<?= baseUrl('/driver/dashboard.php') ?>" style="display:flex; align-items:center; gap:8px;">
-                    <input type="hidden" name="tab" value="reviews">
-                    <label for="rating" class="body-sm" style="color:var(--color-secondary);">Filter:</label>
-                    <select name="rating" id="rating" class="input" style="padding: 6px 12px; width:auto; border-radius: var(--radius-sm);" onchange="this.form.submit()">
-                        <option value="">All Ratings</option>
-                        <option value="5" <?= $ratingFilter === 5 ? 'selected' : '' ?>>5 Stars</option>
-                        <option value="4" <?= $ratingFilter === 4 ? 'selected' : '' ?>>4 Stars</option>
-                        <option value="3" <?= $ratingFilter === 3 ? 'selected' : '' ?>>3 Stars</option>
-                        <option value="2" <?= $ratingFilter === 2 ? 'selected' : '' ?>>2 Stars</option>
-                        <option value="1" <?= $ratingFilter === 1 ? 'selected' : '' ?>>1 Star</option>
-                    </select>
-                </form>
-            </div>
+                <?php if ($tab === 'reviews'): ?>
+                    <div class="settings-card">
+                        <div class="settings-card-header" style="display:flex; justify-content:space-between; align-items:center;">
+                            <div style="display:flex; align-items:center; gap: 16px;">
+                                <span class="material-symbols-outlined">star</span>
+                                <div>
+                                    <h2>My Reviews</h2>
+                                    <p>Read what borrowers have said about your driving.</p>
+                                </div>
+                            </div>
+                            <form method="GET" action="<?= baseUrl('/driver/dashboard.php') ?>" style="display:flex; align-items:center; gap:8px;">
+                                <input type="hidden" name="tab" value="reviews">
+                                <select name="rating" id="rating" class="input" style="padding: 6px 12px; width:auto; border-radius: var(--radius-sm);" onchange="this.form.submit()">
+                                    <option value="">All Ratings</option>
+                                    <option value="5" <?= $ratingFilter === 5 ? 'selected' : '' ?>>5 Stars</option>
+                                    <option value="4" <?= $ratingFilter === 4 ? 'selected' : '' ?>>4 Stars</option>
+                                    <option value="3" <?= $ratingFilter === 3 ? 'selected' : '' ?>>3 Stars</option>
+                                    <option value="2" <?= $ratingFilter === 2 ? 'selected' : '' ?>>2 Stars</option>
+                                    <option value="1" <?= $ratingFilter === 1 ? 'selected' : '' ?>>1 Star</option>
+                                </select>
+                            </form>
+                        </div>
+                        <div class="settings-card-body" style="padding: 24px;">
+
             
             <?php if (empty($reviews)): ?>
                 <div class="card">
@@ -186,9 +236,12 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                 </div>
                 <?php endif; ?>
             <?php endif; ?>
-        <?php endif; ?>
-
-    </main>
+                        </div> <!-- settings-card-body -->
+                    </div> <!-- settings-card -->
+                <?php endif; ?>
+            </div> <!-- profile-content-area -->
+        </div> <!-- profile-layout -->
+    </div> <!-- container -->
 </div>
 
 <?php require_once __DIR__ . '/../../includes/partials/footer.php'; ?>
