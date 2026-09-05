@@ -4,6 +4,29 @@ require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/functions.php';
 
 $extraCss = ['contact'];
+
+$successMessage = '';
+$errorMessage = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $fullName = trim($_POST['full_name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $subject = trim($_POST['subject'] ?? '');
+    $message = trim($_POST['message'] ?? '');
+    
+    if (empty($fullName) || empty($email) || empty($subject) || empty($message)) {
+        $errorMessage = 'Please fill out all required fields.';
+    } else {
+        try {
+            $stmt = getDb()->prepare("INSERT INTO inquiries (full_name, email, subject, message) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$fullName, $email, $subject, $message]);
+            $successMessage = 'Your inquiry has been submitted successfully. Our team will get back to you shortly.';
+        } catch (PDOException $e) {
+            $errorMessage = 'An error occurred while submitting your inquiry. Please try again later.';
+        }
+    }
+}
+
 require_once __DIR__ . '/../includes/partials/head.php';
 ?>
 
@@ -69,31 +92,41 @@ require_once __DIR__ . '/../includes/partials/head.php';
 
             <!-- Right Column: Form -->
             <div class="contact-card">
-                <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Message sent!');">
+                <?php if ($successMessage): ?>
+                    <div class="alert alert-success" style="margin-bottom: 20px;"><?= escapeHtml($successMessage) ?></div>
+                <?php endif; ?>
+                <?php if ($errorMessage): ?>
+                    <div class="alert alert-danger" style="margin-bottom: 20px;"><?= escapeHtml($errorMessage) ?></div>
+                <?php endif; ?>
+                
+                <form action="<?= baseUrl('/contact.php') ?>" method="POST">
                     <div class="grid grid-2" style="gap: 16px; margin-bottom: 20px;">
                         <div>
                             <label class="label-sm">Full Name</label>
-                            <input type="text" class="contact-input" placeholder="Johnathan Sterling" required>
+                            <input type="text" name="full_name" class="contact-input" placeholder="Johnathan Sterling" required>
                         </div>
                         <div>
                             <label class="label-sm">Email Address</label>
-                            <input type="email" class="contact-input" placeholder="john@example.com" required>
+                            <input type="email" name="email" class="contact-input" placeholder="john@example.com" required>
                         </div>
                     </div>
                     
                     <div class="form-group">
                         <label class="label-sm">Subject</label>
-                        <select class="contact-input" required>
+                        <select name="subject" class="contact-input" required>
                             <option value="">Select a subject...</option>
                             <option value="fleet" selected>Corporate Fleet Inquiry</option>
                             <option value="support">Active Rental Support</option>
+                            <option value="payment">Payment Inquiry</option>
+                            <option value="vehicle">Vehicle Inquiry</option>
+                            <option value="driver">Driver Inquiry</option>
                             <option value="other">Other Inquiry</option>
                         </select>
                     </div>
                     
                     <div class="form-group">
                         <label class="label-sm">Message</label>
-                        <textarea class="contact-input" rows="5" placeholder="How can our concierge team assist you today?" required></textarea>
+                        <textarea name="message" class="contact-input" rows="5" placeholder="How can our concierge team assist you today?" required></textarea>
                     </div>
                     
                     <div style="display:flex; align-items:flex-start; gap:8px; margin-bottom: 24px;">
