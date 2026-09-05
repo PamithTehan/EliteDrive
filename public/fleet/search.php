@@ -120,39 +120,6 @@ require_once __DIR__ . '/../../includes/partials/head.php';
     </div>
 </div>
 
-<div class="trust-bar">
-    <div class="container grid grid-4">
-        <div class="trust-item">
-            <span class="material-symbols-outlined">verified_user</span>
-            <div class="trust-text">
-                <h4>Fully Insured</h4>
-                <p>Comprehensive coverage included</p>
-            </div>
-        </div>
-        <div class="trust-item">
-            <span class="material-symbols-outlined">support_agent</span>
-            <div class="trust-text">
-                <h4>24/7 Support</h4>
-                <p>Round-the-clock roadside help</p>
-            </div>
-        </div>
-        <div class="trust-item">
-            <span class="material-symbols-outlined">star</span>
-            <div class="trust-text">
-                <h4>Premium Fleet</h4>
-                <p>Vehicles under 2 years old</p>
-            </div>
-        </div>
-        <div class="trust-item">
-            <span class="material-symbols-outlined">cancel</span>
-            <div class="trust-text">
-                <h4>Free Cancellation</h4>
-                <p>Flexible booking policies</p>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script>
     const resultsGrid = document.getElementById('results-grid');
     const paginationWrapper = document.getElementById('pagination-wrapper');
