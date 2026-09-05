@@ -84,7 +84,10 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             <p class="body-lg" style="color: var(--color-secondary); margin-bottom: var(--space-lg);">
                 Your booking has been secured and payment was processed successfully.
             </p>
-            <a href="<?= baseUrl('/borrower/my_bookings.php') ?>" class="btn btn-primary">View My Bookings</a>
+            <div style="display: flex; gap: var(--space-sm); justify-content: center; flex-wrap: wrap;">
+                <a href="<?= baseUrl('/borrower/my_bookings.php') ?>" class="btn btn-ghost">View My Bookings</a>
+                <a href="<?= baseUrl('/borrower/invoice.php?booking_id=' . $bookingId . '&print=1') ?>" target="_blank" class="btn btn-primary">Download Invoice PDF</a>
+            </div>
         </div>
     </div>
 </div>
