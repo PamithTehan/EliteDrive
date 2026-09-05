@@ -34,10 +34,13 @@ try {
 
     if ($category) {
         $categories = explode(',', $category);
-        $placeholders = str_repeat('?,', count($categories) - 1) . '?';
-        $sql .= " AND v.category IN ($placeholders)";
+        $conditions = [];
         foreach ($categories as $cat) {
+            $conditions[] = "FIND_IN_SET(?, v.category)";
             $params[] = trim($cat);
+        }
+        if (!empty($conditions)) {
+            $sql .= " AND (" . implode(' OR ', $conditions) . ")";
         }
     }
     if ($transmission && in_array(strtolower($transmission), ['auto', 'manual'], true)) {
