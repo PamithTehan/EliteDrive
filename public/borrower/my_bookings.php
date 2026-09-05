@@ -117,7 +117,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                             <?php endif; ?>
                             
                             <?php 
-                                $showReview = in_array($b['status'], ['completed', 'confirmed']);
+                                $showReview = ($b['status'] === 'completed');
                                 $showCancel = !in_array($b['status'], ['completed', 'cancelled', 'rejected', 'reviewed']);
                             ?>
                             <?php if ($showReview || $showCancel): ?>
