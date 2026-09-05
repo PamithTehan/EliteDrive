@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $make = trim($_POST['make'] ?? '');
         $model = trim($_POST['model'] ?? '');
-        $category = $_POST['category'] ?? '';
+        $category = isset($_POST['category']) && is_array($_POST['category']) ? implode(',', $_POST['category']) : '';
         $dailyRate = $_POST['daily_rate'] ?? '';
         $location = trim($_POST['location'] ?? '');
         $description = trim($_POST['description'] ?? '');
@@ -108,15 +108,14 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label" for="category">Category</label>
-                    <select id="category" name="category" class="input" required>
-                        <option value="">Select a category</option>
-                        <option value="Premium">Premium</option>
-                        <option value="Luxury">Luxury</option>
-                        <option value="Budget">Budget</option>
-                        <option value="Offroad">Offroad</option>
-                        <option value="Electric">Electric</option>
-                    </select>
+                    <label class="form-label">Categories (Select all that apply)</label>
+                    <div style="display: flex; gap: var(--space-md); flex-wrap: wrap;">
+                        <label><input type="checkbox" name="category[]" value="Premium"> Premium</label>
+                        <label><input type="checkbox" name="category[]" value="Luxury"> Luxury</label>
+                        <label><input type="checkbox" name="category[]" value="Budget"> Budget</label>
+                        <label><input type="checkbox" name="category[]" value="Offroad"> Offroad</label>
+                        <label><input type="checkbox" name="category[]" value="Electric"> Electric</label>
+                    </div>
                 </div>
                 
                 <div class="grid grid-3">
