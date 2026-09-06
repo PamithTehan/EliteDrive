@@ -57,11 +57,13 @@ $pageBorrowers = isset($_GET['page_borrowers']) ? max(1, (int)$_GET['page_borrow
 $pageOwners = isset($_GET['page_owners']) ? max(1, (int)$_GET['page_owners']) : 1;
 $pageDrivers = isset($_GET['page_drivers']) ? max(1, (int)$_GET['page_drivers']) : 1;
 $pageVehicles = isset($_GET['page_vehicles']) ? max(1, (int)$_GET['page_vehicles']) : 1;
+$pageRejections = isset($_GET['page_rejections']) ? max(1, (int)$_GET['page_rejections']) : 1;
 
 $offsetBorrowers = ($pageBorrowers - 1) * $perPage;
 $offsetOwners = ($pageOwners - 1) * $perPage;
 $offsetDrivers = ($pageDrivers - 1) * $perPage;
 $offsetVehicles = ($pageVehicles - 1) * $perPage;
+$offsetRejections = ($pageRejections - 1) * $perPage;
 
 $db = getDb();
 
@@ -114,6 +116,30 @@ $stmtVehicles->execute();
 $vehicles = $stmtVehicles->fetchAll();
 $totalPagesVehicles = ceil($totalVehicles / $perPage);
 
+// Fetch Rejections
+$totalRejections = $db->query("
+    SELECT COUNT(*) FROM (
+        SELECT 'Vehicle' as type FROM vehicles WHERE status = 'rejected'
+        UNION ALL
+        SELECT 'Driver License' as type FROM driving_licenses WHERE status = 'rejected'
+    ) t
+")->fetchColumn();
+
+$stmtRejections = $db->prepare("
+    SELECT 'Vehicle' as type, id as target_id, CONCAT(make, ' ', model) as name, rejection_reason as reason, updated_at as date 
+    FROM vehicles WHERE status = 'rejected'
+    UNION ALL
+    SELECT 'Driver License' as type, dl.user_id as target_id, u.full_name as name, dl.rejection_reason as reason, dl.updated_at as date
+    FROM driving_licenses dl JOIN users u ON u.id = dl.user_id WHERE dl.status = 'rejected'
+    ORDER BY date DESC
+    LIMIT ? OFFSET ?
+");
+$stmtRejections->bindValue(1, $perPage, PDO::PARAM_INT);
+$stmtRejections->bindValue(2, $offsetRejections, PDO::PARAM_INT);
+$stmtRejections->execute();
+$rejections = $stmtRejections->fetchAll();
+$totalPagesRejections = ceil($totalRejections / $perPage);
+
 
 // User initials for avatar circle
 $initials = '';
@@ -129,6 +155,40 @@ if (!$initials) $initials = 'U';
 $extraCss = ['profile', 'dashboard'];
 require_once __DIR__ . '/../../includes/partials/head.php';
 ?>
+
+<style>
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    .settings-card-body, .settings-card-body * {
+        visibility: visible;
+    }
+    .settings-card-body {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+    .mgmt-tab-content[style*="display: none"] {
+        display: none !important;
+    }
+    .btn {
+        display: none !important;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    table, th, td {
+        border: 1px solid #ccc;
+    }
+    th, td {
+        padding: 8px;
+        text-align: left;
+    }
+}
+</style>
 
 <div style="background-color: #f8fafc; min-height: calc(100vh - 80px); padding-bottom: 40px;">
     <div class="profile-page-hero">
@@ -208,6 +268,15 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                         </button>
                         <button type="button" class="mgmt-tab-btn" data-tab="vehicles" style="padding: 16px; background: none; border: none; font-size: 16px; border-bottom: 2px solid <?= $activeTab === 'vehicles' ? 'var(--color-primary)' : 'transparent' ?>; color: <?= $activeTab === 'vehicles' ? 'var(--color-primary)' : 'var(--color-secondary)' ?>; font-weight: <?= $activeTab === 'vehicles' ? 'bold' : 'normal' ?>; cursor: pointer;">
                             Vehicles
+                        </button>
+                        <button type="button" class="mgmt-tab-btn" data-tab="rejections" style="padding: 16px; background: none; border: none; font-size: 16px; border-bottom: 2px solid <?= $activeTab === 'rejections' ? 'var(--color-primary)' : 'transparent' ?>; color: <?= $activeTab === 'rejections' ? 'var(--color-primary)' : 'var(--color-secondary)' ?>; font-weight: <?= $activeTab === 'rejections' ? 'bold' : 'normal' ?>; cursor: pointer;">
+                            Rejection Logs
+                        </button>
+                    </div>
+
+                    <div style="padding: 16px 24px 0 24px; text-align: right;">
+                        <button type="button" class="btn btn-secondary" onclick="window.print()" style="display: inline-flex; align-items: center; gap: 8px;">
+                            <span class="material-symbols-outlined" style="font-size: 18px;">print</span> Print Current Tab
                         </button>
                     </div>
 
@@ -385,6 +454,47 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                             <div style="display: flex; justify-content: center; gap: 8px; margin-top: 20px;">
                                 <?php for ($i = 1; $i <= $totalPagesVehicles; $i++): ?>
                                     <a href="?tab=vehicles&page_vehicles=<?= $i ?>" class="btn <?= $i === $pageVehicles ? 'btn-primary' : 'btn-outline' ?> btn-sm"><?= $i ?></a>
+                                <?php endfor; ?>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Rejection Logs Tab -->
+                        <div id="tab-rejections" class="mgmt-tab-content" style="display: <?= $activeTab === 'rejections' ? 'block' : 'none' ?>;">
+                            <table class="table" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>Subject</th>
+                                        <th>Rejection Reason</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($rejections as $r): ?>
+                                        <tr>
+                                            <td>
+                                                <span class="badge" style="background: var(--color-surface-variant); color: var(--color-primary); border-radius: 4px; padding: 4px 8px; font-size: 11px;">
+                                                    <?= escapeHtml($r['type']) ?>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div style="font-weight: 500;"><?= escapeHtml($r['name']) ?></div>
+                                                <div style="font-size:12px; color:var(--color-secondary);">ID: <?= escapeHtml($r['target_id']) ?></div>
+                                            </td>
+                                            <td><?= nl2br(escapeHtml($r['reason'] ?: 'No reason provided')) ?></td>
+                                            <td style="color:var(--color-secondary); font-size:14px;"><?= date('M d, Y H:i', strtotime($r['date'])) ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                    <?php if (empty($rejections)): ?>
+                                        <tr><td colspan="4" style="text-align:center;">No rejection logs found.</td></tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                            <?php if ($totalPagesRejections > 1): ?>
+                            <div style="display: flex; justify-content: center; gap: 8px; margin-top: 20px;">
+                                <?php for ($i = 1; $i <= $totalPagesRejections; $i++): ?>
+                                    <a href="?tab=rejections&page_rejections=<?= $i ?>" class="btn <?= $i === $pageRejections ? 'btn-primary' : 'btn-outline' ?> btn-sm"><?= $i ?></a>
                                 <?php endfor; ?>
                             </div>
                             <?php endif; ?>
