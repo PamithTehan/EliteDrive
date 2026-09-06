@@ -149,7 +149,10 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                             <span class="badge" style="font-size:11px; background:var(--color-surface); border:1px solid var(--color-outline);">${escapeHtml(r.transmission || 'Auto')}</span>
                         </div>
                     </td>
-                    <td>${escapeHtml(r.pickup_date)}<br><small style="color:var(--color-secondary);">${escapeHtml(r.pickup_location)}</small></td>
+                    <td>
+                        <div><strong>Pick-up:</strong> ${escapeHtml(r.pickup_date)}<br><small style="color:var(--color-secondary);">${escapeHtml(r.pickup_location)}</small></div>
+                        <div style="margin-top: 4px;"><strong>Return:</strong> ${escapeHtml(r.return_date)}<br><small style="color:var(--color-secondary);">${escapeHtml(r.return_location)}</small></div>
+                    </td>
                     <td>
                         <select class="input driver-select" data-id="${r.id}" style="padding: 4px; font-size: 14px;">
                             ${options}
