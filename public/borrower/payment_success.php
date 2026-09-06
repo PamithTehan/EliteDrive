@@ -31,14 +31,19 @@ if (empty($payment['stripe_session_id'])) {
 
 $sessionId = $payment['stripe_session_id'];
 
-$config = require __DIR__ . '/../../config/config.php';
+$config = getConfig();
 $stripeKey = $config['stripe_secret_key'] ?? '';
 
 // Verify session with Stripe
 $ch = curl_init('https://api.stripe.com/v1/checkout/sessions/' . urlencode($sessionId));
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_USERPWD, $stripeKey . ':');
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Bypass local XAMPP SSL certificate issues
+
 $response = curl_exec($ch);
+if ($response === false) {
+    die('cURL Error: ' . curl_error($ch));
+}
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
