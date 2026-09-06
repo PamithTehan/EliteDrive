@@ -258,75 +258,67 @@ $gracePeriodApplied = $breakdown['grace_period_applied'];
             </div>
         </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Description</th>
-                    <th class="text-right">Rate</th>
-                    <th class="text-right">Duration</th>
-                    <th class="text-right">Amount</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <strong>Vehicle Rental</strong><br>
-                        <span style="font-size:13px; color:var(--color-text-light);"><?= escapeHtml($booking['make'] . ' ' . $booking['model']) ?></span>
-                    </td>
-                    <td class="text-right">$<?= number_format($vehicleDailyRate, 2) ?>/day</td>
-                    <td class="text-right">-</td>
-                    <td class="text-right">-</td>
-                </tr>
-                
-                <?php if ($booking['driver_arrangement'] === 'hired'): ?>
-                <tr>
-                    <td>
-                        <strong>Hired Driver</strong><br>
-                        <span style="font-size:13px; color:var(--color-text-light);"><?= escapeHtml($booking['driver_name'] ?? 'Driver Assigned Later') ?></span>
-                    </td>
-                    <td class="text-right">$<?= number_format($driverDailyFee, 2) ?>/day</td>
-                    <td class="text-right">-</td>
-                    <td class="text-right">-</td>
-                </tr>
-                <?php endif; ?>
-                
-                <?php if ($totalDays > 0): ?>
-                <tr>
-                    <td>
-                        <strong>Full Days Rental</strong><br>
-                        <span style="font-size:13px; color:var(--color-text-light);">
-                            Daily Rate applied for <?= $totalDays ?> days
-                        </span>
-                    </td>
-                    <td class="text-right">$<?= number_format($effectiveDailyRate, 2) ?> / day</td>
-                    <td class="text-right"><?= $totalDays ?> days</td>
-                    <td class="text-right">$<?= number_format($totalDays * $effectiveDailyRate, 2) ?></td>
-                </tr>
-                <?php endif; ?>
-                
-                <?php if ($remainingBlocks > 0 || $totalDays === 0): ?>
-                <tr>
-                    <td>
-                        <strong>Partial Rental Charge</strong><br>
-                        <span style="font-size:13px; color:var(--color-text-light);">
-                            Billed in 6-hour blocks
-                            <?php if ($gracePeriodApplied): ?>
-                            <br><span style="color:#166534; font-weight:500;">(1-Hour Grace Period Applied)</span>
-                            <?php endif; ?>
-                        </span>
-                    </td>
-                    <td class="text-right">$<?= number_format($chargeForDayQuarter, 2) ?> / block</td>
-                    <td class="text-right"><?= $remainingBlocks ?> blocks</td>
-                    <td class="text-right">$<?= number_format($remainingBlocks * $chargeForDayQuarter, 2) ?></td>
-                </tr>
-                <?php endif; ?>
-                
-                <tr class="total-row">
-                    <td colspan="3" class="text-right">Total:</td>
-                    <td class="text-right">$<?= number_format($booking['total_price'], 2) ?></td>
-                </tr>
-            </tbody>
-        </table>
+        <div style="margin-bottom: 40px; background-color: var(--color-bg); padding: 20px; border-radius: 8px;">
+            <h3 style="font-size: 16px; margin-top: 0; margin-bottom: 16px; border-bottom: 1px solid var(--color-border); padding-bottom: 12px; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.05em;">1. Rental Information</h3>
+            
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="color: var(--color-text-light);">Vehicle Daily Rate (<?= escapeHtml($booking['make'] . ' ' . $booking['model']) ?>)</span>
+                <span>$<?= number_format($vehicleDailyRate, 2) ?></span>
+            </div>
+            
+            <?php if ($booking['driver_arrangement'] === 'hired'): ?>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="color: var(--color-text-light);">Driver Daily Fee (<?= escapeHtml($booking['driver_name'] ?? 'Driver Assigned Later') ?>)</span>
+                <span>$<?= number_format($driverDailyFee, 2) ?></span>
+            </div>
+            <?php endif; ?>
+            
+            <div style="display: flex; justify-content: space-between; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--color-border);">
+                <span style="font-weight: 600;">Effective Daily Rate</span>
+                <span style="font-weight: 600;">$<?= number_format($effectiveDailyRate, 2) ?></span>
+            </div>
+            
+            <?php 
+                $pickupObj = new DateTime($booking['pickup_date']);
+                $returnObj = new DateTime($booking['return_date']);
+                $diffSecs = $returnObj->getTimestamp() - $pickupObj->getTimestamp();
+                $durationHours = (int) ceil($diffSecs / 3600);
+            ?>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="color: var(--color-text-light);">Rental Time (<?= date('M d, H:i', strtotime($booking['pickup_date'])) ?> - <?= date('M d, H:i', strtotime($booking['return_date'])) ?>)</span>
+                <span><?= $durationHours ?> hours</span>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="color: var(--color-text-light);">Charge Block Count (6-hour periods)</span>
+                <span><?= $breakdown['total_blocks'] ?> blocks</span>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="color: var(--color-text-light);">Rate per Charge Block (Effective Daily Rate &divide; 4)</span>
+                <span>$<?= number_format($chargeForDayQuarter, 2) ?></span>
+            </div>
+            
+            <?php if ($gracePeriodApplied): ?>
+            <div style="margin-top: 12px;">
+                <span style="background-color: #dcfce7; color: #166534; font-size: 12px; padding: 4px 8px; border-radius: 4px; font-weight: 600;">1-Hour Grace Period Applied</span>
+            </div>
+            <?php endif; ?>
+        </div>
+
+        <div style="margin-bottom: 40px;">
+            <h3 style="font-size: 16px; margin-bottom: 16px; border-bottom: 1px solid var(--color-border); padding-bottom: 12px; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.05em;">2. Billing Summary</h3>
+            
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 15px;">
+                <span style="color: var(--color-text-light);">Total Charge Calculation (<?= $breakdown['total_blocks'] ?> blocks &times; $<?= number_format($chargeForDayQuarter, 2) ?>)</span>
+                <span>$<?= number_format($breakdown['total_blocks'] * $chargeForDayQuarter, 2) ?></span>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; margin-top: 20px; font-size: 20px; font-weight: 700; padding-top: 20px; border-top: 2px solid var(--color-border);">
+                <span>Total Amount Due</span>
+                <span>$<?= number_format($booking['total_price'], 2) ?></span>
+            </div>
+        </div>
         
         <div style="margin-top: 40px; border-top: 1px solid var(--color-border); padding-top: 20px; font-size: 14px; color: var(--color-text-light); text-align: center;">
             <p>Thank you for choosing EliteDrive. For any inquiries about this invoice, please contact support.</p>
