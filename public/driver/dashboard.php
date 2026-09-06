@@ -154,7 +154,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                                         <h3 class="headline-md"><?= escapeHtml($a['make'] . ' ' . $a['model']) ?></h3>
                                         <p class="body-md" style="color:var(--color-secondary);">
                                             <strong>Pick-up:</strong> <?= escapeHtml(date('M d, Y H:i', strtotime($a['pickup_date']))) ?> at <?= escapeHtml($a['pickup_location']) ?><br>
-                                            <strong>Return:</strong> <?= escapeHtml(date('M d, Y H:i', strtotime($a['return_date']))) ?><br>
+                                            <strong>Return:</strong> <?= escapeHtml(date('M d, Y H:i', strtotime($a['return_date']))) ?> at <?= escapeHtml($a['return_location']) ?><br>
                                             <strong>Borrower:</strong> <?= escapeHtml($a['borrower_name']) ?>
                                         </p>
                                     </div>
