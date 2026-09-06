@@ -10,7 +10,7 @@
                 <ul class="stack-xs" style="list-style:none; padding:0; margin:0;">
                     <li><a href="<?= baseUrl('/fleet/search.php') ?>" style="color:var(--color-secondary); text-decoration:none; font-size:14px;">Browse Fleet</a></li>
                     <li><a href="<?= baseUrl('/about.php') ?>" style="color:var(--color-secondary); text-decoration:none; font-size:14px;">About Us</a></li>
-                    <li><a href="<?= baseUrl('/contact.php') ?>" style="color:var(--color-secondary); text-decoration:none; font-size:14px;">Concierge Contact</a></li>
+                    <li><a href="<?= baseUrl('/contact.php') ?>" style="color:var(--color-secondary); text-decoration:none; font-size:14px;">Contact Us</a></li>
                 </ul>
             </div>
             <div>
@@ -18,7 +18,6 @@
                 <ul class="stack-xs" style="list-style:none; padding:0; margin:0;">
                     <li><a href="<?= baseUrl('/faqs.php') ?>" style="color:var(--color-secondary); text-decoration:none; font-size:14px;">Frequently Asked Questions</a></li>
                     <li><a href="<?= baseUrl('/contact.php') ?>" style="color:var(--color-secondary); text-decoration:none; font-size:14px;">Emergency Roadside</a></li>
-                    <li><a href="<?= baseUrl('/faqs.php') ?>" style="color:var(--color-secondary); text-decoration:none; font-size:14px;">Rental Policies</a></li>
                 </ul>
             </div>
             <div>
@@ -28,9 +27,9 @@
             </div>
         </div>
         <div class="container" style="border-top: 1px solid var(--color-outline); margin-top: 32px; padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-            <p class="body-sm" style="color: var(--color-secondary); margin:0;">&copy; <?= date('Y') ?> EliteDrive Technologies Inc. All rights reserved.</p>
+            <p class="body-sm" style="color: var(--color-secondary); margin:0;">&copy; <?= date('Y') ?> Pamith Tehan, EliteDrive Technologies Inc. All rights reserved.</p>
             <div style="display: flex; gap: 16px;">
-                <span class="body-sm" style="color: var(--color-secondary);">Executive Fleet Experience</span>
+                <span class="body-sm" style="color: var(--color-secondary);">Executive Fleet Experience. Acadamic purpose only.</span>
             </div>
         </div>
     </footer>
