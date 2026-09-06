@@ -40,7 +40,7 @@ Companion to `PROJECT_CONTEXT.md`. Screen references assume the EliteDrive visua
 1. Sign up → basic profile (no license required yet — only required if they intend to self-drive).
 
 ### 2.2 Search & Filter Fleet
-1. Landing page search bar (location, pick-up/return dates) → results grid.
+1. Landing page search bar (pickup/return dates, car class) → results grid.
 2. Filter by fleet category chip (Premium / Luxury / Budget / Offroad), price, seats, transmission.
 3. Select a vehicle → detail page (photos, specs, owner rating, trust badges).
 
@@ -57,9 +57,9 @@ On the booking screen, borrower picks one:
 3. Booking status → `Confirmed` (only after the relevant driver's license is verified per 2.3).
 
 ### 2.5 Trip
-1. Pickup: borrower (or driver) checks in at agreed location.
+1. Pickup: borrower (or driver) checks in at the designated pickup hub (CMB, HRI, or Colombo HQ).
 2. Trip runs; in-app support access throughout (per "24/7 Support" trust feature).
-3. Drop-off → both sides confirm condition/mileage.
+3. Drop-off: Vehicle is returned to the selected return hub; both sides confirm condition/mileage.
 4. Booking → `Completed`.
 
 ### 2.6 Post-Trip

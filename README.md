@@ -11,6 +11,8 @@ Comprehensive documentation for this project is available in the `documents/` di
 - **[Configuration Setup](documents/CONFIG_SETUP.md)**: Instructions for configuring the `config.php` file and connecting to the database.
 
 ### System Architecture & Logic
+- **[Database Schema](documents/DATABASE_SCHEMA.md)**: Entity-relationship details and enum status breakdowns for all core tables.
+- **[API Documentation](documents/API_DOCUMENTATION.md)**: Details on the asynchronous JSON endpoints used for bookings, payments, and driver assignments.
 - **[Payment Calculation Logic](documents/payment_calculation_logic.md)**: Details on the 6-hour block billing system, effective daily rates, and the 1-hour grace period implementation.
 - **[Design Guidelines](documents/DESIGN.md)**: Overview of the aesthetic rules, typography, UI patterns, and styling conventions used across the platform.
 - **[Project Context](documents/PROJECT_CONTEXT.md)**: High-level overview of the EliteDrive vision, brand identity, and system boundaries.

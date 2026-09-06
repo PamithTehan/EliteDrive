@@ -57,7 +57,7 @@ Each vehicle listing belongs to exactly one category, set by the Owner at listin
 - **User** — base account: id, name, contact, verification status, role flags (`isOwner`, `isDriverCertified`, `isBorrower`), profile documents.
 - **DrivingLicense** — belongs to a User; number, issuing authority, expiry, uploaded image, `status: pending | verified | rejected | expired`.
 - **Vehicle** — belongs to an Owner; make/model, photos, fleet category, daily rate, location, availability calendar, `status: draft | pending_review | approved | suspended`.
-- **Booking** — links Vehicle + Borrower + resolved Driver (owner/borrower/third-party) + dates + pricing + `driverArrangement: owner | self | hired`.
+- **Booking** — links Vehicle + Borrower + resolved Driver (owner/borrower/third-party) + dates + pricing + pickup/return locations + `driverArrangement: owner | self | hired`.
 - **DriverAssignment** — only exists when arrangement = `hired`; links Booking to a third-party Driver account.
 - **Payment/Payout** — booking payment from Borrower, commission split, payout to Owner (and Driver, if hired and paid separately).
 - **Dispute/SupportTicket** — raised by any party, resolved by Admin.
@@ -73,8 +73,9 @@ Alternate branches: `Rejected` (failed verification or owner declines), `Cancell
 - Drivers (owner or third-party) require license verification before being assignable to any booking.
 
 ## 8. Monetization
-- Commission percentage taken by the platform on each completed booking.
-- Optional separate driver fee when arrangement = `hired`, paid to the Driver account, also commissioned.
+- **Flexible 6-Hour Billing:** Bookings are calculated in 6-hour blocks based on the effective daily rate, with a complimentary 1-hour grace period on returns.
+- **Commission:** Commission percentage taken by the platform on each completed booking.
+- **Driver Fee:** Optional separate driver fee when arrangement = `hired`, paid to the Driver account, also commissioned.
 
 ## 9. Design Reference
 Visual system: see `DESIGN.md` (colors, typography, spacing, shapes, components already defined). Landing page screenshot (`screen.png`) shows the reference hero, fleet cards, and footer — new screens (dashboards, verification flows, booking flows) should reuse the same Navy/Electric-Blue/Slate palette, Inter type scale, 4–12px rounding, and tonal-elevation card style rather than introducing new visual language.

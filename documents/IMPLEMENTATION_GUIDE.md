@@ -272,6 +272,7 @@ $booking = [
     'pickup_date'        => $_POST['pickup_date'],
     'return_date'        => $_POST['return_date'],
     'pickup_location'    => $_POST['pickup_location'],
+    'return_location'    => $_POST['return_location'],
 ];
 
 $check = resolveLicenseRequirement($booking, $db);
@@ -281,13 +282,13 @@ $status = $check['satisfied'] ? 'confirmed' : 'pending_verification';
 $stmt = $db->prepare(
     'INSERT INTO bookings
      (vehicle_id, borrower_id, driver_arrangement, assigned_driver_id,
-      pickup_date, return_date, pickup_location, total_price, status)
-     VALUES (?,?,?,?,?,?,?,?,?)'
+      pickup_date, return_date, pickup_location, return_location, total_price, status)
+     VALUES (?,?,?,?,?,?,?,?,?,?)'
 );
 $stmt->execute([
     $booking['vehicle_id'], $booking['borrower_id'], $booking['driver_arrangement'],
     $booking['assigned_driver_id'], $booking['pickup_date'], $booking['return_date'],
-    $booking['pickup_location'], calculatePrice($booking, $db), $status,
+    $booking['pickup_location'], $booking['return_location'], calculatePrice($booking, $db), $status,
 ]);
 
 echo json_encode([

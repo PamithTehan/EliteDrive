@@ -4,6 +4,8 @@ You can use these credentials to log in and test different parts of the applicat
 
 **Global Password for all users:** `password123`
 
+*Note: The platform supports multiple roles for a single account. A user can be an Owner, a Borrower, and a verified Driver simultaneously.*
+
 ---
 
 ## 1. Admin (System Administrator)

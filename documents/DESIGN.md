@@ -212,7 +212,7 @@ To ensure maximum content readability and an expansive visual feel on high-resol
 ### D. Contact Us & Concierge (`public/contact.php`)
 - **Header**: Clear `headline-xl` title with dedicated concierge support lead text.
 - **Contact Info & Concierge Card**:
-  - Icon-pod list for Email, 24/7 Phone Support, and Global Headquarters in New York.
+  - Icon-pod list for Email, 24/7 Phone Support, and Global Headquarters in Colombo, Sri Lanka.
   - **Emergency Roadside Banner**: Dark `#111827` alert box with emergency icon and 24/7 dispatch instructions.
   - Social media icon pods with hover state transitions.
 - **Contact Form**: Structured 2-column input fields (Name, Email, Subject, Message) with smooth focus borders and primary blue submit button.
