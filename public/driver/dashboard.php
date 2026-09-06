@@ -17,7 +17,15 @@ $licenseStatus = $licenseRow ? $licenseRow['status'] : null;
 $rejectionReason = ($licenseStatus === 'rejected') ? ($licenseRow['rejection_reason'] ?: 'No reason provided.') : '';
 
 if ($tab === 'assignments') {
-    // Fetch assignments where this user is the assigned driver
+    $page = max(1, (int)($_GET['page'] ?? 1));
+    $limit = 10;
+    $offset = ($page - 1) * $limit;
+    
+    $countStmt = $db->prepare('SELECT COUNT(*) FROM bookings WHERE assigned_driver_id = ?');
+    $countStmt->execute([$user['id']]);
+    $totalAssignments = $countStmt->fetchColumn();
+    $totalPages = ceil($totalAssignments / $limit);
+    
     $stmt = $db->prepare('
         SELECT b.*, v.make, v.model, u.full_name as borrower_name 
         FROM bookings b 
@@ -25,14 +33,18 @@ if ($tab === 'assignments') {
         JOIN users u ON b.borrower_id = u.id
         WHERE b.assigned_driver_id = ? 
         ORDER BY b.pickup_date ASC
+        LIMIT ? OFFSET ?
     ');
-    $stmt->execute([$user['id']]);
+    $stmt->bindValue(1, $user['id'], PDO::PARAM_INT);
+    $stmt->bindValue(2, $limit, PDO::PARAM_INT);
+    $stmt->bindValue(3, $offset, PDO::PARAM_INT);
+    $stmt->execute();
     $assignments = $stmt->fetchAll();
 } elseif ($tab === 'reviews') {
     // Fetch driver reviews
     $ratingFilter = isset($_GET['rating']) && $_GET['rating'] !== '' ? (int)$_GET['rating'] : null;
     $page = max(1, (int)($_GET['page'] ?? 1));
-    $limit = 5;
+    $limit = 10;
     $offset = ($page - 1) * $limit;
 
     $revSql = '
@@ -166,6 +178,13 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                         </div>
                     <?php endforeach; ?>
                 </div>
+                
+                <?php
+                $baseUrl = '?tab=assignments&page=';
+                $currentPage = $page;
+                require __DIR__ . '/../../includes/partials/pagination.php';
+                ?>
+                
             <?php endif; ?>
                         </div> <!-- settings-card-body -->
                     </div> <!-- settings-card -->
@@ -219,22 +238,13 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                         </div>
                     <?php endforeach; ?>
                 </div>
-                
-                <?php if ($totalPages > 1): ?>
-                <div style="display:flex; justify-content:center; gap: 8px; margin-top: var(--space-md);">
-                    <?php if ($page > 1): ?>
-                        <a href="<?= baseUrl('/driver/dashboard.php?tab=reviews&rating=' . ($ratingFilter ?? '') . '&page=' . ($page - 1)) ?>" class="btn btn-ghost" style="padding: 6px 12px;">Previous</a>
-                    <?php endif; ?>
-                    
-                    <span style="display:flex; align-items:center; padding: 0 12px; color:var(--color-secondary);" class="body-sm">
-                        Page <?= $page ?> of <?= $totalPages ?>
-                    </span>
-                    
-                    <?php if ($page < $totalPages): ?>
-                        <a href="<?= baseUrl('/driver/dashboard.php?tab=reviews&rating=' . ($ratingFilter ?? '') . '&page=' . ($page + 1)) ?>" class="btn btn-ghost" style="padding: 6px 12px;">Next</a>
-                    <?php endif; ?>
                 </div>
-                <?php endif; ?>
+                
+                <?php
+                $baseUrl = '?tab=reviews' . ($ratingFilter !== null ? '&rating=' . $ratingFilter : '') . '&page=';
+                $currentPage = $page;
+                require __DIR__ . '/../../includes/partials/pagination.php';
+                ?>
             <?php endif; ?>
                         </div> <!-- settings-card-body -->
                     </div> <!-- settings-card -->

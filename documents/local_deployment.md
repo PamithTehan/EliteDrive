@@ -21,7 +21,7 @@ cd Vehical_rental_system
 1. Open your MySQL interface (e.g., phpMyAdmin, MySQL Workbench).
 2. Create a new database named `elitedrive` (or your preferred name).
 3. Import the `database_schema.sql` file located in the root directory to create the required tables.
-4. *(Optional)* Import the `seed_data.sql` or `seed_50_vehicles_10_drivers.sql` file to populate the database with dummy vehicles, users, and drivers.
+4. *(Optional)* Import the `seed_data.sql` file to populate the database with dummy vehicles, users, and drivers.
 
 ### 3. Setup Configuration
 1. Navigate to the `config/` directory.

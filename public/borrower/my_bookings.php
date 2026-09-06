@@ -21,10 +21,32 @@ if ($statusFilter) {
     $sql .= ' AND b.status = ? ';
     $params[] = $statusFilter;
 }
-$sql .= ' ORDER BY b.created_at DESC';
+$page = max(1, (int)($_GET['page'] ?? 1));
+$limit = 10;
+$offset = ($page - 1) * $limit;
+
+$countSql = 'SELECT COUNT(*) FROM bookings b WHERE b.borrower_id = ?';
+$countParams = [$user['id']];
+if ($statusFilter) {
+    $countSql .= ' AND b.status = ?';
+    $countParams[] = $statusFilter;
+}
+$countStmt = $db->prepare($countSql);
+$countStmt->execute($countParams);
+$totalRecords = $countStmt->fetchColumn();
+$totalPages = ceil($totalRecords / $limit);
+
+$sql .= ' ORDER BY b.created_at DESC LIMIT ? OFFSET ?';
+$params[] = $limit;
+$params[] = $offset;
 
 $stmt = $db->prepare($sql);
-$stmt->execute($params);
+foreach ($params as $key => $val) {
+    // 1-indexed for bindValue
+    $type = is_int($val) ? PDO::PARAM_INT : PDO::PARAM_STR;
+    $stmt->bindValue($key + 1, $val, $type);
+}
+$stmt->execute();
 $bookings = $stmt->fetchAll();
 
 // User initials for avatar circle
@@ -183,6 +205,15 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                     </div>
                 <?php endforeach; ?>
             </div>
+            
+            <?php
+            $baseUrl = '?';
+            if ($statusFilter) {
+                $baseUrl .= 'status=' . urlencode($statusFilter) . '&';
+            }
+            $baseUrl .= 'page=';
+            require __DIR__ . '/../../includes/partials/pagination.php';
+            ?>
             <?php endif; ?>
                     </div> <!-- settings-card-body -->
                 </div> <!-- settings-card -->

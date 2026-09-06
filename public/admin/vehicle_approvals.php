@@ -93,6 +93,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                         <tr><td colspan="5" style="text-align:center;">Loading...</td></tr>
                     </tbody>
                 </table>
+                <div id="pagination-container" style="display: flex; justify-content: center; margin-top: 24px; gap: 8px; align-items: center;"></div>
                     </div> <!-- settings-card-body -->
                 </div> <!-- settings-card -->
             </div> <!-- profile-content-area -->
@@ -103,23 +104,31 @@ require_once __DIR__ . '/../../includes/partials/head.php';
 <script>
     const csrfToken = "<?= csrfToken() ?>";
     
-    async function loadQueue() {
+    const urlParams = new URLSearchParams(window.location.search);
+    let currentPage = parseInt(urlParams.get('page')) || 1;
+
+    async function loadQueue(page = currentPage) {
         try {
-            const res = await fetch('<?= baseUrl('/api/vehicles/pending.php') ?>');
+            const res = await fetch(`<?= baseUrl('/api/vehicles/pending.php') ?>?page=${page}`);
             const text = await res.text();
-            let rows;
+            let responseData;
             try {
-                rows = JSON.parse(text);
+                responseData = JSON.parse(text);
             } catch (err) {
                 console.error("API Error Response:", text);
                 document.querySelector('#queue-body').innerHTML = `<tr><td colspan="5" style="color:red;">Error loading data. Check console. Response: ${escapeHtml(text).substring(0, 100)}...</td></tr>`;
                 return;
             }
             
+            // Handle both old array format and new paginated object format just in case
+            const rows = Array.isArray(responseData) ? responseData : (responseData.data || []);
+            const pagination = responseData.pagination || { current_page: 1, total_pages: 1 };
+            
             const tbody = document.querySelector('#queue-body');
             
             if (rows.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No vehicles pending review.</td></tr>';
+                document.querySelector('#pagination-container').innerHTML = '';
                 return;
             }
             
@@ -134,9 +143,35 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                         <button class="btn btn-ghost btn-reject" data-id="${r.id}" style="padding: 4px 12px; font-size: 12px; color: var(--color-error);">Reject</button>
                     </td>
                 </tr>`).join('');
+                
+            renderPagination(pagination.current_page, pagination.total_pages);
         } catch (e) {
             console.error('Failed to load queue', e);
         }
+    }
+
+    function renderPagination(current, total) {
+        const container = document.querySelector('#pagination-container');
+        if (total <= 1) {
+            container.innerHTML = '';
+            return;
+        }
+        
+        let html = '';
+        if (current > 1) {
+            html += `<a href="?page=${current - 1}" class="btn btn-outline" style="padding: 6px 12px; font-size: 14px;">&laquo; Prev</a>`;
+        } else {
+            html += `<button class="btn btn-outline" style="padding: 6px 12px; font-size: 14px;" disabled>&laquo; Prev</button>`;
+        }
+        
+        html += `<span style="font-size: 14px; font-weight: 500; color: var(--color-secondary);">Page ${current} of ${total}</span>`;
+        
+        if (current < total) {
+            html += `<a href="?page=${current + 1}" class="btn btn-outline" style="padding: 6px 12px; font-size: 14px;">Next &raquo;</a>`;
+        } else {
+            html += `<button class="btn btn-outline" style="padding: 6px 12px; font-size: 14px;" disabled>Next &raquo;</button>`;
+        }
+        container.innerHTML = html;
     }
 
     document.addEventListener('click', async (e) => {
