@@ -215,17 +215,32 @@ $titleColor = "color: white;";
                 
                 <div class="form-group">
                     <label class="form-label" for="pickup_date">Pick-up Date & Time</label>
-                    <input type="datetime-local" id="pickup_date" name="pickup_date" class="input" required min="<?= date('Y-m-d\TH:i') ?>">
+                    <input type="datetime-local" id="pickup_date" name="pickup_date" class="input" required min="<?= date('Y-m-d\TH:i') ?>" title="Select when you will pick up the vehicle">
                 </div>
                 
                 <div class="form-group">
                     <label class="form-label" for="return_date">Return Date & Time</label>
-                    <input type="datetime-local" id="return_date" name="return_date" class="input" required min="<?= date('Y-m-d\TH:i') ?>">
+                    <input type="datetime-local" id="return_date" name="return_date" class="input" required min="<?= date('Y-m-d\TH:i') ?>" title="Select when you will return the vehicle">
                 </div>
                 
                 <div class="form-group">
                     <label class="form-label" for="pickup_location">Pick-up Location</label>
-                    <input type="text" id="pickup_location" name="pickup_location" class="input" required placeholder="Where will you pick this up?">
+                    <select id="pickup_location" name="pickup_location" class="input" required>
+                        <option value="">Select pick-up location...</option>
+                        <option value="CMB Airport (Katunayaka)">CMB Airport (Katunayaka)</option>
+                        <option value="HRI Airport (Mattala)">HRI Airport (Mattala)</option>
+                        <option value="Headquarters (Colombo)">EliteDrive Headquarters (Colombo)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="return_location">Return Location</label>
+                    <select id="return_location" name="return_location" class="input" required>
+                        <option value="">Select return location...</option>
+                        <option value="CMB Airport (Katunayaka)">CMB Airport (Katunayaka)</option>
+                        <option value="HRI Airport (Mattala)">HRI Airport (Mattala)</option>
+                        <option value="Headquarters (Colombo)">EliteDrive Headquarters (Colombo)</option>
+                    </select>
                 </div>
                 
                 <fieldset class="form-group" style="border: 1px solid var(--color-outline); padding: var(--space-sm); border-radius: var(--radius-sm);">

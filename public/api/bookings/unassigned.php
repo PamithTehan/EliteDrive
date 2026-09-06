@@ -8,7 +8,7 @@ header('Content-Type: application/json');
 $db = getDb();
 
 $stmt = $db->prepare('
-    SELECT b.id, v.id as vehicle_id, v.make, v.model, v.transmission, u.full_name as renter_name, b.pickup_date, b.return_date, b.pickup_location
+    SELECT b.id, v.id as vehicle_id, v.make, v.model, v.transmission, u.full_name as renter_name, b.pickup_date, b.return_date, b.pickup_location, b.return_location
     FROM bookings b
     JOIN vehicles v ON b.vehicle_id = v.id
     JOIN users u ON b.borrower_id = u.id

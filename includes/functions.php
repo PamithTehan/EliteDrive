@@ -45,7 +45,7 @@ function calculateRentalBreakdown(array $booking, PDO $db): array {
     $stmt->execute([$booking['vehicle_id']]);
     $breakdown['vehicle_daily_rate'] = (float) $stmt->fetchColumn();
 
-    if (!empty($booking['assigned_driver_id']) && ($booking['driver_arrangement'] ?? '') === 'hired') {
+    if (!empty($booking['assigned_driver_id']) && in_array($booking['driver_arrangement'] ?? '', ['hired', 'owner'])) {
         $stmtD = $db->prepare('SELECT daily_fee FROM drivers WHERE user_id = ?');
         $stmtD->execute([$booking['assigned_driver_id']]);
         $breakdown['driver_daily_fee'] = (float) ($stmtD->fetchColumn() ?: 0.0);

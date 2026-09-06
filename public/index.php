@@ -50,9 +50,9 @@ require_once __DIR__ . '/../includes/partials/head.php';
                                 <option value="">All Classes</option>
                                 <option value="Luxury">Luxury</option>
                                 <option value="Premium">Premium</option>
-                                <option value="Luxury">Off-Road</option>
+                                <option value="Off-Road">Off-Road</option>
                                 <option value="Electric">Electric</option>
-                                <option value="Electric">Budget</option>
+                                <option value="Budget">Budget</option>
                             </select>
                         </div>
                     </div>

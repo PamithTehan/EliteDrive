@@ -59,7 +59,7 @@ require_once __DIR__ . '/../includes/partials/head.php';
                         <div class="info-icon"><span class="material-symbols-outlined">call</span></div>
                         <div>
                             <p class="label-sm" style="color:var(--color-secondary); letter-spacing:1px; text-transform:uppercase; margin-bottom:4px;">Phone Support</p>
-                            <p class="body-md" style="font-weight: 500;">+1 (800) ELITE-DRV</p>
+                            <p class="body-md" style="font-weight: 500;">+94 11 2 345678</p>
                         </div>
                     </div>
                     
@@ -67,7 +67,7 @@ require_once __DIR__ . '/../includes/partials/head.php';
                         <div class="info-icon"><span class="material-symbols-outlined">location_on</span></div>
                         <div>
                             <p class="label-sm" style="color:var(--color-secondary); letter-spacing:1px; text-transform:uppercase; margin-bottom:4px;">Global HQ</p>
-                            <p class="body-md" style="font-weight: 500; line-height: 1.4;">450 Park Avenue South, Penthouse<br>New York, NY 10022</p>
+                            <p class="body-md" style="font-weight: 500; line-height: 1.4;">EliteDrive Headquarters<br>Colombo, Sri Lanka</p>
                         </div>
                     </div>
                 </div>
