@@ -21,6 +21,7 @@ $driverArrangement = $_POST['driver_arrangement'];
 $pickupDate = str_replace('T', ' ', $_POST['pickup_date']);
 $returnDate = str_replace('T', ' ', $_POST['return_date']);
 $pickupLocation = $_POST['pickup_location'];
+$returnLocation = $_POST['return_location'] ?? 'Headquarters (Colombo)';
 $driverId = $_POST['driver_id'] ?? null;
 
 $stmt = $db->prepare('SELECT v.*, u.full_name as owner_name FROM vehicles v JOIN users u ON u.id = v.owner_id WHERE v.id = ?');
@@ -107,6 +108,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                 <div>
                     <h3 class="label-sm" style="color:var(--color-secondary);">Return</h3>
                     <p class="body-md"><?= escapeHtml($returnDate) ?></p>
+                    <p class="body-md" style="font-size:14px; color:var(--color-secondary);"><?= escapeHtml($returnLocation) ?></p>
                 </div>
             </div>
             
@@ -197,6 +199,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             formData.append('pickup_date', "<?= $pickupDate ?>");
             formData.append('return_date', "<?= $returnDate ?>");
             formData.append('pickup_location', "<?= $pickupLocation ?>");
+            formData.append('return_location', "<?= $returnLocation ?>");
 
             const res = await fetch('<?= baseUrl('/api/bookings/create.php') ?>', {
                 method: 'POST',
