@@ -1,6 +1,16 @@
 <?php
 // includes/functions.php
 if (defined('FUNCTIONS_PHP_LOADED')) return;
+
+
+
+function getConfig(): array {
+    static $config = null;
+    if ($config === null) {
+        $config = require __DIR__ . '/../config/config.php';
+    }
+    return $config;
+}
 define('FUNCTIONS_PHP_LOADED', 1);
 
 function csrfToken(): string {
