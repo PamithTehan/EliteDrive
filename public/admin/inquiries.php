@@ -20,7 +20,18 @@ if (!$initials) $initials = 'U';
 $extraCss = ['profile', 'dashboard'];
 require_once __DIR__ . '/../../includes/partials/head.php';
 
-$stmt = getDb()->query("SELECT * FROM inquiries ORDER BY created_at DESC");
+$page = max(1, (int)($_GET['page'] ?? 1));
+$limit = 10;
+$offset = ($page - 1) * $limit;
+
+$countStmt = getDb()->query("SELECT COUNT(*) FROM inquiries");
+$totalRecords = $countStmt->fetchColumn();
+$totalPages = ceil($totalRecords / $limit);
+
+$stmt = getDb()->prepare("SELECT * FROM inquiries ORDER BY created_at DESC LIMIT ? OFFSET ?");
+$stmt->bindValue(1, $limit, PDO::PARAM_INT);
+$stmt->bindValue(2, $offset, PDO::PARAM_INT);
+$stmt->execute();
 $inquiries = $stmt->fetchAll();
 ?>
 
@@ -123,6 +134,12 @@ $inquiries = $stmt->fetchAll();
                         <?php endif; ?>
                     </tbody>
                 </table>
+                
+                <?php
+                $baseUrl = '?page=';
+                require __DIR__ . '/../../includes/partials/pagination.php';
+                ?>
+                
                     </div> <!-- settings-card-body -->
                 </div> <!-- settings-card -->
             </div> <!-- profile-content-area -->
