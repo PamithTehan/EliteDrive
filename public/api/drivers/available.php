@@ -27,6 +27,12 @@ $sql = "SELECT d.user_id as id, u.full_name, d.daily_fee, d.transmission_prefere
         WHERE dl.status = 'verified' AND dl.expiry_date > NOW()";
 $params = [];
 
+$user = currentUser();
+if ($user) {
+    $sql .= " AND d.user_id != ?";
+    $params[] = $user['id'];
+}
+
 if ($transmission) {
     $sql .= " AND (d.transmission_preference = 'Both' OR d.transmission_preference = ?)";
     $params[] = $transmission;
