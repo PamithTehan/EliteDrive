@@ -23,8 +23,8 @@
             </div>
             <div>
                 <h4 class="label-md" style="color: var(--color-primary); margin-bottom: 12px;">Headquarters</h4>
-                <p class="body-sm" style="color: var(--color-secondary); line-height: 1.5; margin-bottom: 8px;">450 Park Avenue South, Penthouse<br>New York, NY 10022</p>
-                <p class="body-sm" style="color: var(--color-primary); font-weight: 500;">+1 (800) ELITE-DRV</p>
+                <p class="body-sm" style="color: var(--color-secondary); line-height: 1.5; margin-bottom: 8px;">EliteDrive Headquarters<br>Colombo, Sri Lanka</p>
+                <p class="body-sm" style="color: var(--color-primary); font-weight: 500;">+94 11 2 345678</p>
             </div>
         </div>
         <div class="container" style="border-top: 1px solid var(--color-outline); margin-top: 32px; padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">

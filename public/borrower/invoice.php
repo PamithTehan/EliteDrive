@@ -227,7 +227,7 @@ $gracePeriodApplied = $breakdown['grace_period_applied'];
         <div class="header">
             <div class="brand">
                 <h1>EliteDrive</h1>
-                <p>Premium Vehicle Rental System</p>
+                <p>EliteDrive Premium Vehicle Rental</p>
                 <p>contact@elitedrive.com</p>
             </div>
             <div class="invoice-details">
