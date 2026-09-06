@@ -4,6 +4,10 @@ require_once __DIR__ . '/../../../includes/auth.php';
 require_once __DIR__ . '/../../../includes/functions.php';
 
 header('Content-Type: application/json');
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/error_log.txt');
+
 requireLogin();
 requireRole('borrower');
 
@@ -78,7 +82,8 @@ try {
     $stmt->execute([$bookingId, $user['id'], $totalPrice]);
     
     // Create Stripe Checkout Session
-    $config = require __DIR__ . '/../../../config/config.php';
+    // Create Stripe Checkout Session
+    $config = getConfig();
     $stripeKey = $config['stripe_secret_key'] ?? '';
     
     $successUrl = rtrim($config['base_url'], '/') . '/borrower/payment_success.php?booking_id=' . $bookingId;
@@ -101,8 +106,14 @@ try {
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $stripeData);
     curl_setopt($ch, CURLOPT_USERPWD, $stripeKey . ':');
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Bypass local XAMPP SSL certificate issues
     
     $response = curl_exec($ch);
+    
+    if ($response === false) {
+        throw new Exception('cURL Error: ' . curl_error($ch));
+    }
+    
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
     
@@ -125,7 +136,7 @@ try {
         'booking_id' => $bookingId,
         'stripe_url' => $stripeRes['url']
     ]);
-} catch (Exception $e) {
+} catch (Throwable $e) {
     http_response_code(500);
     echo json_encode(['error' => 'Could not create booking: ' . $e->getMessage()]);
 }
