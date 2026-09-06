@@ -31,6 +31,10 @@ if (!$vehicle) {
     die('Vehicle not found.');
 }
 
+if ($driverArrangement === 'owner') {
+    $driverId = $vehicle['owner_id'];
+}
+
 $errorMessage = '';
 if (!isVehicleAvailable($vehicleId, $pickupDate, $returnDate, $db)) {
     $errorMessage = 'This vehicle is already booked for the selected dates. Please go back and choose different dates.';
