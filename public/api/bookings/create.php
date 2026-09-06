@@ -26,6 +26,12 @@ $booking = [
     'pickup_location'    => $_POST['pickup_location'],
 ];
 
+if ($booking['driver_arrangement'] === 'owner') {
+    $vStmt = $db->prepare('SELECT owner_id FROM vehicles WHERE id = ?');
+    $vStmt->execute([$booking['vehicle_id']]);
+    $booking['assigned_driver_id'] = $vStmt->fetchColumn();
+}
+
 $check = resolveLicenseRequirement($booking, $db);
 
 if (!isVehicleAvailable($booking['vehicle_id'], $booking['pickup_date'], $booking['return_date'], $db)) {
