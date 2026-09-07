@@ -22,14 +22,16 @@ Comprehensive documentation for this project is available in the `documents/` di
 
 ## Key Features
 - **Flexible Billing:** Unique 6-hour charge block calculation with an automatic grace period, ensuring users only pay for what they use.
+- **Payment Options:** Support for seamless online payments via Stripe (LKR) and flexible offline "Pay at Headquarters" options requiring admin confirmation.
 - **Driver Arrangements:** Borrowers can opt to self-drive, hire a professional chauffeur, or request the vehicle owner to drive.
 - **Role-Based Access:** Dedicated dashboards for Administrators, Borrowers, Drivers, and Owners.
 - **Dynamic Hub Selection:** Support for varied pickup and return locations across Sri Lanka (CMB Katunayaka, HRI Mattala, EliteDrive Colombo HQ).
 
 ## Tech Stack
-- **Frontend:** HTML5, Vanilla CSS (Custom Design System), JavaScript
+- **Frontend:** HTML5, Vanilla CSS (Custom Design System), JavaScript (Chart.js, PDF.js)
 - **Backend:** PHP 8+ (Vanilla, No frameworks)
 - **Database:** MySQL/MariaDB
+- **Integrations:** Stripe Payment Gateway
 
 ## License
 *Academic purposes only.*
