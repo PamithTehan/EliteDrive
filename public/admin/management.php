@@ -58,12 +58,15 @@ $pageOwners = isset($_GET['page_owners']) ? max(1, (int)$_GET['page_owners']) : 
 $pageDrivers = isset($_GET['page_drivers']) ? max(1, (int)$_GET['page_drivers']) : 1;
 $pageVehicles = isset($_GET['page_vehicles']) ? max(1, (int)$_GET['page_vehicles']) : 1;
 $pageRejections = isset($_GET['page_rejections']) ? max(1, (int)$_GET['page_rejections']) : 1;
+$pageBookings = isset($_GET['page_bookings']) ? max(1, (int)$_GET['page_bookings']) : 1;
+$bookingStatus = $_GET['booking_status'] ?? '';
 
 $offsetBorrowers = ($pageBorrowers - 1) * $perPage;
 $offsetOwners = ($pageOwners - 1) * $perPage;
 $offsetDrivers = ($pageDrivers - 1) * $perPage;
 $offsetVehicles = ($pageVehicles - 1) * $perPage;
 $offsetRejections = ($pageRejections - 1) * $perPage;
+$offsetBookings = ($pageBookings - 1) * $perPage;
 
 $db = getDb();
 
@@ -139,6 +142,35 @@ $stmtRejections->bindValue(2, $offsetRejections, PDO::PARAM_INT);
 $stmtRejections->execute();
 $rejections = $stmtRejections->fetchAll();
 $totalPagesRejections = ceil($totalRejections / $perPage);
+
+// Fetch Bookings
+$bookingWhere = "";
+$bookingParams = [];
+if ($bookingStatus !== '') {
+    $bookingWhere = "WHERE b.status = ?";
+    $bookingParams[] = $bookingStatus;
+}
+$totalBookingsStmt = $db->prepare("SELECT COUNT(*) FROM bookings b $bookingWhere");
+$totalBookingsStmt->execute($bookingParams);
+$totalBookings = $totalBookingsStmt->fetchColumn();
+
+$bookingParams[] = $perPage;
+$bookingParams[] = $offsetBookings;
+
+$stmtBookings = $db->prepare("
+    SELECT b.id, b.pickup_date, b.return_date, b.status, b.total_price, 
+           u.full_name as borrower_name, v.make, v.model, o.full_name as owner_name 
+    FROM bookings b
+    JOIN users u ON b.borrower_id = u.id
+    JOIN vehicles v ON b.vehicle_id = v.id
+    JOIN users o ON v.owner_id = o.id
+    $bookingWhere
+    ORDER BY b.created_at DESC 
+    LIMIT ? OFFSET ?
+");
+$stmtBookings->execute($bookingParams);
+$bookings = $stmtBookings->fetchAll();
+$totalPagesBookings = ceil($totalBookings / $perPage);
 
 
 // User initials for avatar circle
@@ -272,9 +304,27 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                         <button type="button" class="mgmt-tab-btn" data-tab="rejections" style="padding: 16px; background: none; border: none; font-size: 16px; border-bottom: 2px solid <?= $activeTab === 'rejections' ? 'var(--color-primary)' : 'transparent' ?>; color: <?= $activeTab === 'rejections' ? 'var(--color-primary)' : 'var(--color-secondary)' ?>; font-weight: <?= $activeTab === 'rejections' ? 'bold' : 'normal' ?>; cursor: pointer;">
                             Rejection Logs
                         </button>
+                        <button type="button" class="mgmt-tab-btn" data-tab="bookings" style="padding: 16px; background: none; border: none; font-size: 16px; border-bottom: 2px solid <?= $activeTab === 'bookings' ? 'var(--color-primary)' : 'transparent' ?>; color: <?= $activeTab === 'bookings' ? 'var(--color-primary)' : 'var(--color-secondary)' ?>; font-weight: <?= $activeTab === 'bookings' ? 'bold' : 'normal' ?>; cursor: pointer;">
+                            Bookings
+                        </button>
                     </div>
 
-                    <div style="padding: 16px 24px 0 24px; text-align: right;">
+                    <div style="padding: 16px 24px 0 24px; display: flex; justify-content: flex-end; align-items: center; gap: 16px;">
+                        <div id="booking-filter-container" style="display: <?= $activeTab === 'bookings' ? 'block' : 'none' ?>;">
+                            <form method="GET" action="">
+                                <input type="hidden" name="tab" value="bookings">
+                                <select name="booking_status" onchange="this.form.submit()" style="padding: 6px; border-radius: 4px; border: 1px solid var(--color-outline);">
+                                    <option value="">All Statuses</option>
+                                    <option value="pending_payment" <?= $bookingStatus === 'pending_payment' ? 'selected' : '' ?>>Pending Payment</option>
+                                    <option value="pending_verification" <?= $bookingStatus === 'pending_verification' ? 'selected' : '' ?>>Pending Verification</option>
+                                    <option value="confirmed" <?= $bookingStatus === 'confirmed' ? 'selected' : '' ?>>Confirmed</option>
+                                    <option value="active" <?= $bookingStatus === 'active' ? 'selected' : '' ?>>Active</option>
+                                    <option value="completed" <?= $bookingStatus === 'completed' ? 'selected' : '' ?>>Completed</option>
+                                    <option value="cancelled" <?= $bookingStatus === 'cancelled' ? 'selected' : '' ?>>Cancelled</option>
+                                    <option value="rejected" <?= $bookingStatus === 'rejected' ? 'selected' : '' ?>>Rejected</option>
+                                </select>
+                            </form>
+                        </div>
                         <button type="button" class="btn btn-secondary" onclick="window.print()" style="display: inline-flex; align-items: center; gap: 8px;">
                             <span class="material-symbols-outlined" style="font-size: 18px;">print</span> Print Current Tab
                         </button>
@@ -500,6 +550,54 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                             <?php endif; ?>
                         </div>
 
+                        <!-- Bookings Tab -->
+                        <div id="tab-bookings" class="mgmt-tab-content" style="display: <?= $activeTab === 'bookings' ? 'block' : 'none' ?>;">
+                            <table class="table" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Vehicle & Owner</th>
+                                        <th>Borrower</th>
+                                        <th>Dates</th>
+                                        <th>Total Price</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($bookings as $b): ?>
+                                        <tr>
+                                            <td>#<?= $b['id'] ?></td>
+                                            <td>
+                                                <div style="font-weight: 500;"><?= escapeHtml($b['make'] . ' ' . $b['model']) ?></div>
+                                                <div style="font-size:12px; color:var(--color-secondary);">Owner: <?= escapeHtml($b['owner_name']) ?></div>
+                                            </td>
+                                            <td><?= escapeHtml($b['borrower_name']) ?></td>
+                                            <td>
+                                                <div style="font-size: 13px;"><?= date('M j, Y H:i', strtotime($b['pickup_date'])) ?></div>
+                                                <div style="font-size: 13px; color: var(--color-secondary);">to <?= date('M j, Y H:i', strtotime($b['return_date'])) ?></div>
+                                            </td>
+                                            <td style="font-weight: 500;">LKR <?= number_format($b['total_price'], 2) ?></td>
+                                            <td>
+                                                <span class="badge" style="background: var(--color-surface-variant); color: var(--color-primary); border-radius: 4px; padding: 4px 8px; font-size: 11px;">
+                                                    <?= escapeHtml(ucfirst(str_replace('_', ' ', $b['status']))) ?>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                    <?php if (empty($bookings)): ?>
+                                        <tr><td colspan="6" style="text-align:center;">No bookings found.</td></tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                            <?php if ($totalPagesBookings > 1): ?>
+                            <div style="display: flex; justify-content: center; gap: 8px; margin-top: 20px;">
+                                <?php for ($i = 1; $i <= $totalPagesBookings; $i++): ?>
+                                    <a href="?tab=bookings&page_bookings=<?= $i ?><?= $bookingStatus ? '&booking_status='.urlencode($bookingStatus) : '' ?>" class="btn <?= $i === $pageBookings ? 'btn-primary' : 'btn-outline' ?> btn-sm"><?= $i ?></a>
+                                <?php endfor; ?>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+
                     </div> <!-- settings-card-body -->
                 </div> <!-- settings-card -->
             </div> <!-- profile-content-area -->
@@ -531,6 +629,12 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                 // Show selected content
                 const tabId = btn.getAttribute('data-tab');
                 document.getElementById('tab-' + tabId).style.display = 'block';
+
+                // Toggle Filter Dropdown
+                const filterContainer = document.getElementById('booking-filter-container');
+                if (filterContainer) {
+                    filterContainer.style.display = (tabId === 'bookings') ? 'block' : 'none';
+                }
                 
                 // Update URL without refreshing (optional but nice)
                 history.replaceState(null, '', '?tab=' + tabId);
