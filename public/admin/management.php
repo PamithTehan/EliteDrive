@@ -209,36 +209,11 @@ require_once __DIR__ . '/../../includes/partials/head.php';
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const tabBtns = document.querySelectorAll('.mgmt-tab-btn');
-        const tabContents = document.querySelectorAll('.mgmt-tab-content');
 
         tabBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                // Remove active styling from all buttons
-                tabBtns.forEach(b => {
-                    b.style.borderBottomColor = 'transparent';
-                    b.style.color = 'var(--color-secondary)';
-                    b.style.fontWeight = 'normal';
-                });
-                // Hide all contents
-                tabContents.forEach(c => c.style.display = 'none');
-
-                // Apply active styling
-                btn.style.borderBottomColor = 'var(--color-primary)';
-                btn.style.color = 'var(--color-primary)';
-                btn.style.fontWeight = 'bold';
-
-                // Show selected content
                 const tabId = btn.getAttribute('data-tab');
-                document.getElementById('tab-' + tabId).style.display = 'block';
-
-                // Toggle Filter Dropdown
-                const filterContainer = document.getElementById('booking-filter-container');
-                if (filterContainer) {
-                    filterContainer.style.display = (tabId === 'bookings') ? 'block' : 'none';
-                }
-                
-                // Update URL without refreshing (optional but nice)
-                history.replaceState(null, '', '?tab=' + tabId);
+                window.location.href = '?tab=' + tabId;
             });
         });
     });
