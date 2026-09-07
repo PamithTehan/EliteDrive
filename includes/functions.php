@@ -44,6 +44,9 @@ function calculateRentalBreakdown(array $booking, PDO $db): array {
         'total_blocks' => 0,
         'block_rate' => 0.0,
         'grace_period_applied' => false,
+        'base_price' => 0.0,
+        'commission_rate' => 0.0,
+        'commission_amount' => 0.0,
         'total_price' => 0.0
     ];
 
@@ -94,9 +97,20 @@ function calculateRentalBreakdown(array $booking, PDO $db): array {
     // Total blocks across the whole period (just for display if needed)
     $breakdown['total_blocks'] = ($breakdown['total_days'] * 4) + $breakdown['remaining_blocks'];
     
-    // Calculate price: (Full Days * Daily Rate) + (Remaining Blocks * Block Rate)
-    $breakdown['total_price'] = ($breakdown['total_days'] * $breakdown['effective_daily_rate']) + 
+    // Calculate base price: (Full Days * Daily Rate) + (Remaining Blocks * Block Rate)
+    $breakdown['base_price'] = ($breakdown['total_days'] * $breakdown['effective_daily_rate']) + 
                                 ($breakdown['remaining_blocks'] * $breakdown['block_rate']);
+
+    // Commission logic
+    $config = require __DIR__ . '/../config/config.php';
+    if ($breakdown['base_price'] > 100000) {
+        $breakdown['commission_rate'] = 10.0;
+    } else {
+        $breakdown['commission_rate'] = (float)($config['commission_pct'] ?? 15.0);
+    }
+    
+    $breakdown['commission_amount'] = $breakdown['base_price'] * ($breakdown['commission_rate'] / 100);
+    $breakdown['total_price'] = $breakdown['base_price'] + $breakdown['commission_amount'];
 
     return $breakdown;
 }
