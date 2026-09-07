@@ -20,7 +20,9 @@
                             <input type="hidden" name="action" value="delete_user">
                             <input type="hidden" name="tab" value="borrowers">
                             <input type="hidden" name="id" value="<?= $b['id'] ?>">
-                            <button type="submit" class="btn btn-outline btn-sm" style="color: var(--color-danger); border-color: var(--color-danger);">Remove</button>
+                            <button type="submit" title="Remove" style="background: none; border: none; color: var(--color-danger); cursor: pointer; padding: 4px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#fee2e2';" onmouseout="this.style.backgroundColor='transparent';">
+                                <span class="material-symbols-outlined" style="font-size: 20px;">delete</span>
+                            </button>
                         </form>
                     </td>
                 </tr>
