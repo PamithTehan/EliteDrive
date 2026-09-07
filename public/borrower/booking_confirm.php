@@ -163,7 +163,19 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                 
                 <div style="display: flex; justify-content: space-between;">
                     <span class="body-md" style="color: var(--color-secondary);">Chargeable Blocks (6-hour periods)</span>
-                    <span class="body-md"><?= $breakdown['total_blocks'] ?> &times; $<?= number_format($breakdown['block_rate'], 2) ?></span>
+                    <span class="body-md"><?= $breakdown['total_blocks'] ?> &times; LKR <?= number_format($breakdown['block_rate'], 2) ?></span>
+                </div>
+                
+                <hr style="border: 0; border-top: 1px dashed var(--color-outline); margin: 16px 0;">
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span class="body-md" style="color: var(--color-secondary);">Base Rental Price</span>
+                    <span class="body-md">LKR <?= number_format($breakdown['base_price'], 2) ?></span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between;">
+                    <span class="body-md" style="color: var(--color-secondary);">Platform Commission (<?= $breakdown['commission_rate'] ?>%)</span>
+                    <span class="body-md" style="color: var(--color-primary); font-weight: 600;">+ LKR <?= number_format($breakdown['commission_amount'], 2) ?></span>
                 </div>
             </div>
             
