@@ -276,7 +276,7 @@ require_once __DIR__ . '/../includes/partials/head.php';
                         <?php if (!empty($user['is_driver']) && $driver): ?>
                             <div class="profile-meta-item">
                                 <span class="material-symbols-outlined">payments</span>
-                                <span>$<?= number_format($driver['daily_fee'], 2) ?> / day</span>
+                                <span>LKR <?= number_format($driver['daily_fee'], 2) ?> / day</span>
                             </div>
                             <div class="profile-meta-item">
                                 <span class="material-symbols-outlined">tune</span>

@@ -263,19 +263,19 @@ $gracePeriodApplied = $breakdown['grace_period_applied'];
             
             <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                 <span style="color: var(--color-text-light);">Vehicle Daily Rate (<?= escapeHtml($booking['make'] . ' ' . $booking['model']) ?>)</span>
-                <span>$<?= number_format($vehicleDailyRate, 2) ?></span>
+                <span>LKR <?= number_format($vehicleDailyRate, 2) ?></span>
             </div>
             
             <?php if ($booking['driver_arrangement'] === 'hired'): ?>
             <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                 <span style="color: var(--color-text-light);">Driver Daily Fee (<?= escapeHtml($booking['driver_name'] ?? 'Driver Assigned Later') ?>)</span>
-                <span>$<?= number_format($driverDailyFee, 2) ?></span>
+                <span>LKR <?= number_format($driverDailyFee, 2) ?></span>
             </div>
             <?php endif; ?>
             
             <div style="display: flex; justify-content: space-between; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--color-border);">
                 <span style="font-weight: 600;">Effective Daily Rate</span>
-                <span style="font-weight: 600;">$<?= number_format($effectiveDailyRate, 2) ?></span>
+                <span style="font-weight: 600;">LKR <?= number_format($effectiveDailyRate, 2) ?></span>
             </div>
             
             <?php 
@@ -296,7 +296,7 @@ $gracePeriodApplied = $breakdown['grace_period_applied'];
             
             <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                 <span style="color: var(--color-text-light);">Rate per Charge Block (Effective Daily Rate &divide; 4)</span>
-                <span>$<?= number_format($chargeForDayQuarter, 2) ?></span>
+                <span>LKR <?= number_format($chargeForDayQuarter, 2) ?></span>
             </div>
             
             <?php if ($gracePeriodApplied): ?>
@@ -311,12 +311,12 @@ $gracePeriodApplied = $breakdown['grace_period_applied'];
             
             <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 15px;">
                 <span style="color: var(--color-text-light);">Total Charge Calculation (<?= $breakdown['total_blocks'] ?> blocks &times; $<?= number_format($chargeForDayQuarter, 2) ?>)</span>
-                <span>$<?= number_format($breakdown['total_blocks'] * $chargeForDayQuarter, 2) ?></span>
+                <span>LKR <?= number_format($breakdown['total_blocks'] * $chargeForDayQuarter, 2) ?></span>
             </div>
             
             <div style="display: flex; justify-content: space-between; margin-top: 20px; font-size: 20px; font-weight: 700; padding-top: 20px; border-top: 2px solid var(--color-border);">
                 <span>Total Amount Due</span>
-                <span>$<?= number_format($booking['total_price'], 2) ?></span>
+                <span>LKR <?= number_format($booking['total_price'], 2) ?></span>
             </div>
         </div>
         

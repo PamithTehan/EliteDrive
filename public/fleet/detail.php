@@ -207,7 +207,7 @@ $titleColor = "color: white;";
     
     <aside style="grid-column: 3 / 4; position:relative; z-index: 10; margin-top: -64px;">
         <div class="booking-card">
-            <h3 class="headline-lg" style="color:var(--color-primary); margin-bottom: var(--space-sm);">$<?= escapeHtml($vehicle['daily_rate']) ?> <span class="body-md" style="color:var(--color-secondary); font-weight:normal;">/ day</span></h3>
+            <h3 class="headline-lg" style="color:var(--color-primary); margin-bottom: var(--space-sm);">LKR <?= escapeHtml($vehicle['daily_rate']) ?> <span class="body-md" style="color:var(--color-secondary); font-weight:normal;">/ day</span></h3>
             
             <form method="POST" action="<?= baseUrl('/borrower/booking_confirm.php') ?>" id="booking-form">
                 <input type="hidden" name="csrf" value="<?= csrfToken() ?>">

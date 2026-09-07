@@ -259,7 +259,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                             <p>YOM: ${escapeHtml(v.yom || '')}</p>
                         </div>
                         <div class="fleet-price">
-                            <div class="amount">$${escapeHtml(v.daily_rate)}</div>
+                            <div class="amount">LKR ${escapeHtml(v.daily_rate)}</div>
                             <div class="period">per day</div>
                         </div>
                     </div>

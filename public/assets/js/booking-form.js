@@ -40,7 +40,7 @@ async function loadAvailableDrivers() {
       
       let options = '<option value="">Let admin assign a driver</option>';
       options += drivers.map(d => {
-          const fee = d.daily_fee ? `$${parseFloat(d.daily_fee).toFixed(2)}/day` : '';
+          const fee = d.daily_fee ? `LKR ${parseFloat(d.daily_fee).toFixed(2)}/day` : '';
           const trans = d.transmission_preference ? ` (${d.transmission_preference})` : '';
           const label = `${escapeHtml(d.full_name)}${fee ? ' - ' + fee : ''}${trans}`;
           return `<option value="${d.id}">${label}</option>`;

@@ -150,7 +150,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                                     </p>
                                 </div>
                                 <div style="text-align:right;">
-                                    <h3 class="headline-md" style="color:var(--color-primary);">$<?= escapeHtml($b['total_price']) ?></h3>
+                                    <h3 class="headline-md" style="color:var(--color-primary);">LKR <?= escapeHtml($b['total_price']) ?></h3>
                                     <?php
                                     $badgeClass = match($b['status']) {
                                         'confirmed', 'active', 'completed' => 'badge-status-verified',
