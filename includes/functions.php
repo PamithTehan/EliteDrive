@@ -47,6 +47,8 @@ function calculateRentalBreakdown(array $booking, PDO $db): array {
         'base_price' => 0.0,
         'commission_rate' => 0.0,
         'commission_amount' => 0.0,
+        'owner_earnings' => 0.0,
+        'driver_earnings' => 0.0,
         'total_price' => 0.0
     ];
 
@@ -100,6 +102,24 @@ function calculateRentalBreakdown(array $booking, PDO $db): array {
     // Calculate base price: (Full Days * Daily Rate) + (Remaining Blocks * Block Rate)
     $breakdown['base_price'] = ($breakdown['total_days'] * $breakdown['effective_daily_rate']) + 
                                 ($breakdown['remaining_blocks'] * $breakdown['block_rate']);
+
+    // Earnings split calculation
+    $vehicle_block_rate = $breakdown['vehicle_daily_rate'] / 4;
+    $driver_block_rate = $breakdown['driver_daily_fee'] / 4;
+    
+    $vehicle_total = ($breakdown['total_days'] * $breakdown['vehicle_daily_rate']) + ($breakdown['remaining_blocks'] * $vehicle_block_rate);
+    $driver_total = ($breakdown['total_days'] * $breakdown['driver_daily_fee']) + ($breakdown['remaining_blocks'] * $driver_block_rate);
+
+    if ($booking['driver_arrangement'] === 'hired') {
+        $breakdown['owner_earnings'] = $vehicle_total;
+        $breakdown['driver_earnings'] = $driver_total;
+    } elseif ($booking['driver_arrangement'] === 'owner') {
+        $breakdown['owner_earnings'] = $vehicle_total + $driver_total;
+        $breakdown['driver_earnings'] = 0.0;
+    } else {
+        $breakdown['owner_earnings'] = $vehicle_total;
+        $breakdown['driver_earnings'] = 0.0;
+    }
 
     // Commission logic
     $config = require __DIR__ . '/../config/config.php';
