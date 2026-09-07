@@ -106,6 +106,9 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                         <a href="<?= baseUrl('/admin/inquiries.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
                             <span class="material-symbols-outlined">contact_support</span> Inquiries
                         </a>
+                        <a href="<?= baseUrl('/admin/income.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
+                            <span class="material-symbols-outlined">payments</span> Income
+                        </a>
                         <a href="<?= baseUrl('/admin/management.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: #e0e7ff; font-weight: 600;">
                             <span class="material-symbols-outlined">manage_accounts</span> System Management
                         </a>
@@ -175,8 +178,8 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                                 </select>
                             </form>
                         </div>
-                        <button type="button" class="btn btn-secondary" onclick="window.print()" style="display: inline-flex; align-items: center; gap: 8px;">
-                            <span class="material-symbols-outlined" style="font-size: 18px;">print</span> Print Current Tab
+                        <button type="button" onclick="window.print()" style="display: inline-flex; align-items: center; gap: 8px; background-color: white; color: var(--color-primary); border: 1px solid var(--color-primary); padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.backgroundColor='var(--color-primary)'; this.style.color='white';" onmouseout="this.style.backgroundColor='white'; this.style.color='var(--color-primary)';">
+                            <span class="material-symbols-outlined" style="font-size: 18px;">print</span> Print Report
                         </button>
                     </div>
 
