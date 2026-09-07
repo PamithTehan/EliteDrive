@@ -133,7 +133,7 @@ require_once __DIR__ . '/../includes/partials/head.php';
                     <div class="fleet-title-row">
                         <h3><?= escapeHtml($v['make'] . ' ' . $v['model']) ?></h3>
                         <div class="fleet-price">
-                            <div class="amount">$<?= escapeHtml($v['daily_rate']) ?></div>
+                            <div class="amount">LKR <?= escapeHtml($v['daily_rate']) ?></div>
                             <div class="period">/day</div>
                         </div>
                     </div>

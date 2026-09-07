@@ -103,8 +103,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $transmissionPref = $_POST['transmission_preference'] ?? 'Both';
                 $drivingPref = $_POST['driving_preference'] ?? 'any_vehicle';
 
-                if ($dailyFee < 20.00 || $dailyFee > 35.00) {
-                    $errorMsg = 'Driver daily fee must be between $20.00 and $35.00 per day.';
+                if ($dailyFee < 2500.00 || $dailyFee > 7000.00) {
+                    $errorMsg = 'Driver daily fee must be between LKR 2500.00 and LKR 7000.00 per day.';
                 } elseif (!in_array($transmissionPref, ['Manual', 'Auto', 'Both'], true)) {
                     $errorMsg = 'Invalid transmission preference selected.';
                 } elseif (!in_array($drivingPref, ['any_vehicle', 'own_vehicles'], true)) {
@@ -276,7 +276,7 @@ require_once __DIR__ . '/../includes/partials/head.php';
                         <?php if (!empty($user['is_driver']) && $driver): ?>
                             <div class="profile-meta-item">
                                 <span class="material-symbols-outlined">payments</span>
-                                <span>$<?= number_format($driver['daily_fee'], 2) ?> / day</span>
+                                <span>LKR <?= number_format($driver['daily_fee'], 2) ?> / day</span>
                             </div>
                             <div class="profile-meta-item">
                                 <span class="material-symbols-outlined">tune</span>
@@ -363,9 +363,9 @@ require_once __DIR__ . '/../includes/partials/head.php';
                             <h3 style="font-size: 16px; margin-bottom: 16px; color: var(--color-text-primary);">Driver Preferences & Rates</h3>
                             <div class="form-grid-2">
                                 <div class="form-field">
-                                    <label for="daily_fee">Driver Daily Fee ($/day)</label>
-                                    <input type="number" id="daily_fee" name="daily_fee" min="20" max="35" step="0.50" value="<?= number_format($driver['daily_fee'] ?? 25.00, 2, '.', '') ?>" <?= !empty($user['is_driver']) ? 'required' : '' ?>>
-                                    <div class="field-hint">Permitted fee range is $20.00 – $35.00 per day.</div>
+                                    <label for="daily_fee">Driver Daily Fee (LKR/day)</label>
+                                    <input type="number" id="daily_fee" name="daily_fee" min="2500" max="7000" step="50.00" value="<?= number_format($driver['daily_fee'] ?? 2500.00, 2, '.', '') ?>" <?= !empty($user['is_driver']) ? 'required' : '' ?>>
+                                    <div class="field-hint">Permitted fee range is LKR 2500.00 – LKR 7000.00 per day.</div>
                                 </div>
 
                                 <div class="form-field">

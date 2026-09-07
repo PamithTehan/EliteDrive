@@ -385,7 +385,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                                                 <div style="font-size:12px; color:var(--color-secondary);"><?= escapeHtml($d['transmission_preference']) ?></div>
                                             </td>
                                             <td><?= escapeHtml($d['email']) ?></td>
-                                            <td>$<?= number_format($d['daily_fee'], 2) ?></td>
+                                            <td>LKR <?= number_format($d['daily_fee'], 2) ?></td>
                                             <td>
                                                 <form method="POST" action="" onsubmit="return confirm('Are you sure you want to remove this driver?');" style="display:inline;">
                                                     <input type="hidden" name="csrf" value="<?= csrfToken() ?>">

@@ -68,7 +68,9 @@
                                 <?php if (!empty($user['is_driver'])): ?>
                                     <li><a href="<?= baseUrl('/driver/dashboard.php') ?>" style="display:flex; align-items:center; gap:8px; padding:10px 16px; color:var(--color-text); text-decoration:none; font-size:13px; font-weight:500;"><span class="material-symbols-outlined" style="font-size:18px; color:var(--color-secondary);">drive_eta</span> Driver Dashboard</a></li>
                                 <?php endif; ?>
-                                <li><a href="<?= baseUrl('/borrower/my_bookings.php') ?>" style="display:flex; align-items:center; gap:8px; padding:10px 16px; color:var(--color-text); text-decoration:none; font-size:13px; font-weight:500;"><span class="material-symbols-outlined" style="font-size:18px; color:var(--color-secondary);">event_note</span> My Bookings</a></li>
+                                <?php if (!empty($user['is_borrower'])): ?>
+                                    <li><a href="<?= baseUrl('/borrower/my_bookings.php') ?>" style="display:flex; align-items:center; gap:8px; padding:10px 16px; color:var(--color-text); text-decoration:none; font-size:13px; font-weight:500;"><span class="material-symbols-outlined" style="font-size:18px; color:var(--color-secondary);">event_note</span> My Bookings</a></li>
+                                <?php endif; ?>
                                 <li><hr style="border:0; border-top:1px solid var(--color-outline); margin: 4px 0;"></li>
                                 <li><a href="<?= baseUrl('/logout.php') ?>" style="display:flex; align-items:center; gap:8px; padding:10px 16px; color:#b91c1c; text-decoration:none; font-size:13px; font-weight:500;"><span class="material-symbols-outlined" style="font-size:18px;">logout</span> Sign Out</a></li>
                             </ul>

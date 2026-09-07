@@ -142,7 +142,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                     options = '<option value="">No compatible drivers available</option>';
                 } else {
                     options += eligibleDrivers.map(d => {
-                        const fee = d.daily_fee ? `$${parseFloat(d.daily_fee).toFixed(2)}/day` : '';
+                        const fee = d.daily_fee ? `LKR ${parseFloat(d.daily_fee).toFixed(2)}/day` : '';
                         const trans = d.transmission_preference ? ` (${d.transmission_preference})` : '';
                         return `<option value="${d.id}">${escapeHtml(d.full_name)}${fee ? ' - ' + fee : ''}${trans}</option>`;
                     }).join('');

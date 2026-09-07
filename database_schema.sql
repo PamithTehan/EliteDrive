@@ -19,7 +19,7 @@ CREATE TABLE users (
 
 CREATE TABLE drivers (
     user_id INT PRIMARY KEY,
-    daily_fee DECIMAL(10, 2) NOT NULL DEFAULT 25.00,
+    daily_fee DECIMAL(10, 2) NOT NULL DEFAULT 2500.00,
     transmission_preference ENUM('Manual', 'Auto', 'Both') NOT NULL DEFAULT 'Both',
     driving_preference ENUM('own_vehicles', 'any_vehicle') DEFAULT 'any_vehicle',
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE

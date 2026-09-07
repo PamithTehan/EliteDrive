@@ -133,19 +133,19 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                 
                 <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                     <span class="body-md" style="color: var(--color-secondary);">Vehicle Daily Rate</span>
-                    <span class="body-md">$<?= number_format($breakdown['vehicle_daily_rate'], 2) ?></span>
+                    <span class="body-md">LKR <?= number_format($breakdown['vehicle_daily_rate'], 2) ?></span>
                 </div>
                 
                 <?php if ($breakdown['driver_daily_fee'] > 0): ?>
                 <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                     <span class="body-md" style="color: var(--color-secondary);">Driver Daily Fee</span>
-                    <span class="body-md">$<?= number_format($breakdown['driver_daily_fee'], 2) ?></span>
+                    <span class="body-md">LKR <?= number_format($breakdown['driver_daily_fee'], 2) ?></span>
                 </div>
                 <?php endif; ?>
                 
                 <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
                     <span class="body-md" style="color: var(--color-text); font-weight: 600;">Effective Daily Rate</span>
-                    <span class="body-md" style="font-weight: 600;">$<?= number_format($breakdown['effective_daily_rate'], 2) ?></span>
+                    <span class="body-md" style="font-weight: 600;">LKR <?= number_format($breakdown['effective_daily_rate'], 2) ?></span>
                 </div>
                 
                 <hr style="border: 0; border-top: 1px dashed var(--color-outline); margin: 16px 0;">
@@ -169,7 +169,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: var(--space-lg); border-top: 2px solid var(--color-outline); padding-top: var(--space-md);">
                 <h3 class="headline-md">Total Price</h3>
-                <h3 class="headline-lg" style="color:var(--color-primary);">$<?= number_format($price, 2) ?></h3>
+                <h3 class="headline-lg" style="color:var(--color-primary);">LKR <?= number_format($price, 2) ?></h3>
             </div>
             
             <div id="payment-status" class="alert alert-success" style="display:none;">Payment successful! Processing booking...</div>

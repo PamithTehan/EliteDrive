@@ -29,8 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (!$isOwner && !$isDriver && !$isBorrower) {
             $error = 'Please select at least one role.';
-        } elseif ($isDriver && ($dailyFee < 20.00 || $dailyFee > 35.00)) {
-            $error = 'Driver daily fee must be between $20.00 and $35.00.';
+        } elseif ($isDriver && ($dailyFee < 2500.00 || $dailyFee > 7000.00)) {
+            $error = 'Driver daily fee must be between LKR 2500.00 and LKR 7000.00.';
         } elseif ($isDriver && !in_array($transmissionPref, ['Manual', 'Auto', 'Both'], true)) {
             $error = 'Please select a valid transmission preference (Manual, Auto, or Both).';
         } else {
@@ -113,11 +113,11 @@ require_once __DIR__ . '/../includes/partials/head.php';
                 <h3 class="headline-sm" style="margin-bottom: 12px; color: var(--color-primary);">Driver Profile & Rates</h3>
                 
                 <div class="form-group">
-                    <label class="form-label" for="daily_fee">Your Daily Fee ($20.00 – $35.00)</label>
+                    <label class="form-label" for="daily_fee">Your Daily Fee (LKR 2500.00 – LKR 7000.00)</label>
                     <div style="position: relative;">
-                        <input type="number" id="daily_fee" name="daily_fee" class="input" min="20" max="35" step="0.50" value="<?= htmlspecialchars($_POST['daily_fee'] ?? '25.00') ?>" required>
+                        <input type="number" id="daily_fee" name="daily_fee" class="input" min="2500" max="7000" step="50.00" value="<?= htmlspecialchars($_POST['daily_fee'] ?? '2500.00') ?>" required>
                     </div>
-                    <small style="color: var(--color-secondary); display:block; margin-top: 4px;">Set the amount you charge per day (must be between $20 and $35).</small>
+                    <small style="color: var(--color-secondary); display:block; margin-top: 4px;">Set the amount you charge per day (must be between LKR 2500 and LKR 7000).</small>
                 </div>
 
                 <div class="form-group">
