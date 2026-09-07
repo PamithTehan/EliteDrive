@@ -118,7 +118,7 @@ CREATE TABLE payments (
     stripe_session_id VARCHAR(255) NULL UNIQUE,
     stripe_payment_intent_id VARCHAR(255) NULL UNIQUE,
     amount DECIMAL(10, 2) NOT NULL,
-    currency CHAR(3) DEFAULT 'USD',
+    currency CHAR(3) DEFAULT 'LKR',
     status ENUM('pending', 'completed', 'failed', 'refunded') DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

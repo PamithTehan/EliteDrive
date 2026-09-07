@@ -55,7 +55,7 @@ try {
     
     $stripeData = http_build_query([
         'payment_method_types[0]' => 'card',
-        'line_items[0][price_data][currency]' => 'usd',
+        'line_items[0][price_data][currency]' => 'lkr',
         'line_items[0][price_data][product_data][name]' => 'Vehicle Rental Booking #' . $bookingId,
         'line_items[0][price_data][unit_amount]' => round($totalPrice * 100), // in cents
         'line_items[0][quantity]' => 1,
