@@ -68,21 +68,22 @@ $vehicles = $stmtVehicles->fetchAll();
 $totalPagesVehicles = ceil($totalVehicles / $perPage);
 
 // Fetch Rejections
-$totalRejections = $db->query("
-    SELECT COUNT(*) FROM (
-        SELECT 'Vehicle' as type FROM vehicles WHERE status = 'rejected'
-        UNION ALL
-        SELECT 'Driver License' as type FROM driving_licenses WHERE status = 'rejected'
-    ) t
-")->fetchColumn();
+$totalRejections = $db->query("SELECT COUNT(*) FROM rejection_logs")->fetchColumn();
 
 $stmtRejections = $db->prepare("
-    SELECT 'Vehicle' as type, id as target_id, CONCAT(make, ' ', model) as name, rejection_reason as reason, updated_at as date 
-    FROM vehicles WHERE status = 'rejected'
-    UNION ALL
-    SELECT 'Driver License' as type, dl.user_id as target_id, u.full_name as name, dl.rejection_reason as reason, dl.updated_at as date
-    FROM driving_licenses dl JOIN users u ON u.id = dl.user_id WHERE dl.status = 'rejected'
-    ORDER BY date DESC
+    SELECT 
+        r.entity_type as type, 
+        r.entity_id as target_id, 
+        r.reason, 
+        r.created_at as date,
+        CASE 
+            WHEN r.entity_type = 'vehicle' THEN COALESCE((SELECT CONCAT(make, ' ', model) FROM vehicles WHERE id = r.entity_id), r.entity_type)
+            WHEN r.entity_type = 'license' THEN COALESCE((SELECT u.full_name FROM driving_licenses dl JOIN users u ON dl.user_id = u.id WHERE dl.id = r.entity_id), r.entity_type)
+            WHEN r.entity_type = 'booking' THEN COALESCE((SELECT CONCAT('Booking #', id) FROM bookings WHERE id = r.entity_id), r.entity_type)
+            ELSE r.entity_type
+        END as name
+    FROM rejection_logs r
+    ORDER BY r.created_at DESC
     LIMIT ? OFFSET ?
 ");
 $stmtRejections->bindValue(1, $perPage, PDO::PARAM_INT);
