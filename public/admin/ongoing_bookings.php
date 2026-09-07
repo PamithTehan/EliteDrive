@@ -27,6 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $db->beginTransaction();
         try {
             $db->exec("UPDATE bookings SET status = 'rejected' WHERE id = $bookingId");
+            $stmt = $db->prepare("UPDATE bookings SET status = 'rejected' WHERE id = ?");
+            $stmt->execute([$bookingId]);
             $stmt = $db->prepare("INSERT INTO rejection_logs (entity_type, entity_id, reason, rejected_by) VALUES ('booking', ?, ?, ?)");
             $stmt->execute([$bookingId, $reason, $user['id']]);
             $db->commit();
@@ -164,11 +166,15 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                                                             <input type="hidden" name="csrf" value="<?= csrfToken() ?>">
                                                             <input type="hidden" name="action" value="confirm">
                                                             <input type="hidden" name="booking_id" value="<?= $b['id'] ?>">
-                                                            <button type="submit" class="btn btn-primary btn-sm" onclick="return confirm('Confirm payment received for this booking?');">Confirm</button>
+                                                            <button type="submit" title="Confirm Payment" style="display:inline-flex; align-items:center; gap:6px; background-color:var(--color-primary); color:white; border:1px solid var(--color-primary); border-radius:6px; padding:6px 12px; font-size:12px; font-weight:600; cursor:pointer; transition:all 0.2s;" onclick="return confirm('Confirm payment received for this booking?');" onmouseover="this.style.opacity='0.9';" onmouseout="this.style.opacity='1';">
+                                                                <span class="material-symbols-outlined" style="font-size: 16px;">check_circle</span> Confirm
+                                                            </button>
                                                         </form>
                                                     <?php endif; ?>
                                                     
-                                                    <button type="button" class="btn btn-outline btn-sm reject-btn" data-id="<?= $b['id'] ?>" style="color: var(--color-danger); border-color: var(--color-danger);">Reject</button>
+                                                    <button type="button" class="reject-btn" data-id="<?= $b['id'] ?>" title="Reject Booking" style="display:inline-flex; align-items:center; gap:6px; background-color:transparent; color:var(--color-error); border:1px solid var(--color-error); border-radius:6px; padding:6px 12px; font-size:12px; font-weight:600; cursor:pointer; transition:all 0.2s;" onmouseover="this.style.backgroundColor='var(--color-error)'; this.style.color='white';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--color-error)';">
+                                                        <span class="material-symbols-outlined" style="font-size: 16px;">cancel</span> Reject
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -207,7 +213,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             </div>
             <div style="display:flex; justify-content:flex-end; gap:8px;">
                 <button type="button" class="btn btn-outline" onclick="document.getElementById('reject-modal').style.display='none'">Cancel</button>
-                <button type="submit" class="btn btn-primary" style="background:var(--color-danger); border-color:var(--color-danger);">Reject Booking</button>
+                <button type="submit" class="btn btn-primary" style="background-color:var(--color-error); border-color:var(--color-error); color:white; font-weight:600; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.9';" onmouseout="this.style.opacity='1';">Reject Booking</button>
             </div>
         </form>
     </div>
