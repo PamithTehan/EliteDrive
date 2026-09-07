@@ -5,7 +5,7 @@ The payment calculation logic for the EliteDrive platform uses a 6-hour block sy
 ## 1. Daily Rates
 The **Effective Daily Rate** is the sum of:
 1. **Vehicle Daily Rate**: The base price set for the specific vehicle class/model.
-2. **Driver Daily Fee**: If a professional chauffeur or the vehicle owner is hired, their daily fee is added. If the borrower is self-driving, this fee is `$0.00`.
+2. **Driver Daily Fee**: If a professional chauffeur or the vehicle owner is hired, their daily fee is added. If the borrower is self-driving, this fee is `LKR 0.00`.
 
 *Formula:*
 `Effective Daily Rate = Vehicle Daily Rate + Driver Daily Fee`
@@ -31,11 +31,11 @@ The system converts the billable minutes back into hours, and calculates the tot
    `Total Price = (Full Days * Effective Daily Rate) + (Remaining Blocks * Block Rate)`
 
 ### Example Scenario
-- **Vehicle Rate:** $100/day
-- **Driver Fee:** $0 (Self-drive)
-- **Effective Daily Rate:** $100/day
-- **Block Rate:** $25 per 6-hour block
+- **Vehicle Rate:** LKR 10,000/day
+- **Driver Fee:** LKR 0 (Self-drive)
+- **Effective Daily Rate:** LKR 10,000/day
+- **Block Rate:** LKR 2,500 per 6-hour block
 
 **Duration:** 25 hours.
-- *Without Grace Period:* 25 hours = 1 full day (24 hours) + 1 extra hour. The extra hour would trigger a new 6-hour block ($25). Total = $125.
-- *With Grace Period:* 25 hours = 1500 minutes. Subtract 60 minutes = 1440 billable minutes (exactly 24 hours). The extra hour is waived. Total = $100.
+- *Without Grace Period:* 25 hours = 1 full day (24 hours) + 1 extra hour. The extra hour would trigger a new 6-hour block (LKR 2,500). Total = LKR 12,500.
+- *With Grace Period:* 25 hours = 1500 minutes. Subtract 60 minutes = 1440 billable minutes (exactly 24 hours). The extra hour is waived. Total = LKR 10,000.

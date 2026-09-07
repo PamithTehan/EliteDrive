@@ -26,7 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         
         $db->beginTransaction();
         try {
-            $db->exec("UPDATE bookings SET status = 'rejected' WHERE id = $bookingId");
             $stmt = $db->prepare("UPDATE bookings SET status = 'rejected' WHERE id = ?");
             $stmt->execute([$bookingId]);
             $stmt = $db->prepare("INSERT INTO rejection_logs (entity_type, entity_id, reason, rejected_by) VALUES ('booking', ?, ?, ?)");

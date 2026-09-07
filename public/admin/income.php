@@ -8,7 +8,7 @@ $user = currentUser();
 $db = getDb();
 
 // 1. Get Platform Totals
-$totalRevenueStmt = $db->query('SELECT SUM(commission_amount) FROM bookings WHERE commission_amount > 0 AND status IN ("confirmed", "active", "completed", "reviewed")');
+$totalRevenueStmt = $db->query('SELECT SUM(commission_amount) FROM bookings WHERE commission_amount > 0 AND status IN ("completed", "reviewed")');
 $totalEarned = (float)$totalRevenueStmt->fetchColumn();
 
 // 2. Get This Month's Revenue
@@ -17,7 +17,7 @@ $thisMonthStmt = $db->prepare('
     SELECT SUM(commission_amount) 
     FROM bookings 
     WHERE commission_amount > 0 
-      AND status IN ("confirmed", "active", "completed", "reviewed")
+      AND status IN ("completed", "reviewed")
       AND DATE_FORMAT(created_at, "%Y-%m") = ?
 ');
 $thisMonthStmt->execute([$currentMonthStr]);
@@ -29,7 +29,7 @@ $monthlyDataStmt = $db->prepare('
     SELECT MONTH(created_at) as month, SUM(commission_amount) as total
     FROM bookings
     WHERE commission_amount > 0 
-      AND status IN ("confirmed", "active", "completed", "reviewed")
+      AND status IN ("completed", "reviewed")
       AND YEAR(created_at) = ?
     GROUP BY MONTH(created_at)
 ');

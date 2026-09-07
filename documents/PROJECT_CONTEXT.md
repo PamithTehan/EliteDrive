@@ -80,7 +80,13 @@ Alternate branches: `Rejected` (failed verification or owner declines), `Cancell
 ## 9. Design Reference
 Visual system: see `DESIGN.md` (colors, typography, spacing, shapes, components already defined). Landing page screenshot (`screen.png`) shows the reference hero, fleet cards, and footer — new screens (dashboards, verification flows, booking flows) should reuse the same Navy/Electric-Blue/Slate palette, Inter type scale, 4–12px rounding, and tonal-elevation card style rather than introducing new visual language.
 
-## 10. Non-Functional Notes
+## 10. Third-Party Libraries
+To maintain a modern, interactive user experience without bloating the backend, the following frontend libraries are used:
+- **Chart.js**: Utilized on the Admin, Owner, and Driver dashboards (`income.php` and `dashboard.php`) to render dynamic, responsive line charts for visualizing 12-month revenue and earnings trends.
+- **PDF.js**: Integrated into the Admin Verification Queue (`verification_queue.php`) to seamlessly render uploaded PDF driving licenses directly in the browser via HTML5 `<canvas>`, avoiding the need for users to download files or rely on native browser PDF plugins.
+- **Browser Print API**: Standard `window.print()` is used for generating PDF invoices (e.g., `invoice.php`), providing a lightweight client-side solution for saving/printing transaction records.
+
+## 11. Non-Functional Notes
 - Document upload & verification needs secure storage + admin review queue.
 - License/insurance expiry should be tracked and trigger re-verification reminders.
 - Multi-role accounts (e.g., an Owner who is also Driver-certified) need a single login with a role/context switcher in the dashboard.

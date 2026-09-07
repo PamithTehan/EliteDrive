@@ -75,7 +75,7 @@ if ($tab === 'assignments') {
         SELECT b.id, b.created_at, b.driver_earnings, b.status, v.make, v.model
         FROM bookings b
         JOIN vehicles v ON b.vehicle_id = v.id
-        WHERE b.assigned_driver_id = ? AND b.status IN ("confirmed", "active", "completed", "reviewed")
+        WHERE b.assigned_driver_id = ? AND b.status IN ("completed", "reviewed")
         ORDER BY b.created_at DESC
     ');
     $stmtIncome->execute([$user['id']]);
@@ -91,18 +91,14 @@ if ($tab === 'assignments') {
 
     foreach ($earningsList as $row) {
         $amount = (float)$row['driver_earnings'];
-        if (in_array($row['status'], ['confirmed', 'active'])) {
-            $pendingPayouts += $amount;
-        } else {
-            $totalEarned += $amount;
-            
-            $ts = strtotime($row['created_at']);
-            if (date('Y', $ts) == $currentYear) {
-                $m = (int)date('n', $ts);
-                $monthlyData[$m] += $amount;
-                if ($m == $currentMonth) {
-                    $thisMonthEarned += $amount;
-                }
+        $totalEarned += $amount;
+        
+        $ts = strtotime($row['created_at']);
+        if (date('Y', $ts) == $currentYear) {
+            $m = (int)date('n', $ts);
+            $monthlyData[$m] += $amount;
+            if ($m == $currentMonth) {
+                $thisMonthEarned += $amount;
             }
         }
     }
@@ -304,16 +300,12 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                             
                             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
                                 <div style="background: white; border: 1px solid var(--color-outline); border-radius: 8px; padding: 20px;">
-                                    <div style="color: var(--color-secondary); font-size: 14px; margin-bottom: 8px;">Total Earned</div>
-                                    <div style="font-size: 24px; font-weight: 700; color: var(--color-primary);">LKR <?= number_format($totalEarned, 2) ?></div>
+                                    <div style="color: var(--color-secondary); font-size: 14px; margin-bottom: 8px;">Total Earnings</div>
+                                    <div style="font-size: 28px; font-weight: 700; color: var(--color-primary);">LKR <?= number_format($totalEarned, 2) ?></div>
                                 </div>
                                 <div style="background: white; border: 1px solid var(--color-outline); border-radius: 8px; padding: 20px;">
-                                    <div style="color: var(--color-secondary); font-size: 14px; margin-bottom: 8px;">Earned This Month</div>
-                                    <div style="font-size: 24px; font-weight: 700; color: #166534;">LKR <?= number_format($thisMonthEarned, 2) ?></div>
-                                </div>
-                                <div style="background: white; border: 1px solid var(--color-outline); border-radius: 8px; padding: 20px;">
-                                    <div style="color: var(--color-secondary); font-size: 14px; margin-bottom: 8px;">Pending Payouts</div>
-                                    <div style="font-size: 24px; font-weight: 700; color: #b45309;">LKR <?= number_format($pendingPayouts, 2) ?></div>
+                                    <div style="color: var(--color-secondary); font-size: 14px; margin-bottom: 8px;">Earnings This Month</div>
+                                    <div style="font-size: 28px; font-weight: 700; color: #166534;">LKR <?= number_format($thisMonthEarned, 2) ?></div>
                                 </div>
                             </div>
 
