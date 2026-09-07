@@ -187,7 +187,45 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             <div id="payment-status" class="alert alert-success" style="display:none;">Payment successful! Processing booking...</div>
             <div id="payment-error" class="alert alert-error" style="display:none;"></div>
 
-            <button id="btn-pay" class="btn btn-primary" style="width: 100%;">Pay & Confirm</button>
+            <div style="margin-bottom: var(--space-lg);">
+                <label style="display:block; font-weight:600; margin-bottom: 12px; color: var(--color-on-surface);">Select Payment Method</label>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <label class="payment-card" style="cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 16px; border: 2px solid var(--color-primary); border-radius: 8px; background-color: rgba(15, 23, 42, 0.02); transition: all 0.2s ease;">
+                        <input type="radio" name="payment_method" value="card" checked style="display:none;" onchange="updatePaymentCards()">
+                        <span class="material-symbols-outlined payment-icon" style="font-size: 32px; color: var(--color-primary); margin-bottom: 8px;">credit_card</span>
+                        <span style="font-weight: 600; color: var(--color-on-surface);">Online Payment</span>
+                        <span style="font-size: 12px; color: var(--color-secondary);">Pay securely via Stripe</span>
+                    </label>
+                    
+                    <label class="payment-card" style="cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 16px; border: 2px solid var(--color-outline); border-radius: 8px; background-color: var(--color-surface); transition: all 0.2s ease;">
+                        <input type="radio" name="payment_method" value="headquarters" style="display:none;" onchange="updatePaymentCards()">
+                        <span class="material-symbols-outlined payment-icon" style="font-size: 32px; color: var(--color-secondary); margin-bottom: 8px;">storefront</span>
+                        <span style="font-weight: 600; color: var(--color-on-surface);">Pay at Headquarters</span>
+                        <span style="font-size: 12px; color: var(--color-secondary);">Pay in person</span>
+                    </label>
+                </div>
+            </div>
+
+            <script>
+                function updatePaymentCards() {
+                    const cards = document.querySelectorAll('.payment-card');
+                    cards.forEach(card => {
+                        const radio = card.querySelector('input[type="radio"]');
+                        const icon = card.querySelector('.payment-icon');
+                        if (radio.checked) {
+                            card.style.borderColor = 'var(--color-primary)';
+                            card.style.backgroundColor = 'rgba(15, 23, 42, 0.02)';
+                            icon.style.color = 'var(--color-primary)';
+                        } else {
+                            card.style.borderColor = 'var(--color-outline)';
+                            card.style.backgroundColor = 'var(--color-surface)';
+                            icon.style.color = 'var(--color-secondary)';
+                        }
+                    });
+                }
+            </script>
+
+            <button id="btn-pay" class="btn btn-primary" style="width: 100%;">Confirm Booking</button>
         </div>
     </div>
 </div>
@@ -212,6 +250,9 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             formData.append('return_date', "<?= $returnDate ?>");
             formData.append('pickup_location', "<?= $pickupLocation ?>");
             formData.append('return_location', "<?= $returnLocation ?>");
+            
+            const paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+            formData.append('payment_method', paymentMethod);
 
             const res = await fetch('<?= baseUrl('/api/bookings/create.php') ?>', {
                 method: 'POST',
@@ -220,9 +261,15 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             
             const data = await res.json();
             
-            if (res.ok && data.stripe_url) {
-                // Redirect directly to Stripe Checkout
-                window.location.href = data.stripe_url;
+            if (res.ok) {
+                if (paymentMethod === 'card' && data.stripe_url) {
+                    // Redirect directly to Stripe Checkout
+                    window.location.href = data.stripe_url;
+                } else if (paymentMethod === 'headquarters' && data.ok) {
+                    window.location.href = "<?= baseUrl('/borrower/my_bookings.php') ?>";
+                } else {
+                    throw new Error(data.error || 'Failed to initialize payment.');
+                }
             } else {
                 throw new Error(data.error || 'Failed to initialize payment.');
             }
