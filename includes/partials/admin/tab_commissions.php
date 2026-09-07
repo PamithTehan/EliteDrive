@@ -54,7 +54,7 @@
             <?php if ($totalPagesCommissions > 1): ?>
                 <div class="pagination" style="margin-top: 24px; display: flex; justify-content: center; gap: 8px;">
                     <?php for ($i = 1; $i <= $totalPagesCommissions; $i++): ?>
-                        <a href="?tab=commissions&page=<?= $i ?>" class="page-link" style="padding: 8px 12px; border: 1px solid var(--color-outline); border-radius: 4px; text-decoration: none; color: <?= $i === $page ? 'white' : 'var(--color-primary)' ?>; background-color: <?= $i === $page ? 'var(--color-primary)' : 'white' ?>;">
+                        <a href="?tab=commissions&page_commissions=<?= $i ?>" class="page-link" style="padding: 8px 12px; border: 1px solid var(--color-outline); border-radius: 4px; text-decoration: none; color: <?= $i === $pageCommissions ? 'white' : 'var(--color-primary)' ?>; background-color: <?= $i === $pageCommissions ? 'var(--color-primary)' : 'white' ?>;">
                             <?= $i ?>
                         </a>
                     <?php endfor; ?>

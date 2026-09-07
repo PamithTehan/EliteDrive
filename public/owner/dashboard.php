@@ -64,6 +64,9 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                         <a href="<?= baseUrl('/owner/bookings.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
                             <span class="material-symbols-outlined">calendar_month</span> Bookings
                         </a>
+                        <a href="<?= baseUrl('/owner/income.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
+                            <span class="material-symbols-outlined">payments</span> Income
+                        </a>
                     </div>
                 </div>
             </aside>
@@ -104,29 +107,24 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                                 <span>LKR <?= escapeHtml($v['daily_rate']) ?>/day</span>
                             </div>
                             <div style="margin-top: var(--space-sm);">
-                                <?php
-                                $badgeClass = match($v['status']) {
-                                    'approved' => 'badge-status-verified',
-                                    'pending_review' => 'badge-status-pending',
-                                    'rejected' => 'badge-status-rejected',
-                                    default => 'badge-status-pending'
-                                };
-                                ?>
-                                <span class="badge <?= $badgeClass ?>"><?= escapeHtml($v['status']) ?></span>
-                                <a href="<?= baseUrl('/owner/vehicle_form.php?id=' . $v['id']) ?>" class="btn btn-ghost" style="padding: 4px 12px; font-size: 13px; margin-left: 8px;">Edit</a>
+                                <?php if ($v['status'] === 'active'): ?>
+                                    <span class="badge badge-success">Active</span>
+                                <?php elseif ($v['status'] === 'maintenance'): ?>
+                                    <span class="badge badge-warning">Maintenance</span>
+                                <?php else: ?>
+                                    <span class="badge badge-secondary"><?= escapeHtml(ucfirst($v['status'])) ?></span>
+                                <?php endif; ?>
                             </div>
-                            <?php if ($v['status'] === 'rejected' && !empty($v['rejection_reason'])): ?>
-                                <div class="alert alert-error" style="margin-top: var(--space-sm); font-size: 13px; padding: 8px 12px;">
-                                    <strong>Rejection Reason:</strong> <?= escapeHtml($v['rejection_reason']) ?>
-                                </div>
-                            <?php endif; ?>
+                        </div>
+                        <div class="card-footer" style="padding: var(--space-md); border-top: 1px solid var(--color-outline); display:flex; justify-content:flex-end; gap:var(--space-sm);">
+                            <a href="<?= baseUrl('/owner/vehicle_form.php?id=' . $v['id']) ?>" class="btn btn-outline" style="padding: var(--space-xs) var(--space-sm);">Edit</a>
                         </div>
                     </div>
                 <?php endforeach; ?>
             </div>
-            <?php endif; ?>
-                    </div> <!-- settings-card-body -->
-                </div> <!-- settings-card -->
+        <?php endif; ?>
+                        </div>
+                </div>
             </div> <!-- profile-content-area -->
         </div> <!-- profile-layout -->
     </div> <!-- container -->

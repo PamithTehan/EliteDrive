@@ -7,6 +7,7 @@ $pageDrivers = isset($_GET['page_drivers']) ? max(1, (int)$_GET['page_drivers'])
 $pageVehicles = isset($_GET['page_vehicles']) ? max(1, (int)$_GET['page_vehicles']) : 1;
 $pageRejections = isset($_GET['page_rejections']) ? max(1, (int)$_GET['page_rejections']) : 1;
 $pageBookings = isset($_GET['page_bookings']) ? max(1, (int)$_GET['page_bookings']) : 1;
+$pageCommissions = isset($_GET['page_commissions']) ? max(1, (int)$_GET['page_commissions']) : 1;
 $bookingStatus = $_GET['booking_status'] ?? '';
 
 $offsetBorrowers = ($pageBorrowers - 1) * $perPage;
@@ -15,6 +16,7 @@ $offsetDrivers = ($pageDrivers - 1) * $perPage;
 $offsetVehicles = ($pageVehicles - 1) * $perPage;
 $offsetRejections = ($pageRejections - 1) * $perPage;
 $offsetBookings = ($pageBookings - 1) * $perPage;
+$offsetCommissions = ($pageCommissions - 1) * $perPage;
 
 $db = getDb();
 
@@ -139,7 +141,7 @@ $stmtCommissions = $db->prepare('
     LIMIT ? OFFSET ?
 ');
 $stmtCommissions->bindValue(1, $perPage, PDO::PARAM_INT);
-$stmtCommissions->bindValue(2, $offset, PDO::PARAM_INT);
+$stmtCommissions->bindValue(2, $offsetCommissions, PDO::PARAM_INT);
 $stmtCommissions->execute();
 $commissions = $stmtCommissions->fetchAll();
 $totalPagesCommissions = ceil($totalCommissions / $perPage);
