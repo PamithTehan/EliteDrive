@@ -99,6 +99,8 @@ CREATE TABLE bookings (
     total_price DECIMAL(10, 2) NOT NULL,
     commission_rate DECIMAL(5, 2) DEFAULT 0.00,
     commission_amount DECIMAL(10, 2) DEFAULT 0.00,
+    owner_earnings DECIMAL(10, 2) DEFAULT 0.00,
+    driver_earnings DECIMAL(10, 2) DEFAULT 0.00,
     status ENUM('pending_payment', 'pending_verification', 'confirmed', 'active', 'completed', 'reviewed', 'rejected', 'cancelled', 'disputed') DEFAULT 'pending_payment',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
