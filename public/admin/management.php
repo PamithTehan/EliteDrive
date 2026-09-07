@@ -154,6 +154,9 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                         <button type="button" class="mgmt-tab-btn" data-tab="bookings" style="padding: 16px; background: none; border: none; font-size: 16px; border-bottom: 2px solid <?= $activeTab === 'bookings' ? 'var(--color-primary)' : 'transparent' ?>; color: <?= $activeTab === 'bookings' ? 'var(--color-primary)' : 'var(--color-secondary)' ?>; font-weight: <?= $activeTab === 'bookings' ? 'bold' : 'normal' ?>; cursor: pointer;">
                             Bookings
                         </button>
+                        <button type="button" class="mgmt-tab-btn" data-tab="commissions" style="padding: 16px; background: none; border: none; font-size: 16px; border-bottom: 2px solid <?= $activeTab === 'commissions' ? 'var(--color-primary)' : 'transparent' ?>; color: <?= $activeTab === 'commissions' ? 'var(--color-primary)' : 'var(--color-secondary)' ?>; font-weight: <?= $activeTab === 'commissions' ? 'bold' : 'normal' ?>; cursor: pointer;">
+                            Commissions
+                        </button>
                     </div>
 
                     <div style="padding: 16px 24px 0 24px; display: flex; justify-content: flex-end; align-items: center; gap: 16px;">
@@ -180,14 +183,21 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                     <div class="settings-card-body" style="padding: 24px;">
                         
                         <!-- Tabs Content -->
-                        <?php 
-                        require_once __DIR__ . '/../../includes/partials/admin/tab_borrowers.php';
-                        require_once __DIR__ . '/../../includes/partials/admin/tab_owners.php';
-                        require_once __DIR__ . '/../../includes/partials/admin/tab_drivers.php';
-                        require_once __DIR__ . '/../../includes/partials/admin/tab_vehicles.php';
-                        require_once __DIR__ . '/../../includes/partials/admin/tab_rejections.php';
-                        require_once __DIR__ . '/../../includes/partials/admin/tab_bookings.php';
-                        ?>
+                        <?php if ($activeTab === 'borrowers'): ?>
+                            <?php require_once __DIR__ . '/../../includes/partials/admin/tab_borrowers.php'; ?>
+                        <?php elseif ($activeTab === 'owners'): ?>
+                            <?php require_once __DIR__ . '/../../includes/partials/admin/tab_owners.php'; ?>
+                        <?php elseif ($activeTab === 'drivers'): ?>
+                            <?php require_once __DIR__ . '/../../includes/partials/admin/tab_drivers.php'; ?>
+                        <?php elseif ($activeTab === 'vehicles'): ?>
+                            <?php require_once __DIR__ . '/../../includes/partials/admin/tab_vehicles.php'; ?>
+                        <?php elseif ($activeTab === 'rejections'): ?>
+                            <?php require_once __DIR__ . '/../../includes/partials/admin/tab_rejections.php'; ?>
+                        <?php elseif ($activeTab === 'bookings'): ?>
+                            <?php require_once __DIR__ . '/../../includes/partials/admin/tab_bookings.php'; ?>
+                        <?php elseif ($activeTab === 'commissions'): ?>
+                            <?php require_once __DIR__ . '/../../includes/partials/admin/tab_commissions.php'; ?>
+                        <?php endif; ?>
 
                     </div> <!-- settings-card-body -->
                 </div> <!-- settings-card -->
