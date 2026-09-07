@@ -238,7 +238,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
 
         // Render Vehicle Cards
         resultsGrid.innerHTML = visibleVehicles.map(v => {
-            const img = v.photo_path ? (v.photo_path.startsWith('http') ? v.photo_path : `<?= baseUrl('/') ?>${v.photo_path}`) : '';
+            const img = v.photo_path || '';
             const imgHtml = img ? `<img src="${escapeHtml(img)}" alt="Vehicle">` : `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#ccc;">[No Image]</div>`;
             
             const isElectric = v.category === 'Electric';
