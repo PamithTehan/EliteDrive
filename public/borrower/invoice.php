@@ -310,9 +310,16 @@ $gracePeriodApplied = $breakdown['grace_period_applied'];
             <h3 style="font-size: 16px; margin-bottom: 16px; border-bottom: 1px solid var(--color-border); padding-bottom: 12px; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.05em;">2. Billing Summary</h3>
             
             <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 15px;">
-                <span style="color: var(--color-text-light);">Total Charge Calculation (<?= $breakdown['total_blocks'] ?> blocks &times; $<?= number_format($chargeForDayQuarter, 2) ?>)</span>
-                <span>LKR <?= number_format($breakdown['total_blocks'] * $chargeForDayQuarter, 2) ?></span>
+                <span style="color: var(--color-text-light);">Base Rental Price (<?= $breakdown['total_blocks'] ?> blocks &times; LKR <?= number_format($chargeForDayQuarter, 2) ?>)</span>
+                <span>LKR <?= number_format($breakdown['base_price'] ?? ($breakdown['total_blocks'] * $chargeForDayQuarter), 2) ?></span>
             </div>
+
+            <?php if (($booking['commission_amount'] ?? 0) > 0): ?>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 15px;">
+                <span style="color: var(--color-text-light);">Platform Commission (<?= $booking['commission_rate'] ?>%)</span>
+                <span>LKR <?= number_format($booking['commission_amount'], 2) ?></span>
+            </div>
+            <?php endif; ?>
             
             <div style="display: flex; justify-content: space-between; margin-top: 20px; font-size: 20px; font-weight: 700; padding-top: 20px; border-top: 2px solid var(--color-border);">
                 <span>Total Amount Due</span>

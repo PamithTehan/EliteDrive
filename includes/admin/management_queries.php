@@ -120,3 +120,26 @@ $stmtBookings = $db->prepare("
 $stmtBookings->execute($bookingParams);
 $bookings = $stmtBookings->fetchAll();
 $totalPagesBookings = ceil($totalBookings / $perPage);
+
+// --- COMMISSIONS ---
+$totalRevenueStmt = $db->query('SELECT SUM(commission_amount) FROM bookings WHERE commission_amount > 0 AND status IN ("confirmed", "active", "completed", "reviewed")');
+$totalPlatformRevenue = (float)$totalRevenueStmt->fetchColumn();
+
+$stmtTotalCommissions = $db->query('SELECT COUNT(*) FROM bookings WHERE commission_amount > 0');
+$totalCommissions = $stmtTotalCommissions->fetchColumn();
+
+$stmtCommissions = $db->prepare('
+    SELECT b.id, b.created_at, b.commission_rate, b.commission_amount, b.total_price, b.status,
+           u.full_name as borrower_name, v.make, v.model
+    FROM bookings b
+    JOIN users u ON b.borrower_id = u.id
+    JOIN vehicles v ON b.vehicle_id = v.id
+    WHERE b.commission_amount > 0
+    ORDER BY b.created_at DESC 
+    LIMIT ? OFFSET ?
+');
+$stmtCommissions->bindValue(1, $perPage, PDO::PARAM_INT);
+$stmtCommissions->bindValue(2, $offset, PDO::PARAM_INT);
+$stmtCommissions->execute();
+$commissions = $stmtCommissions->fetchAll();
+$totalPagesCommissions = ceil($totalCommissions / $perPage);

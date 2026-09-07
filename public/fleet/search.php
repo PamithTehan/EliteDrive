@@ -241,7 +241,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             const img = v.photo_path || '';
             const imgHtml = img ? `<img src="${escapeHtml(img)}" alt="Vehicle">` : `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#ccc;">[No Image]</div>`;
             
-            const isElectric = v.category === 'Electric';
+            const isElectric = (v.category || '').includes('Electric');
             const rateUnit = isElectric ? 'km/charge' : 'km/l';
             const rateIcon = isElectric ? 'electric_car' : 'local_gas_station';
             const transIcon = v.transmission === 'Manual' ? 'account_tree' : 'settings';

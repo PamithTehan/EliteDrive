@@ -139,7 +139,7 @@ require_once __DIR__ . '/../includes/partials/head.php';
                     </div>
                     <div class="fleet-specs">
                         <?php 
-                            $isElectric = $v['category'] === 'Electric';
+                            $isElectric = strpos($v['category'], 'Electric') !== false;
                             $rateUnit = $isElectric ? 'km/charge' : 'km/l';
                             $rateIcon = $isElectric ? 'electric_car' : 'local_gas_station';
                             $transIcon = $v['transmission'] === 'Manual' ? 'account_tree' : 'settings';

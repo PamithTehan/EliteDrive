@@ -64,16 +64,18 @@ $status = 'pending_payment';
 $stmt = $db->prepare(
     'INSERT INTO bookings
      (vehicle_id, borrower_id, driver_arrangement, assigned_driver_id,
-      pickup_date, return_date, pickup_location, return_location, total_price, status)
-     VALUES (?,?,?,?,?,?,?,?,?,?)'
+      pickup_date, return_date, pickup_location, return_location, total_price, commission_rate, commission_amount, status)
+     VALUES (?,?,?,?,?,?,?,?,?,?,?,?)'
 );
 
 try {
-    $totalPrice = calculatePrice($booking, $db);
+    $breakdown = calculateRentalBreakdown($booking, $db);
+    $totalPrice = $breakdown['total_price'];
     $stmt->execute([
         $booking['vehicle_id'], $booking['borrower_id'], $booking['driver_arrangement'],
         $booking['assigned_driver_id'], $booking['pickup_date'], $booking['return_date'],
-        $booking['pickup_location'], $booking['return_location'], $totalPrice, $status,
+        $booking['pickup_location'], $booking['return_location'], $totalPrice, 
+        $breakdown['commission_rate'], $breakdown['commission_amount'], $status,
     ]);
     $bookingId = $db->lastInsertId();
     
