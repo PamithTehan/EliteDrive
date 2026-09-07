@@ -60,6 +60,7 @@ Records Stripe payment intents and transactions associated with a booking.
 - `booking_id`, `user_id`: Foreign Keys
 - `stripe_session_id`, `stripe_payment_intent_id`: VARCHAR (Unique identifiers from Stripe)
 - `amount`: DECIMAL
+- `currency`: CHAR(3) (Default 'LKR')
 - `status`: ENUM ('pending', 'completed', 'failed', 'refunded')
 
 ## 7. `reviews` Table

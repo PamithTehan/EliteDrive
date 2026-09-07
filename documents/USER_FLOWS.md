@@ -53,8 +53,10 @@ On the booking screen, borrower picks one:
 
 ### 2.4 Confirm & Pay
 1. Review trip summary, price breakdown, cancellation policy.
-2. Payment (card/wallet).
-3. Booking status → `Confirmed` (only after the relevant driver's license is verified per 2.3).
+2. Select payment method: Online (Stripe) or "Pay for Headquarters".
+3. Payment execution:
+   - If Online: Booking status → `Confirmed` (after successful payment and driver verification).
+   - If Pay for Headquarters: Booking status stays `pending_payment` until Admin manually confirms the payment via the Ongoing Bookings tab.
 
 ### 2.5 Trip
 1. Pickup: borrower (or driver) checks in at the designated pickup hub (CMB, HRI, or Colombo HQ).
@@ -104,9 +106,10 @@ On the booking screen, borrower picks one:
 1. Queue of `pending_review` vehicles.
 2. Admin checks photos, documents, category correctness (Premium/Luxury/Budget/Offroad) → approve (goes live) or reject (with notes back to Owner).
 
-### 4.3 Dispute Resolution
+### 4.3 Dispute Resolution & Ongoing Bookings
 1. Ticket queue (damage claims, no-shows, payment disputes, driver conduct).
 2. Admin reviews trip data, messages, evidence → issues resolution (refund, payout adjustment, account warning/suspension).
+3. **Ongoing Bookings**: Admins monitor all active/upcoming bookings. If a user selected "Pay for Headquarters", the Admin can manually **Confirm** (update status to `confirmed`) once payment is received, or **Reject** the booking if the user fails to pay or verify (logs reason to `rejection_logs`).
 
 ### 4.4 Fleet & Category Management
 1. Manage the four fixed categories (naming, badge styling, featured placement on landing page "Our Premium Fleet" section).
