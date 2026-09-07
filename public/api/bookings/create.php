@@ -84,7 +84,17 @@ try {
     $stmt = $db->prepare('INSERT INTO payments (booking_id, user_id, amount, status) VALUES (?, ?, ?, "pending")');
     $stmt->execute([$bookingId, $user['id'], $totalPrice]);
     
-    // Create Stripe Checkout Session
+    $paymentMethod = $_POST['payment_method'] ?? 'card';
+
+    if ($paymentMethod === 'headquarters') {
+        echo json_encode([
+            'ok' => true,
+            'booking_id' => $bookingId,
+            'message' => 'Booking created. Please pay at headquarters.'
+        ]);
+        exit;
+    }
+    
     // Create Stripe Checkout Session
     $config = getConfig();
     $stripeKey = $config['stripe_secret_key'] ?? '';
