@@ -111,7 +111,12 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                                         <div style="font-size: 14px;"><?= date('M j, Y H:i', strtotime($b['pickup_date'])) ?></div>
                                         <div style="font-size: 14px; color: var(--color-secondary);">to <?= date('M j, Y H:i', strtotime($b['return_date'])) ?></div>
                                     </td>
-                                    <td>LKR <?= number_format($b['total_price'], 2) ?></td>
+                                    <td>
+                                        <div style="font-weight: 600;">LKR <?= number_format($b['total_price'] - ($b['commission_amount'] ?? 0), 2) ?></div>
+                                        <?php if (($b['commission_amount'] ?? 0) > 0): ?>
+                                            <div style="font-size: 11px; color: var(--color-secondary);">Net after <?= (float)$b['commission_rate'] ?>% fee</div>
+                                        <?php endif; ?>
+                                    </td>
                                     <td>
                                         <?php if ($b['status'] === 'confirmed' || $b['status'] === 'active'): ?>
                                             <span class="badge" style="background: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase;">Active</span>
