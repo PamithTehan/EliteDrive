@@ -1,0 +1,31 @@
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    .settings-card-body, .settings-card-body * {
+        visibility: visible;
+    }
+    .settings-card-body {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+    .mgmt-tab-content[style*="display: none"] {
+        display: none !important;
+    }
+    .btn {
+        display: none !important;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    table, th, td {
+        border: 1px solid #ccc;
+    }
+    th, td {
+        padding: 8px;
+        text-align: left;
+    }
+}

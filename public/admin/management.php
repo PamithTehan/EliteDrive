@@ -51,94 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Pagination Setup
-$perPage = 10;
-$pageBorrowers = isset($_GET['page_borrowers']) ? max(1, (int)$_GET['page_borrowers']) : 1;
-$pageOwners = isset($_GET['page_owners']) ? max(1, (int)$_GET['page_owners']) : 1;
-$pageDrivers = isset($_GET['page_drivers']) ? max(1, (int)$_GET['page_drivers']) : 1;
-$pageVehicles = isset($_GET['page_vehicles']) ? max(1, (int)$_GET['page_vehicles']) : 1;
-$pageRejections = isset($_GET['page_rejections']) ? max(1, (int)$_GET['page_rejections']) : 1;
-
-$offsetBorrowers = ($pageBorrowers - 1) * $perPage;
-$offsetOwners = ($pageOwners - 1) * $perPage;
-$offsetDrivers = ($pageDrivers - 1) * $perPage;
-$offsetVehicles = ($pageVehicles - 1) * $perPage;
-$offsetRejections = ($pageRejections - 1) * $perPage;
-
-$db = getDb();
-
-// Fetch Borrowers
-$totalBorrowers = $db->query("SELECT COUNT(*) FROM users WHERE is_borrower = 1")->fetchColumn();
-$stmtBorrowers = $db->prepare("SELECT id, full_name, email, contact_number, created_at FROM users WHERE is_borrower = 1 ORDER BY created_at DESC LIMIT ? OFFSET ?");
-$stmtBorrowers->bindValue(1, $perPage, PDO::PARAM_INT);
-$stmtBorrowers->bindValue(2, $offsetBorrowers, PDO::PARAM_INT);
-$stmtBorrowers->execute();
-$borrowers = $stmtBorrowers->fetchAll();
-$totalPagesBorrowers = ceil($totalBorrowers / $perPage);
-
-// Fetch Owners
-$totalOwners = $db->query("SELECT COUNT(*) FROM users WHERE is_owner = 1")->fetchColumn();
-$stmtOwners = $db->prepare("SELECT id, full_name, email, contact_number, created_at FROM users WHERE is_owner = 1 ORDER BY created_at DESC LIMIT ? OFFSET ?");
-$stmtOwners->bindValue(1, $perPage, PDO::PARAM_INT);
-$stmtOwners->bindValue(2, $offsetOwners, PDO::PARAM_INT);
-$stmtOwners->execute();
-$owners = $stmtOwners->fetchAll();
-$totalPagesOwners = ceil($totalOwners / $perPage);
-
-// Fetch Drivers
-$totalDrivers = $db->query("SELECT COUNT(*) FROM users WHERE is_driver = 1")->fetchColumn();
-$stmtDrivers = $db->prepare("
-    SELECT u.id, u.full_name, u.email, u.contact_number, u.created_at, d.daily_fee, d.transmission_preference 
-    FROM users u 
-    JOIN drivers d ON u.id = d.user_id 
-    WHERE u.is_driver = 1 
-    ORDER BY u.created_at DESC 
-    LIMIT ? OFFSET ?
-");
-$stmtDrivers->bindValue(1, $perPage, PDO::PARAM_INT);
-$stmtDrivers->bindValue(2, $offsetDrivers, PDO::PARAM_INT);
-$stmtDrivers->execute();
-$drivers = $stmtDrivers->fetchAll();
-$totalPagesDrivers = ceil($totalDrivers / $perPage);
-
-// Fetch Vehicles
-$totalVehicles = $db->query("SELECT COUNT(*) FROM vehicles")->fetchColumn();
-$stmtVehicles = $db->prepare("
-    SELECT v.id, v.make, v.model, v.yom, v.category, v.status, u.full_name as owner_name 
-    FROM vehicles v 
-    JOIN users u ON v.owner_id = u.id 
-    ORDER BY v.created_at DESC 
-    LIMIT ? OFFSET ?
-");
-$stmtVehicles->bindValue(1, $perPage, PDO::PARAM_INT);
-$stmtVehicles->bindValue(2, $offsetVehicles, PDO::PARAM_INT);
-$stmtVehicles->execute();
-$vehicles = $stmtVehicles->fetchAll();
-$totalPagesVehicles = ceil($totalVehicles / $perPage);
-
-// Fetch Rejections
-$totalRejections = $db->query("
-    SELECT COUNT(*) FROM (
-        SELECT 'Vehicle' as type FROM vehicles WHERE status = 'rejected'
-        UNION ALL
-        SELECT 'Driver License' as type FROM driving_licenses WHERE status = 'rejected'
-    ) t
-")->fetchColumn();
-
-$stmtRejections = $db->prepare("
-    SELECT 'Vehicle' as type, id as target_id, CONCAT(make, ' ', model) as name, rejection_reason as reason, updated_at as date 
-    FROM vehicles WHERE status = 'rejected'
-    UNION ALL
-    SELECT 'Driver License' as type, dl.user_id as target_id, u.full_name as name, dl.rejection_reason as reason, dl.updated_at as date
-    FROM driving_licenses dl JOIN users u ON u.id = dl.user_id WHERE dl.status = 'rejected'
-    ORDER BY date DESC
-    LIMIT ? OFFSET ?
-");
-$stmtRejections->bindValue(1, $perPage, PDO::PARAM_INT);
-$stmtRejections->bindValue(2, $offsetRejections, PDO::PARAM_INT);
-$stmtRejections->execute();
-$rejections = $stmtRejections->fetchAll();
-$totalPagesRejections = ceil($totalRejections / $perPage);
+require_once __DIR__ . '/../../includes/admin/management_queries.php';
 
 
 // User initials for avatar circle
@@ -152,43 +65,9 @@ foreach ($parts as $p) {
 }
 if (!$initials) $initials = 'U';
 
-$extraCss = ['profile', 'dashboard'];
+$extraCss = ['profile', 'dashboard', 'management'];
 require_once __DIR__ . '/../../includes/partials/head.php';
 ?>
-
-<style>
-@media print {
-    body * {
-        visibility: hidden;
-    }
-    .settings-card-body, .settings-card-body * {
-        visibility: visible;
-    }
-    .settings-card-body {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-    }
-    .mgmt-tab-content[style*="display: none"] {
-        display: none !important;
-    }
-    .btn {
-        display: none !important;
-    }
-    table {
-        border-collapse: collapse;
-        width: 100%;
-    }
-    table, th, td {
-        border: 1px solid #ccc;
-    }
-    th, td {
-        padding: 8px;
-        text-align: left;
-    }
-}
-</style>
 
 <div style="background-color: #f8fafc; min-height: calc(100vh - 80px); padding-bottom: 40px;">
     <div class="profile-page-hero">
@@ -272,9 +151,27 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                         <button type="button" class="mgmt-tab-btn" data-tab="rejections" style="padding: 16px; background: none; border: none; font-size: 16px; border-bottom: 2px solid <?= $activeTab === 'rejections' ? 'var(--color-primary)' : 'transparent' ?>; color: <?= $activeTab === 'rejections' ? 'var(--color-primary)' : 'var(--color-secondary)' ?>; font-weight: <?= $activeTab === 'rejections' ? 'bold' : 'normal' ?>; cursor: pointer;">
                             Rejection Logs
                         </button>
+                        <button type="button" class="mgmt-tab-btn" data-tab="bookings" style="padding: 16px; background: none; border: none; font-size: 16px; border-bottom: 2px solid <?= $activeTab === 'bookings' ? 'var(--color-primary)' : 'transparent' ?>; color: <?= $activeTab === 'bookings' ? 'var(--color-primary)' : 'var(--color-secondary)' ?>; font-weight: <?= $activeTab === 'bookings' ? 'bold' : 'normal' ?>; cursor: pointer;">
+                            Bookings
+                        </button>
                     </div>
 
-                    <div style="padding: 16px 24px 0 24px; text-align: right;">
+                    <div style="padding: 16px 24px 0 24px; display: flex; justify-content: flex-end; align-items: center; gap: 16px;">
+                        <div id="booking-filter-container" style="display: <?= $activeTab === 'bookings' ? 'block' : 'none' ?>;">
+                            <form method="GET" action="">
+                                <input type="hidden" name="tab" value="bookings">
+                                <select name="booking_status" onchange="this.form.submit()" style="padding: 6px; border-radius: 4px; border: 1px solid var(--color-outline);">
+                                    <option value="">All Statuses</option>
+                                    <option value="pending_payment" <?= $bookingStatus === 'pending_payment' ? 'selected' : '' ?>>Pending Payment</option>
+                                    <option value="pending_verification" <?= $bookingStatus === 'pending_verification' ? 'selected' : '' ?>>Pending Verification</option>
+                                    <option value="confirmed" <?= $bookingStatus === 'confirmed' ? 'selected' : '' ?>>Confirmed</option>
+                                    <option value="active" <?= $bookingStatus === 'active' ? 'selected' : '' ?>>Active</option>
+                                    <option value="completed" <?= $bookingStatus === 'completed' ? 'selected' : '' ?>>Completed</option>
+                                    <option value="cancelled" <?= $bookingStatus === 'cancelled' ? 'selected' : '' ?>>Cancelled</option>
+                                    <option value="rejected" <?= $bookingStatus === 'rejected' ? 'selected' : '' ?>>Rejected</option>
+                                </select>
+                            </form>
+                        </div>
                         <button type="button" class="btn btn-secondary" onclick="window.print()" style="display: inline-flex; align-items: center; gap: 8px;">
                             <span class="material-symbols-outlined" style="font-size: 18px;">print</span> Print Current Tab
                         </button>
@@ -282,223 +179,15 @@ require_once __DIR__ . '/../../includes/partials/head.php';
 
                     <div class="settings-card-body" style="padding: 24px;">
                         
-                        <!-- Borrowers Tab -->
-                        <div id="tab-borrowers" class="mgmt-tab-content" style="display: <?= $activeTab === 'borrowers' ? 'block' : 'none' ?>;">
-                            <table class="table" style="width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Joined</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($borrowers as $b): ?>
-                                        <tr>
-                                            <td><?= escapeHtml($b['full_name']) ?></td>
-                                            <td><?= escapeHtml($b['email']) ?></td>
-                                            <td><?= date('M j, Y', strtotime($b['created_at'])) ?></td>
-                                            <td>
-                                                <form method="POST" action="" onsubmit="return confirm('Are you sure you want to remove this borrower?');" style="display:inline;">
-                                                    <input type="hidden" name="csrf" value="<?= csrfToken() ?>">
-                                                    <input type="hidden" name="action" value="delete_user">
-                                                    <input type="hidden" name="tab" value="borrowers">
-                                                    <input type="hidden" name="id" value="<?= $b['id'] ?>">
-                                                    <button type="submit" class="btn btn-outline btn-sm" style="color: var(--color-danger); border-color: var(--color-danger);">Remove</button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                    <?php if (empty($borrowers)): ?>
-                                        <tr><td colspan="4" style="text-align:center;">No borrowers found.</td></tr>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
-                            <?php if ($totalPagesBorrowers > 1): ?>
-                            <div style="display: flex; justify-content: center; gap: 8px; margin-top: 20px;">
-                                <?php for ($i = 1; $i <= $totalPagesBorrowers; $i++): ?>
-                                    <a href="?tab=borrowers&page_borrowers=<?= $i ?>" class="btn <?= $i === $pageBorrowers ? 'btn-primary' : 'btn-outline' ?> btn-sm"><?= $i ?></a>
-                                <?php endfor; ?>
-                            </div>
-                            <?php endif; ?>
-                        </div>
-
-                        <!-- Owners Tab -->
-                        <div id="tab-owners" class="mgmt-tab-content" style="display: <?= $activeTab === 'owners' ? 'block' : 'none' ?>;">
-                            <table class="table" style="width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Joined</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($owners as $o): ?>
-                                        <tr>
-                                            <td><?= escapeHtml($o['full_name']) ?></td>
-                                            <td><?= escapeHtml($o['email']) ?></td>
-                                            <td><?= date('M j, Y', strtotime($o['created_at'])) ?></td>
-                                            <td>
-                                                <form method="POST" action="" onsubmit="return confirm('Are you sure you want to remove this owner? Their vehicles will also be removed if constraints allow.');" style="display:inline;">
-                                                    <input type="hidden" name="csrf" value="<?= csrfToken() ?>">
-                                                    <input type="hidden" name="action" value="delete_user">
-                                                    <input type="hidden" name="tab" value="owners">
-                                                    <input type="hidden" name="id" value="<?= $o['id'] ?>">
-                                                    <button type="submit" class="btn btn-outline btn-sm" style="color: var(--color-danger); border-color: var(--color-danger);">Remove</button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                    <?php if (empty($owners)): ?>
-                                        <tr><td colspan="4" style="text-align:center;">No owners found.</td></tr>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
-                            <?php if ($totalPagesOwners > 1): ?>
-                            <div style="display: flex; justify-content: center; gap: 8px; margin-top: 20px;">
-                                <?php for ($i = 1; $i <= $totalPagesOwners; $i++): ?>
-                                    <a href="?tab=owners&page_owners=<?= $i ?>" class="btn <?= $i === $pageOwners ? 'btn-primary' : 'btn-outline' ?> btn-sm"><?= $i ?></a>
-                                <?php endfor; ?>
-                            </div>
-                            <?php endif; ?>
-                        </div>
-
-                        <!-- Drivers Tab -->
-                        <div id="tab-drivers" class="mgmt-tab-content" style="display: <?= $activeTab === 'drivers' ? 'block' : 'none' ?>;">
-                            <table class="table" style="width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Daily Fee</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($drivers as $d): ?>
-                                        <tr>
-                                            <td>
-                                                <div><?= escapeHtml($d['full_name']) ?></div>
-                                                <div style="font-size:12px; color:var(--color-secondary);"><?= escapeHtml($d['transmission_preference']) ?></div>
-                                            </td>
-                                            <td><?= escapeHtml($d['email']) ?></td>
-                                            <td>LKR <?= number_format($d['daily_fee'], 2) ?></td>
-                                            <td>
-                                                <form method="POST" action="" onsubmit="return confirm('Are you sure you want to remove this driver?');" style="display:inline;">
-                                                    <input type="hidden" name="csrf" value="<?= csrfToken() ?>">
-                                                    <input type="hidden" name="action" value="delete_user">
-                                                    <input type="hidden" name="tab" value="drivers">
-                                                    <input type="hidden" name="id" value="<?= $d['id'] ?>">
-                                                    <button type="submit" class="btn btn-outline btn-sm" style="color: var(--color-danger); border-color: var(--color-danger);">Remove</button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                    <?php if (empty($drivers)): ?>
-                                        <tr><td colspan="4" style="text-align:center;">No drivers found.</td></tr>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
-                            <?php if ($totalPagesDrivers > 1): ?>
-                            <div style="display: flex; justify-content: center; gap: 8px; margin-top: 20px;">
-                                <?php for ($i = 1; $i <= $totalPagesDrivers; $i++): ?>
-                                    <a href="?tab=drivers&page_drivers=<?= $i ?>" class="btn <?= $i === $pageDrivers ? 'btn-primary' : 'btn-outline' ?> btn-sm"><?= $i ?></a>
-                                <?php endfor; ?>
-                            </div>
-                            <?php endif; ?>
-                        </div>
-
-                        <!-- Vehicles Tab -->
-                        <div id="tab-vehicles" class="mgmt-tab-content" style="display: <?= $activeTab === 'vehicles' ? 'block' : 'none' ?>;">
-                            <table class="table" style="width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Vehicle</th>
-                                        <th>Owner</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($vehicles as $v): ?>
-                                        <tr>
-                                            <td>
-                                                <div><?= escapeHtml($v['make'] . ' ' . $v['model'] . ' (' . $v['yom'] . ')') ?></div>
-                                                <div style="font-size:12px; color:var(--color-secondary);"><?= escapeHtml($v['category']) ?></div>
-                                            </td>
-                                            <td><?= escapeHtml($v['owner_name']) ?></td>
-                                            <td>
-                                                <span class="badge" style="background: var(--color-surface-variant); color: var(--color-primary); border-radius: 4px; padding: 4px 8px; font-size: 11px;">
-                                                    <?= escapeHtml(ucfirst(str_replace('_', ' ', $v['status']))) ?>
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <form method="POST" action="" onsubmit="return confirm('Are you sure you want to remove this vehicle?');" style="display:inline;">
-                                                    <input type="hidden" name="csrf" value="<?= csrfToken() ?>">
-                                                    <input type="hidden" name="action" value="delete_vehicle">
-                                                    <input type="hidden" name="id" value="<?= $v['id'] ?>">
-                                                    <button type="submit" class="btn btn-outline btn-sm" style="color: var(--color-danger); border-color: var(--color-danger);">Remove</button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                    <?php if (empty($vehicles)): ?>
-                                        <tr><td colspan="4" style="text-align:center;">No vehicles found.</td></tr>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
-                            <?php if ($totalPagesVehicles > 1): ?>
-                            <div style="display: flex; justify-content: center; gap: 8px; margin-top: 20px;">
-                                <?php for ($i = 1; $i <= $totalPagesVehicles; $i++): ?>
-                                    <a href="?tab=vehicles&page_vehicles=<?= $i ?>" class="btn <?= $i === $pageVehicles ? 'btn-primary' : 'btn-outline' ?> btn-sm"><?= $i ?></a>
-                                <?php endfor; ?>
-                            </div>
-                            <?php endif; ?>
-                        </div>
-
-                        <!-- Rejection Logs Tab -->
-                        <div id="tab-rejections" class="mgmt-tab-content" style="display: <?= $activeTab === 'rejections' ? 'block' : 'none' ?>;">
-                            <table class="table" style="width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Type</th>
-                                        <th>Subject</th>
-                                        <th>Rejection Reason</th>
-                                        <th>Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($rejections as $r): ?>
-                                        <tr>
-                                            <td>
-                                                <span class="badge" style="background: var(--color-surface-variant); color: var(--color-primary); border-radius: 4px; padding: 4px 8px; font-size: 11px;">
-                                                    <?= escapeHtml($r['type']) ?>
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div style="font-weight: 500;"><?= escapeHtml($r['name']) ?></div>
-                                                <div style="font-size:12px; color:var(--color-secondary);">ID: <?= escapeHtml($r['target_id']) ?></div>
-                                            </td>
-                                            <td><?= nl2br(escapeHtml($r['reason'] ?: 'No reason provided')) ?></td>
-                                            <td style="color:var(--color-secondary); font-size:14px;"><?= date('M d, Y H:i', strtotime($r['date'])) ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                    <?php if (empty($rejections)): ?>
-                                        <tr><td colspan="4" style="text-align:center;">No rejection logs found.</td></tr>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
-                            <?php if ($totalPagesRejections > 1): ?>
-                            <div style="display: flex; justify-content: center; gap: 8px; margin-top: 20px;">
-                                <?php for ($i = 1; $i <= $totalPagesRejections; $i++): ?>
-                                    <a href="?tab=rejections&page_rejections=<?= $i ?>" class="btn <?= $i === $pageRejections ? 'btn-primary' : 'btn-outline' ?> btn-sm"><?= $i ?></a>
-                                <?php endfor; ?>
-                            </div>
-                            <?php endif; ?>
-                        </div>
+                        <!-- Tabs Content -->
+                        <?php 
+                        require_once __DIR__ . '/../../includes/partials/admin/tab_borrowers.php';
+                        require_once __DIR__ . '/../../includes/partials/admin/tab_owners.php';
+                        require_once __DIR__ . '/../../includes/partials/admin/tab_drivers.php';
+                        require_once __DIR__ . '/../../includes/partials/admin/tab_vehicles.php';
+                        require_once __DIR__ . '/../../includes/partials/admin/tab_rejections.php';
+                        require_once __DIR__ . '/../../includes/partials/admin/tab_bookings.php';
+                        ?>
 
                     </div> <!-- settings-card-body -->
                 </div> <!-- settings-card -->
@@ -531,6 +220,12 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                 // Show selected content
                 const tabId = btn.getAttribute('data-tab');
                 document.getElementById('tab-' + tabId).style.display = 'block';
+
+                // Toggle Filter Dropdown
+                const filterContainer = document.getElementById('booking-filter-container');
+                if (filterContainer) {
+                    filterContainer.style.display = (tabId === 'bookings') ? 'block' : 'none';
+                }
                 
                 // Update URL without refreshing (optional but nice)
                 history.replaceState(null, '', '?tab=' + tabId);
