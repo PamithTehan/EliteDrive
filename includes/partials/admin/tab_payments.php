@@ -12,7 +12,6 @@
                         <th>Date</th>
                         <th>User</th>
                         <th>Amount</th>
-                        <th>Stripe Intent ID</th>
                         <th>Status</th>
                     </tr>
                 </thead>
@@ -24,7 +23,6 @@
                             <td><?= date('M j, Y H:i', strtotime($p['created_at'])) ?></td>
                             <td><?= escapeHtml($p['user_name']) ?></td>
                             <td style="font-weight: 600; color: var(--color-primary);"><?= escapeHtml($p['currency']) ?> <?= number_format($p['amount'], 2) ?></td>
-                            <td><span style="font-family: monospace; font-size: 12px; background: #f1f5f9; padding: 2px 6px; border-radius: 4px;"><?= escapeHtml($p['stripe_payment_intent_id']) ?></span></td>
                             <td>
                                 <?php if ($p['status'] === 'succeeded'): ?>
                                     <span class="badge" style="background: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase;">Succeeded</span>
