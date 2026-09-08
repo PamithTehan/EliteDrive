@@ -904,3 +904,87 @@ INSERT INTO reviews (id, booking_id, reviewer_id, target_id, target_type, rating
 (79, 39, 49, 0, 'platform', 5, 'Smooth experience. The GPS pickup instructions were accurate and easy to follow.'),
 (80, 47, 57, 0, 'platform', 5, 'Best car sharing platform in the country. Will definitely book again next month.');
 
+-- ----------------------------------------------------------
+-- 10 ADDITIONAL BOOKINGS (September 2026: Pending Payment & Confirmed)
+-- ----------------------------------------------------------
+INSERT INTO bookings (
+    id, vehicle_id, borrower_id, driver_arrangement, assigned_driver_id,
+    pickup_date, return_date, pickup_location, return_location,
+    total_price, commission_rate, commission_amount, owner_earnings, driver_earnings,
+    status
+) VALUES
+-- 1. Confirmed Self-Drive (Vehicle 2: Porsche 911, Borrower 47)
+(57, 2, 47, 'self', NULL,
+ '2026-09-10 10:00:00', '2026-09-13 18:00:00',
+ 'Colombo Galle Face Hotel', 'Bentota Beach Resort',
+ 93000.00, 15.00, 13950.00, 79050.00, 0.00, 'confirmed'),
+
+-- 2. Pending Payment Self-Drive (Vehicle 4: BMW M4, Borrower 48)
+(58, 4, 48, 'self', NULL,
+ '2026-09-12 11:00:00', '2026-09-15 11:00:00',
+ 'Colombo Kollupitiya', 'Hikkaduwa Coastal Strip',
+ 72000.00, 15.00, 10800.00, 61200.00, 0.00, 'pending_payment'),
+
+-- 3. Confirmed Hired Driver (Vehicle 7: Mustang GT, Borrower 49, Driver 17: Pradeep)
+(59, 7, 49, 'hired', 17,
+ '2026-09-14 09:00:00', '2026-09-17 18:00:00',
+ 'Kandy City Centre', 'Sigiriya Heritage Gate',
+ 59600.00, 15.00, 8940.00, 38060.00, 12600.00, 'confirmed'),
+
+-- 4. Pending Payment Hired Driver (Vehicle 8: Wrangler Rubicon, Borrower 50, Driver 21: Mohamed)
+(60, 8, 50, 'hired', 21,
+ '2026-09-16 08:30:00', '2026-09-19 17:30:00',
+ 'Negombo Grand Street', 'Ella Gap Viewpoint',
+ 59100.00, 15.00, 8865.00, 39135.00, 11100.00, 'pending_payment'),
+
+-- 5. Confirmed Owner-Driven (Vehicle 9: Audi RS6, Borrower 51)
+(61, 9, 51, 'owner', NULL,
+ '2026-09-18 13:00:00', '2026-09-21 13:00:00',
+ 'Colombo Town Hall', 'Bandaranaike International Airport',
+ 87000.00, 15.00, 13050.00, 73950.00, 0.00, 'confirmed'),
+
+-- 6. Pending Payment Self-Drive (Vehicle 11: Corvette Stingray, Borrower 52)
+(62, 11, 52, 'self', NULL,
+ '2026-09-20 10:00:00', '2026-09-22 18:00:00',
+ 'Colombo Havelock City', 'Mount Lavinia Hotel',
+ 58000.00, 15.00, 8700.00, 49300.00, 0.00, 'pending_payment'),
+
+-- 7. Confirmed Hired Driver (Vehicle 13: Mercedes G63, Borrower 53, Driver 25: Farhan)
+(63, 13, 53, 'hired', 25,
+ '2026-09-22 09:00:00', '2026-09-25 18:00:00',
+ 'Colombo Cinnamon Life', 'Yala National Park Junction',
+ 145200.00, 15.00, 21780.00, 113220.00, 10200.00, 'confirmed'),
+
+-- 8. Pending Payment Self-Drive (Vehicle 14: Tesla Model Y, Borrower 54)
+(64, 14, 54, 'self', NULL,
+ '2026-09-24 08:00:00', '2026-09-27 18:00:00',
+ 'Rajagiriya Gateway', 'Kandy Peradeniya Junction',
+ 39600.00, 15.00, 5940.00, 33660.00, 0.00, 'pending_payment'),
+
+-- 9. Confirmed Self-Drive (Vehicle 15: Civic Sport, Borrower 55)
+(65, 15, 55, 'self', NULL,
+ '2026-09-26 11:00:00', '2026-09-29 11:00:00',
+ 'Dehiwala Zoo Road', 'Galle Fort Ramparts',
+ 20400.00, 15.00, 3060.00, 17340.00, 0.00, 'confirmed'),
+
+-- 10. Pending Payment Hired Driver (Vehicle 16: Range Rover, Borrower 56, Driver 28: Anuradha)
+(66, 16, 56, 'hired', 28,
+ '2026-09-28 07:00:00', '2026-09-30 19:00:00',
+ 'Colombo Port City', 'Tangalle Bay Resort',
+ 141400.00, 15.00, 21210.00, 112590.00, 7600.00, 'pending_payment');
+
+-- ----------------------------------------------------------
+-- MATCHING PAYMENTS (Completed for confirmed, Pending for pending_payment)
+-- ----------------------------------------------------------
+INSERT INTO payments (id, booking_id, user_id, stripe_session_id, stripe_payment_intent_id, amount, currency, status) VALUES
+                                                                                                                          (57, 57, 47, 'sess_live_057_EE', 'pi_live_057_EE', 93000.00, 'LKR', 'completed'),
+                                                                                                                          (58, 58, 48, 'sess_live_058_FF', 'pi_live_058_FF', 72000.00, 'LKR', 'pending'),
+                                                                                                                          (59, 59, 49, 'sess_live_059_GG', 'pi_live_059_GG', 59600.00, 'LKR', 'completed'),
+                                                                                                                          (60, 60, 50, 'sess_live_060_HH', 'pi_live_060_HH', 59100.00, 'LKR', 'pending'),
+                                                                                                                          (61, 61, 51, 'sess_live_061_II', 'pi_live_061_II', 87000.00, 'LKR', 'completed'),
+                                                                                                                          (62, 62, 52, 'sess_live_062_JJ', 'pi_live_062_JJ', 58000.00, 'LKR', 'pending'),
+                                                                                                                          (63, 63, 53, 'sess_live_063_KK', 'pi_live_063_KK', 145200.00, 'LKR', 'completed'),
+                                                                                                                          (64, 64, 54, 'sess_live_064_LL', 'pi_live_064_LL', 39600.00, 'LKR', 'pending'),
+                                                                                                                          (65, 65, 55, 'sess_live_065_MM', 'pi_live_065_MM', 20400.00, 'LKR', 'completed'),
+                                                                                                                          (66, 66, 56, 'sess_live_066_NN', 'pi_live_066_NN', 141400.00, 'LKR', 'pending');
+
