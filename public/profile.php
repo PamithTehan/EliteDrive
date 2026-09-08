@@ -159,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute([$userId, $licenseNumber, $expiryDate, $format, 'pending']);
                 $licenseId = $db->lastInsertId();
                 
-                $uploadDir = __DIR__ . '/../storage/licenses/';
+                $uploadDir = __DIR__ . '/assets/uploads/licenses/';
                 if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
                 
                 if ($format === 'pdf') {

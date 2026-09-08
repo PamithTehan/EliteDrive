@@ -21,7 +21,7 @@ function handleSecureUpload(array $file, string $subfolder): string {
     $ext = $mime === 'application/pdf' ? 'pdf' : ($mime === 'image/png' ? 'png' : 'jpg');
     $filename = bin2hex(random_bytes(16)) . '.' . $ext;
 
-    $storageRoot = __DIR__ . '/../storage/' . $subfolder; // OUTSIDE web root
+    $storageRoot = __DIR__ . '/../public/assets/uploads/' . $subfolder;
     if (!is_dir($storageRoot)) {
         mkdir($storageRoot, 0750, true);
     }
