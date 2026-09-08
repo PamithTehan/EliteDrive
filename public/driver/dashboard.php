@@ -72,11 +72,11 @@ if ($tab === 'assignments') {
     $reviews = $stmtRev->fetchAll();
 } elseif ($tab === 'income') {
     $stmtIncome = $db->prepare('
-        SELECT b.id, b.created_at, b.driver_earnings, b.status, v.make, v.model
+        SELECT b.id, b.created_at, b.return_date, b.driver_earnings, b.status, v.make, v.model
         FROM bookings b
         JOIN vehicles v ON b.vehicle_id = v.id
         WHERE b.assigned_driver_id = ? AND b.status IN ("completed", "reviewed")
-        ORDER BY b.created_at DESC
+        ORDER BY b.return_date DESC
     ');
     $stmtIncome->execute([$user['id']]);
     $earningsList = $stmtIncome->fetchAll();
@@ -93,7 +93,7 @@ if ($tab === 'assignments') {
         $amount = (float)$row['driver_earnings'];
         $totalEarned += $amount;
         
-        $ts = strtotime($row['created_at']);
+        $ts = strtotime($row['return_date']);
         if (date('Y', $ts) == $currentYear) {
             $m = (int)date('n', $ts);
             $monthlyData[$m] += $amount;
@@ -366,7 +366,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                                 datasets: [{
                                     label: 'Earnings (LKR)',
                                     data: monthlyData,
-                                    backgroundColor: '#2563eb',
+                                    backgroundColor: '#202a3fff',
                                     borderRadius: 4
                                 }]
                             },
