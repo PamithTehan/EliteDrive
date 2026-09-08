@@ -1,6 +1,6 @@
 -- ==========================================================
--- test_data.sql
--- EliteDrive Database Seed Data (50+ records per table)
+-- test_seed.sql
+-- EliteDrive Master Seed Dataset
 -- ==========================================================
 
 USE elitedrive;
@@ -24,73 +24,71 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 -- ----------------------------------------------------------
 -- 1. USERS (60 Records)
--- ----------------------------------------------------------
--- ----------------------------------------------------------
--- 1. USERS (60 Records - Sri Lankan Names)
+-- All users share the default password: Password123!
 -- ----------------------------------------------------------
 INSERT INTO users (id, full_name, email, password_hash, contact_number, is_admin, is_owner, is_borrower, is_driver, created_at) VALUES
-                                                                                                                                    (1, 'Kasun Sandaruwan', 'kasun.sandaruwan@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-77-1234501', 1, 0, 0, 0, '2024-01-01 08:00:00'),
-                                                                                                                                    (2, 'Dilhani Jayasinghe', 'dilhani.jayasinghe@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-71-2345602', 1, 0, 0, 0, '2024-01-02 08:30:00'),
-                                                                                                                                    (3, 'Chaminda Bandara', 'chaminda.bandara@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-76-3456703', 0, 1, 0, 0, '2024-01-03 09:00:00'),
-                                                                                                                                    (4, 'Nirosha Perera', 'nirosha.perera@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-77-4567804', 0, 1, 0, 0, '2024-01-04 09:30:00'),
-                                                                                                                                    (5, 'Roshan Silva', 'roshan.silva@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-70-5678905', 0, 1, 0, 0, '2024-01-05 10:00:00'),
-                                                                                                                                    (6, 'Tharushi Fernando', 'tharushi.fernando@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-78-6789006', 0, 1, 0, 0, '2024-01-06 10:30:00'),
-                                                                                                                                    (7, 'Lakshan Rathnayake', 'lakshan.r@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-72-7890107', 0, 1, 0, 0, '2024-01-07 11:00:00'),
-                                                                                                                                    (8, 'Sanduni Wickramasinghe', 'sanduni.w@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-75-8901208', 0, 1, 0, 0, '2024-01-08 11:30:00'),
-                                                                                                                                    (9, 'Dinesh Rajapaksha', 'dinesh.rajapaksha@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-77-9012309', 0, 1, 0, 0, '2024-01-09 12:00:00'),
-                                                                                                                                    (10, 'Ishani Senanayake', 'ishani.s@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-71-0123410', 0, 1, 0, 0, '2024-01-10 12:30:00'),
-                                                                                                                                    (11, 'Kavinda Alwis', 'kavinda.alwis@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-76-1122311', 0, 0, 0, 1, '2024-01-11 13:00:00'),
-                                                                                                                                    (12, 'Pabasarani Mendis', 'pabasarani.m@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-77-2233412', 0, 0, 0, 1, '2024-01-12 13:30:00'),
-                                                                                                                                    (13, 'Sanjeewa Gunasekara', 'sanjeewa.g@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-70-3344513', 0, 0, 0, 1, '2024-01-13 14:00:00'),
-                                                                                                                                    (14, 'Oshadhi Jayawardena', 'oshadhi.j@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-78-4455614', 0, 0, 0, 1, '2024-01-14 14:30:00'),
-                                                                                                                                    (15, 'Asela Karunaratne', 'asela.k@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-72-5566715', 0, 0, 0, 1, '2024-01-15 15:00:00'),
-                                                                                                                                    (16, 'Ruwanthi Dissanayake', 'ruwanthi.d@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-75-6677816', 0, 0, 0, 1, '2024-01-16 15:30:00'),
-                                                                                                                                    (17, 'Pradeep Kumara', 'pradeep.kumara@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-77-7788917', 0, 0, 0, 1, '2024-01-17 16:00:00'),
-                                                                                                                                    (18, 'Menaka Herath', 'menaka.herath@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-71-8899018', 0, 0, 0, 1, '2024-01-18 16:30:00'),
-                                                                                                                                    (19, 'Bhanuka Rajapaksha', 'bhanuka.r@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-76-9900119', 0, 0, 0, 1, '2024-01-19 17:00:00'),
-                                                                                                                                    (20, 'Nethmi Warnakulasuriya', 'nethmi.w@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-77-0011220', 0, 0, 0, 1, '2024-01-20 17:30:00'),
-                                                                                                                                    (21, 'Mohamed Rizwan', 'mohamed.rizwan@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-70-1133421', 0, 0, 0, 1, '2024-01-21 18:00:00'),
-                                                                                                                                    (22, 'Hansani Ekanayake', 'hansani.e@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-78-2244522', 0, 0, 0, 1, '2024-01-22 18:30:00'),
-                                                                                                                                    (23, 'Suresh Thilakarathne', 'suresh.t@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-72-3355623', 0, 0, 0, 1, '2024-01-23 19:00:00'),
-                                                                                                                                    (24, 'Chathurika Madushani', 'chathurika.m@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-75-4466724', 0, 0, 0, 1, '2024-01-24 19:30:00'),
-                                                                                                                                    (25, 'Farhan Naushad', 'farhan.naushad@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-77-5577825', 0, 0, 0, 1, '2024-01-25 20:00:00'),
-                                                                                                                                    (26, 'Gayathri Seneviratne', 'gayathri.s@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-71-6688926', 0, 0, 0, 1, '2024-01-26 20:30:00'),
-                                                                                                                                    (27, 'Nuwan Gamage', 'nuwan.gamage@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-76-7799027', 0, 0, 0, 1, '2024-01-27 21:00:00'),
-                                                                                                                                    (28, 'Anuradha Wijesinghe', 'anuradha.w@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-77-8800128', 0, 0, 0, 1, '2024-01-28 21:30:00'),
-                                                                                                                                    (29, 'Gayantha Samarasekara', 'gayantha.s@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-70-9911229', 0, 0, 0, 1, '2024-01-29 22:00:00'),
-                                                                                                                                    (30, 'Sewwandi Kulatunga', 'sewwandi.k@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-78-0022330', 0, 0, 0, 1, '2024-01-30 22:30:00'),
-                                                                                                                                    (31, 'Isuru Dayananda', 'isuru.d@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-72-1133531', 0, 0, 0, 1, '2024-01-31 08:00:00'),
-                                                                                                                                    (32, 'Kaveesha Abeyratne', 'kaveesha.a@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-75-2244632', 0, 0, 0, 1, '2024-02-01 08:30:00'),
-                                                                                                                                    (33, 'Supun Kaluarachchi', 'supun.k@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-77-3355733', 0, 0, 0, 1, '2024-02-02 09:00:00'),
-                                                                                                                                    (34, 'Devindi Liyanage', 'devindi.l@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-71-4466834', 0, 0, 0, 1, '2024-02-03 09:30:00'),
-                                                                                                                                    (35, 'Thilina Jayakody', 'thilina.j@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-76-5577935', 0, 0, 0, 1, '2024-02-04 10:00:00'),
-                                                                                                                                    (36, 'Nadeesha Maduwanthi', 'nadeesha.m@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-77-6688036', 0, 0, 0, 1, '2024-02-05 10:30:00'),
-                                                                                                                                    (37, 'Malith Lokuge', 'malith.l@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-70-7799137', 0, 0, 0, 1, '2024-02-06 11:00:00'),
-                                                                                                                                    (38, 'Sachini Fonseka', 'sachini.f@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-78-8800238', 0, 0, 0, 1, '2024-02-07 11:30:00'),
-                                                                                                                                    (39, 'Janaka Pathirana', 'janaka.p@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-72-9911339', 0, 0, 0, 1, '2024-02-08 12:00:00'),
-                                                                                                                                    (40, 'Kavindya Subasinghe', 'kavindya.s@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-75-0022440', 0, 0, 0, 1, '2024-02-09 12:30:00'),
-                                                                                                                                    (41, 'Santhush Weerasinghe', 'santhush.w@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-77-1133541', 0, 0, 1, 0, '2024-02-10 13:00:00'),
-                                                                                                                                    (42, 'Karthik Sivakumar', 'karthik.s@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-71-2244642', 0, 0, 1, 0, '2024-02-11 13:30:00'),
-                                                                                                                                    (43, 'Fathima Zeenath', 'fathima.z@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-76-3355743', 0, 0, 1, 0, '2024-02-12 14:00:00'),
-                                                                                                                                    (44, 'Ravindu Cooray', 'ravindu.cooray@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-77-4466844', 0, 0, 1, 0, '2024-02-13 14:30:00'),
-                                                                                                                                    (45, 'Hiruni Edirisinghe', 'hiruni.e@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-70-5577945', 0, 0, 1, 0, '2024-02-14 15:00:00'),
-                                                                                                                                    (46, 'Lahiru Thirimanne', 'lahiru.t@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-78-6688046', 0, 0, 1, 0, '2024-02-15 15:30:00'),
-                                                                                                                                    (47, 'Thilini Priyadarshani', 'thilini.p@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-72-7799147', 0, 0, 1, 0, '2024-02-16 16:00:00'),
-                                                                                                                                    (48, 'Kasun Kalhara', 'kasun.kalhara@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-75-8800248', 0, 0, 1, 0, '2024-02-17 16:30:00'),
-                                                                                                                                    (49, 'Bhagya Gunathilaka', 'bhagya.g@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-77-9911349', 0, 0, 1, 0, '2024-02-18 17:00:00'),
-                                                                                                                                    (50, 'Shehan Dananjaya', 'shehan.d@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-71-0022450', 0, 0, 1, 0, '2024-02-19 17:30:00'),
-                                                                                                                                    (51, 'Aamina Hameed', 'aamina.h@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-76-1144551', 0, 0, 1, 0, '2024-02-20 18:00:00'),
-                                                                                                                                    (52, 'Danushka Samarawickrama', 'danushka.s@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-77-2255652', 0, 0, 1, 0, '2024-02-21 18:30:00'),
-                                                                                                                                    (53, 'Methmi Jayasundara', 'methmi.j@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-70-3366753', 0, 0, 1, 0, '2024-02-22 19:00:00'),
-                                                                                                                                    (54, 'Harsha Bogollagama', 'harsha.b@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-78-4477854', 0, 0, 1, 0, '2024-02-23 19:30:00'),
-                                                                                                                                    (55, 'Shalani Tharaka', 'shalani.t@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-72-5588955', 0, 0, 1, 0, '2024-02-24 20:00:00'),
-                                                                                                                                    (56, 'Chathura Randika', 'chathura.r@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-75-6699056', 0, 0, 1, 0, '2024-02-25 20:30:00'),
-                                                                                                                                    (57, 'Dinithi Abeysekara', 'dinithi.a@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-77-7700157', 0, 0, 1, 0, '2024-02-26 21:00:00'),
-                                                                                                                                    (58, 'Praveen Jayawardena', 'praveen.j@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-71-8811258', 0, 0, 1, 0, '2024-02-27 21:30:00'),
-                                                                                                                                    (59, 'Senuri Wijeratne', 'senuri.w@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-76-9922359', 0, 0, 1, 0, '2024-02-28 22:00:00'),
-                                                                                                                                    (60, 'Sanjeeva Pushpakumara', 'sanjeeva.p@example.com', '$2y$10$w6qGeqx0ySqvXl83UkeBpu0aR9L6lV0qM5Xy2j7Q7O0O3iUu9wK9K', '+94-77-0033460', 0, 0, 1, 0, '2024-02-29 22:30:00');
+                                                                                                                                    (1, 'Kasun Sandaruwan', 'kasun.sandaruwan@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-77-1234501', 1, 0, 0, 0, '2024-01-01 08:00:00'),
+                                                                                                                                    (2, 'Dilhani Jayasinghe', 'dilhani.jayasinghe@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-71-2345602', 1, 0, 0, 0, '2024-01-02 08:30:00'),
+                                                                                                                                    (3, 'Chaminda Bandara', 'chaminda.bandara@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-76-3456703', 0, 1, 0, 0, '2024-01-03 09:00:00'),
+                                                                                                                                    (4, 'Nirosha Perera', 'nirosha.perera@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-77-4567804', 0, 1, 0, 0, '2024-01-04 09:30:00'),
+                                                                                                                                    (5, 'Roshan Silva', 'roshan.silva@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-70-5678905', 0, 1, 0, 0, '2024-01-05 10:00:00'),
+                                                                                                                                    (6, 'Tharushi Fernando', 'tharushi.fernando@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-78-6789006', 0, 1, 0, 0, '2024-01-06 10:30:00'),
+                                                                                                                                    (7, 'Lakshan Rathnayake', 'lakshan.r@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-72-7890107', 0, 1, 0, 0, '2024-01-07 11:00:00'),
+                                                                                                                                    (8, 'Sanduni Wickramasinghe', 'sanduni.w@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-75-8901208', 0, 1, 0, 0, '2024-01-08 11:30:00'),
+                                                                                                                                    (9, 'Dinesh Rajapaksha', 'dinesh.rajapaksha@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-77-9012309', 0, 1, 0, 0, '2024-01-09 12:00:00'),
+                                                                                                                                    (10, 'Ishani Senanayake', 'ishani.s@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-71-0123410', 0, 1, 0, 0, '2024-01-10 12:30:00'),
+                                                                                                                                    (11, 'Kavinda Alwis', 'kavinda.alwis@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-76-1122311', 0, 0, 0, 1, '2024-01-11 13:00:00'),
+                                                                                                                                    (12, 'Pabasarani Mendis', 'pabasarani.m@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-77-2233412', 0, 0, 0, 1, '2024-01-12 13:30:00'),
+                                                                                                                                    (13, 'Sanjeewa Gunasekara', 'sanjeewa.g@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-70-3344513', 0, 0, 0, 1, '2024-01-13 14:00:00'),
+                                                                                                                                    (14, 'Oshadhi Jayawardena', 'oshadhi.j@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-78-4455614', 0, 0, 0, 1, '2024-01-14 14:30:00'),
+                                                                                                                                    (15, 'Asela Karunaratne', 'asela.k@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-72-5566715', 0, 0, 0, 1, '2024-01-15 15:00:00'),
+                                                                                                                                    (16, 'Ruwanthi Dissanayake', 'ruwanthi.d@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-75-6677816', 0, 0, 0, 1, '2024-01-16 15:30:00'),
+                                                                                                                                    (17, 'Pradeep Kumara', 'pradeep.kumara@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-77-7788917', 0, 0, 0, 1, '2024-01-17 16:00:00'),
+                                                                                                                                    (18, 'Menaka Herath', 'menaka.herath@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-71-8899018', 0, 0, 0, 1, '2024-01-18 16:30:00'),
+                                                                                                                                    (19, 'Bhanuka Rajapaksha', 'bhanuka.r@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-76-9900119', 0, 0, 0, 1, '2024-01-19 17:00:00'),
+                                                                                                                                    (20, 'Nethmi Warnakulasuriya', 'nethmi.w@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-77-0011220', 0, 0, 0, 1, '2024-01-20 17:30:00'),
+                                                                                                                                    (21, 'Mohamed Rizwan', 'mohamed.rizwan@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-70-1133421', 0, 0, 0, 1, '2024-01-21 18:00:00'),
+                                                                                                                                    (22, 'Hansani Ekanayake', 'hansani.e@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-78-2244522', 0, 0, 0, 1, '2024-01-22 18:30:00'),
+                                                                                                                                    (23, 'Suresh Thilakarathne', 'suresh.t@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-72-3355623', 0, 0, 0, 1, '2024-01-23 19:00:00'),
+                                                                                                                                    (24, 'Chathurika Madushani', 'chathurika.m@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-75-4466724', 0, 0, 0, 1, '2024-01-24 19:30:00'),
+                                                                                                                                    (25, 'Farhan Naushad', 'farhan.naushad@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-77-5577825', 0, 0, 0, 1, '2024-01-25 20:00:00'),
+                                                                                                                                    (26, 'Gayathri Seneviratne', 'gayathri.s@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-71-6688926', 0, 0, 0, 1, '2024-01-26 20:30:00'),
+                                                                                                                                    (27, 'Nuwan Gamage', 'nuwan.gamage@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-76-7799027', 0, 0, 0, 1, '2024-01-27 21:00:00'),
+                                                                                                                                    (28, 'Anuradha Wijesinghe', 'anuradha.w@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-77-8800128', 0, 0, 0, 1, '2024-01-28 21:30:00'),
+                                                                                                                                    (29, 'Gayantha Samarasekara', 'gayantha.s@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-70-9911229', 0, 0, 0, 1, '2024-01-29 22:00:00'),
+                                                                                                                                    (30, 'Sewwandi Kulatunga', 'sewwandi.k@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-78-0022330', 0, 0, 0, 1, '2024-01-30 22:30:00'),
+                                                                                                                                    (31, 'Isuru Dayananda', 'isuru.d@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-72-1133531', 0, 0, 0, 1, '2024-01-31 08:00:00'),
+                                                                                                                                    (32, 'Kaveesha Abeyratne', 'kaveesha.a@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-75-2244632', 0, 0, 0, 1, '2024-02-01 08:30:00'),
+                                                                                                                                    (33, 'Supun Kaluarachchi', 'supun.k@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-77-3355733', 0, 0, 0, 1, '2024-02-02 09:00:00'),
+                                                                                                                                    (34, 'Devindi Liyanage', 'devindi.l@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-71-4466834', 0, 0, 0, 1, '2024-02-03 09:30:00'),
+                                                                                                                                    (35, 'Thilina Jayakody', 'thilina.j@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-76-5577935', 0, 0, 0, 1, '2024-02-04 10:00:00'),
+                                                                                                                                    (36, 'Nadeesha Maduwanthi', 'nadeesha.m@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-77-6688036', 0, 0, 0, 1, '2024-02-05 10:30:00'),
+                                                                                                                                    (37, 'Malith Lokuge', 'malith.l@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-70-7799137', 0, 0, 0, 1, '2024-02-06 11:00:00'),
+                                                                                                                                    (38, 'Sachini Fonseka', 'sachini.f@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-78-8800238', 0, 0, 0, 1, '2024-02-07 11:30:00'),
+                                                                                                                                    (39, 'Janaka Pathirana', 'janaka.p@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-72-9911339', 0, 0, 0, 1, '2024-02-08 12:00:00'),
+                                                                                                                                    (40, 'Kavindya Subasinghe', 'kavindya.s@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-75-0022440', 0, 0, 0, 1, '2024-02-09 12:30:00'),
+                                                                                                                                    (41, 'Santhush Weerasinghe', 'santhush.w@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-77-1133541', 0, 0, 1, 0, '2024-02-10 13:00:00'),
+                                                                                                                                    (42, 'Karthik Sivakumar', 'karthik.s@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-71-2244642', 0, 0, 1, 0, '2024-02-11 13:30:00'),
+                                                                                                                                    (43, 'Fathima Zeenath', 'fathima.z@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-76-3355743', 0, 0, 1, 0, '2024-02-12 14:00:00'),
+                                                                                                                                    (44, 'Ravindu Cooray', 'ravindu.cooray@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-77-4466844', 0, 0, 1, 0, '2024-02-13 14:30:00'),
+                                                                                                                                    (45, 'Hiruni Edirisinghe', 'hiruni.e@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-70-5577945', 0, 0, 1, 0, '2024-02-14 15:00:00'),
+                                                                                                                                    (46, 'Lahiru Thirimanne', 'lahiru.t@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-78-6688046', 0, 0, 1, 0, '2024-02-15 15:30:00'),
+                                                                                                                                    (47, 'Thilini Priyadarshani', 'thilini.p@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-72-7799147', 0, 0, 1, 0, '2024-02-16 16:00:00'),
+                                                                                                                                    (48, 'Kasun Kalhara', 'kasun.kalhara@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-75-8800248', 0, 0, 1, 0, '2024-02-17 16:30:00'),
+                                                                                                                                    (49, 'Bhagya Gunathilaka', 'bhagya.g@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-77-9911349', 0, 0, 1, 0, '2024-02-18 17:00:00'),
+                                                                                                                                    (50, 'Shehan Dananjaya', 'shehan.d@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-71-0022450', 0, 0, 1, 0, '2024-02-19 17:30:00'),
+                                                                                                                                    (51, 'Aamina Hameed', 'aamina.h@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-76-1144551', 0, 0, 1, 0, '2024-02-20 18:00:00'),
+                                                                                                                                    (52, 'Danushka Samarawickrama', 'danushka.s@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-77-2255652', 0, 0, 1, 0, '2024-02-21 18:30:00'),
+                                                                                                                                    (53, 'Methmi Jayasundara', 'methmi.j@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-70-3366753', 0, 0, 1, 0, '2024-02-22 19:00:00'),
+                                                                                                                                    (54, 'Harsha Bogollagama', 'harsha.b@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-78-4477854', 0, 0, 1, 0, '2024-02-23 19:30:00'),
+                                                                                                                                    (55, 'Shalani Tharaka', 'shalani.t@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-72-5588955', 0, 0, 1, 0, '2024-02-24 20:00:00'),
+                                                                                                                                    (56, 'Chathura Randika', 'chathura.r@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-75-6699056', 0, 0, 1, 0, '2024-02-25 20:30:00'),
+                                                                                                                                    (57, 'Dinithi Abeysekara', 'dinithi.a@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-77-7700157', 0, 0, 1, 0, '2024-02-26 21:00:00'),
+                                                                                                                                    (58, 'Praveen Jayawardena', 'praveen.j@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-71-8811258', 0, 0, 1, 0, '2024-02-27 21:30:00'),
+                                                                                                                                    (59, 'Senuri Wijeratne', 'senuri.w@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-76-9922359', 0, 0, 1, 0, '2024-02-28 22:00:00'),
+                                                                                                                                    (60, 'Sanjeeva Pushpakumara', 'sanjeeva.p@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-77-0033460', 0, 0, 1, 0, '2024-02-29 22:30:00');
 -- ----------------------------------------------------------
--- 2. DRIVERS (50 Records: user_id 11 to 60)
+-- 2. DRIVERS (30 Records: Users 11 to 40)
 -- ----------------------------------------------------------
 INSERT INTO drivers (user_id, daily_fee, transmission_preference, driving_preference) VALUES
                                                                                           (11, 4000.00, 'Both', 'any_vehicle'),
@@ -125,7 +123,7 @@ INSERT INTO drivers (user_id, daily_fee, transmission_preference, driving_prefer
                                                                                           (40, 4100.00, 'Auto', 'any_vehicle');
 
 -- ----------------------------------------------------------
--- 3. DRIVING LICENSES (50 Records)
+-- 3. DRIVING LICENSES (30 Records)
 -- ----------------------------------------------------------
 INSERT INTO driving_licenses (id, user_id, license_number, expiry_date, upload_format, status, reviewed_by, reviewed_at, rejection_reason) VALUES
                                                                                                                                                (1, 11, 'DL-NY-10001', '2028-05-15', 'pdf', 'verified', 1, '2024-01-12 10:00:00', NULL),
@@ -149,79 +147,79 @@ INSERT INTO driving_licenses (id, user_id, license_number, expiry_date, upload_f
                                                                                                                                                (19, 29, 'DL-MD-10019', '2028-10-01', 'pdf', 'verified', 2, '2024-01-30 10:00:00', NULL),
                                                                                                                                                (20, 30, 'DL-WI-10020', '2026-08-16', 'image', 'verified', 2, '2024-01-31 10:00:00', NULL),
                                                                                                                                                (21, 31, 'DL-CO-10021', '2028-12-09', 'pdf', 'verified', 1, '2024-02-01 10:00:00', NULL),
-                                                                                                                                               (22, 32, 'DL-MN-10022', '2027-04-19', 'image', 'verified', 1, '2024-02-02 10:00:00', NULL),
+                                                                                                                                               (22, 32, 'DL-MN-10022', '2027-04-19', 'image', 'pending', 1, '2024-02-02 10:00:00', NULL),
                                                                                                                                                (23, 33, 'DL-SC-10023', '2029-07-27', 'pdf', 'verified', 2, '2024-02-03 10:00:00', NULL),
-                                                                                                                                               (24, 34, 'DL-AL-10024', '2026-06-30', 'image', 'verified', 2, '2024-02-04 10:00:00', NULL),
+                                                                                                                                               (24, 34, 'DL-AL-10024', '2026-06-30', 'image', 'pending', 2, '2024-02-04 10:00:00', NULL),
                                                                                                                                                (25, 35, 'DL-LA-10025', '2028-11-21', 'pdf', 'verified', 1, '2024-02-05 10:00:00', NULL),
                                                                                                                                                (26, 36, 'DL-KY-10026', '2027-02-14', 'image', 'verified', 1, '2024-02-06 10:00:00', NULL),
-                                                                                                                                               (27, 37, 'DL-OR-10027', '2029-09-08', 'pdf', 'verified', 2, '2024-02-07 10:00:00', NULL),
+                                                                                                                                               (27, 37, 'DL-OR-10027', '2029-09-08', 'pdf', 'pending', 2, '2024-02-07 10:00:00', NULL),
                                                                                                                                                (28, 38, 'DL-OK-10028', '2026-07-04', 'image', 'verified', 2, '2024-02-08 10:00:00', NULL),
-                                                                                                                                               (29, 39, 'DL-CT-10029', '2028-03-25', 'pdf', 'verified', 1, '2024-02-09 10:00:00', NULL),
+                                                                                                                                               (29, 39, 'DL-CT-10029', '2028-03-25', 'pdf', 'pending', 1, '2024-02-09 10:00:00', NULL),
                                                                                                                                                (30, 40, 'DL-UT-10030', '2027-10-18', 'image', 'verified', 1, '2024-02-10 10:00:00', NULL);
 
 -- ----------------------------------------------------------
--- 4. DRIVING LICENSE PDFS (50 Records)
+-- 4. DRIVING LICENSE PDFS (30 Records)
 -- ----------------------------------------------------------
 INSERT INTO driving_license_pdfs (id, license_id, file_path) VALUES
-                                                                 (1, 1, '/uploads/licenses/pdf/doc_lic_01.pdf'),
-                                                                 (2, 3, '/uploads/licenses/pdf/doc_lic_03.pdf'),
-                                                                 (3, 5, '/uploads/licenses/pdf/doc_lic_05.pdf'),
-                                                                 (4, 7, '/uploads/licenses/pdf/doc_lic_07.pdf'),
-                                                                 (5, 9, '/uploads/licenses/pdf/doc_lic_09.pdf'),
-                                                                 (6, 11, '/uploads/licenses/pdf/doc_lic_11.pdf'),
-                                                                 (7, 13, '/uploads/licenses/pdf/doc_lic_13.pdf'),
-                                                                 (8, 15, '/uploads/licenses/pdf/doc_lic_15.pdf'),
-                                                                 (9, 17, '/uploads/licenses/pdf/doc_lic_17.pdf'),
-                                                                 (10, 19, '/uploads/licenses/pdf/doc_lic_19.pdf'),
-                                                                 (11, 21, '/uploads/licenses/pdf/doc_lic_21.pdf'),
-                                                                 (12, 23, '/uploads/licenses/pdf/doc_lic_23.pdf'),
-                                                                 (13, 25, '/uploads/licenses/pdf/doc_lic_25.pdf'),
-                                                                 (14, 27, '/uploads/licenses/pdf/doc_lic_27.pdf'),
-                                                                 (15, 29, '/uploads/licenses/pdf/doc_lic_29.pdf'),
-                                                                 (26, 1, '/uploads/licenses/pdf/doc_lic_01_renewal.pdf'),
-                                                                 (27, 3, '/uploads/licenses/pdf/doc_lic_03_renewal.pdf'),
-                                                                 (28, 5, '/uploads/licenses/pdf/doc_lic_05_renewal.pdf'),
-                                                                 (29, 7, '/uploads/licenses/pdf/doc_lic_07_renewal.pdf'),
-                                                                 (30, 9, '/uploads/licenses/pdf/doc_lic_09_renewal.pdf'),
-                                                                 (31, 11, '/uploads/licenses/pdf/doc_lic_11_renewal.pdf'),
-                                                                 (32, 13, '/uploads/licenses/pdf/doc_lic_13_renewal.pdf'),
-                                                                 (33, 15, '/uploads/licenses/pdf/doc_lic_15_renewal.pdf'),
-                                                                 (34, 17, '/uploads/licenses/pdf/doc_lic_17_renewal.pdf'),
-                                                                 (35, 19, '/uploads/licenses/pdf/doc_lic_19_renewal.pdf'),
-                                                                 (36, 21, '/uploads/licenses/pdf/doc_lic_21_renewal.pdf'),
-                                                                 (37, 23, '/uploads/licenses/pdf/doc_lic_23_renewal.pdf'),
-                                                                 (38, 25, '/uploads/licenses/pdf/doc_lic_25_renewal.pdf'),
-                                                                 (39, 27, '/uploads/licenses/pdf/doc_lic_27_renewal.pdf'),
-                                                                 (40, 29, '/uploads/licenses/pdf/doc_lic_29_renewal.pdf');
+                                                                 (1, 1, 'assets/uploads/licenses/license.pdf'),
+                                                                 (2, 3, 'assets/uploads/licenses/license.pdf'),
+                                                                 (3, 5, 'assets/uploads/licenses/license.pdf'),
+                                                                 (4, 7, 'assets/uploads/licenses/license.pdf'),
+                                                                 (5, 9, 'assets/uploads/licenses/license.pdf'),
+                                                                 (6, 11, 'assets/uploads/licenses/license.pdf'),
+                                                                 (7, 13, 'assets/uploads/licenses/license.pdf'),
+                                                                 (8, 15, 'assets/uploads/licenses/license.pdf'),
+                                                                 (9, 17, 'assets/uploads/licenses/license.pdf'),
+                                                                 (10, 19, 'assets/uploads/licenses/license.pdf'),
+                                                                 (11, 21, 'assets/uploads/licenses/license.pdf'),
+                                                                 (12, 23, 'assets/uploads/licenses/license.pdf'),
+                                                                 (13, 25, 'assets/uploads/licenses/license.pdf'),
+                                                                 (14, 27, 'assets/uploads/licenses/license.pdf'),
+                                                                 (15, 29, 'assets/uploads/licenses/license.pdf'),
+                                                                 (26, 1, 'assets/uploads/licenses/license.pdf'),
+                                                                 (27, 3, 'assets/uploads/licenses/license.pdf'),
+                                                                 (28, 5, 'assets/uploads/licenses/license.pdf'),
+                                                                 (29, 7, 'assets/uploads/licenses/license.pdf'),
+                                                                 (30, 9, 'assets/uploads/licenses/license.pdf'),
+                                                                 (31, 11, 'assets/uploads/licenses/license.pdf'),
+                                                                 (32, 13, 'assets/uploads/licenses/license(1).pdf'),
+                                                                 (33, 15, 'assets/uploads/licenses/license.pdf'),
+                                                                 (34, 17, 'assets/uploads/licenses/license(2).pdf'),
+                                                                 (35, 19, 'assets/uploads/licenses/license.pdf'),
+                                                                 (36, 21, 'assets/uploads/licenses/license.pdf'),
+                                                                 (37, 23, 'assets/uploads/licenses/license(3).pdf'),
+                                                                 (38, 25, 'assets/uploads/licenses/license.pdf'),
+                                                                 (39, 27, 'assets/uploads/licenses/license(4).pdf'),
+                                                                 (40, 29, 'assets/uploads/licenses/license.pdf');
+
 -- ----------------------------------------------------------
--- 5. DRIVING LICENSE IMAGES (50 Records)
+-- 5. DRIVING LICENSE IMAGES (20 Records)
 -- ----------------------------------------------------------
 INSERT INTO driving_license_images (id, license_id, front_image_path, back_image_path) VALUES
-                                                                                           (1, 2, '/uploads/licenses/img/lic_02_front.jpg', '/uploads/licenses/img/lic_02_back.jpg'),
-                                                                                           (2, 4, '/uploads/licenses/img/lic_04_front.jpg', '/uploads/licenses/img/lic_04_back.jpg'),
-                                                                                           (3, 6, '/uploads/licenses/img/lic_06_front.jpg', '/uploads/licenses/img/lic_06_back.jpg'),
-                                                                                           (4, 8, '/uploads/licenses/img/lic_08_front.jpg', '/uploads/licenses/img/lic_08_back.jpg'),
-                                                                                           (5, 10, '/uploads/licenses/img/lic_10_front.jpg', '/uploads/licenses/img/lic_10_back.jpg'),
-                                                                                           (6, 12, '/uploads/licenses/img/lic_12_front.jpg', '/uploads/licenses/img/lic_12_back.jpg'),
-                                                                                           (7, 14, '/uploads/licenses/img/lic_14_front.jpg', '/uploads/licenses/img/lic_14_back.jpg'),
-                                                                                           (8, 16, '/uploads/licenses/img/lic_16_front.jpg', '/uploads/licenses/img/lic_16_back.jpg'),
-                                                                                           (9, 18, '/uploads/licenses/img/lic_18_front.jpg', '/uploads/licenses/img/lic_18_back.jpg'),
-                                                                                           (10, 20, '/uploads/licenses/img/lic_20_front.jpg', '/uploads/licenses/img/lic_20_back.jpg'),
-                                                                                           (11, 22, '/uploads/licenses/img/lic_22_front.jpg', '/uploads/licenses/img/lic_22_back.jpg'),
-                                                                                           (12, 24, '/uploads/licenses/img/lic_24_front.jpg', '/uploads/licenses/img/lic_24_back.jpg'),
-                                                                                           (13, 26, '/uploads/licenses/img/lic_26_front.jpg', '/uploads/licenses/img/lic_26_back.jpg'),
-                                                                                           (14, 28, '/uploads/licenses/img/lic_28_front.jpg', '/uploads/licenses/img/lic_28_back.jpg'),
-                                                                                           (15, 30, '/uploads/licenses/img/lic_30_front.jpg', '/uploads/licenses/img/lic_30_back.jpg'),
-                                                                                           (26, 2, '/uploads/licenses/img/lic_02_front_hd.jpg', '/uploads/licenses/img/lic_02_back_hd.jpg'),
-                                                                                           (27, 4, '/uploads/licenses/img/lic_04_front_hd.jpg', '/uploads/licenses/img/lic_04_back_hd.jpg'),
-                                                                                           (28, 6, '/uploads/licenses/img/lic_06_front_hd.jpg', '/uploads/licenses/img/lic_06_back_hd.jpg'),
-                                                                                           (29, 8, '/uploads/licenses/img/lic_08_front_hd.jpg', '/uploads/licenses/img/lic_08_back_hd.jpg'),
-                                                                                           (30, 10, '/uploads/licenses/img/lic_10_front_hd.jpg', '/uploads/licenses/img/lic_10_back_hd.jpg');
+                                                                                           (1, 2, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (2, 4, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (3, 6, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (4, 8, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (5, 10, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (6, 12, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (7, 14, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (8, 16, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (9, 18, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (10, 20, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (11, 22, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (12, 24, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (13, 26, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (14, 28, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (15, 30, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (26, 2, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (27, 4, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (28, 6, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (29, 8, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (30, 10, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf');
 
 -- ----------------------------------------------------------
 -- 6. VEHICLES (50 Records)
--- km_rate: Real-world values representing km/L for ICE/Hybrids
---          or km/charge for Electric models.
+-- Exact 150-word descriptions; km_rate formatted (km/L or km/charge)
 -- ----------------------------------------------------------
 INSERT INTO vehicles (id, owner_id, make, model, category, daily_rate, location, transmission, mileage, km_rate, yom, yor, status, rejection_reason, description, created_at) VALUES
                                                                                                                                                                                   (1, 3, 'Tesla', 'Model S Plaid', 'Electric,Luxury', 22000.00, 'Los Angeles Downtown, CA', 'Auto', 12400, 560.00, 2022, 2022, 'approved', NULL,
@@ -373,164 +371,66 @@ INSERT INTO vehicles (id, owner_id, make, model, category, daily_rate, location,
 
                                                                                                                                                                                   (50, 4, 'Mercedes-Benz', 'GLS 580 4MATIC', 'Luxury', 55000.00, 'Greenwich Ave, CT', 'Auto', 13400, 7.80, 2023, 2023, 'approved', NULL,
                                                                                                                                                                                    'Often referred to as the S-Class of SUVs this palatial three row luxury vehicle accommodates seven passengers in pure first class comfort. A twin turbocharged V8 engine featuring EQ Boost mild hybrid technology delivers effortless whisper quiet power through a smooth nine speed transmission. E-Active body control suspension scans road surfaces ahead smoothing out harsh bumps while leaning gently into corners to minimize passenger lateral motion. The cavernous interior features heated and cooled massage seats open pore walnut woodwork and sixty four color ambient mood lighting throughout. Five zone climate control and individual USB ports ensure all occupants travel with personalized comfort across long distance family holiday vacations. Power folding second and third row seating allows seamless transformation from passenger transport to massive flat floor cargo hauling capability. Indulge your family with unmatched German engineering regal road presence and cloud like highway composure behind the wheel of this flagship SUV.', '2024-02-05 18:00:00');
+
 -- ----------------------------------------------------------
--- 7. VEHICLE PHOTOS (50 Records - Model & Type Matched)
+-- 7. VEHICLE PHOTOS (52 Records - Model & Type Matched)
 -- ----------------------------------------------------------
 INSERT INTO vehicle_photos (id, vehicle_id, photo_path, is_primary) VALUES
--- 1: Tesla Model S Plaid (Electric Sedan)
-(1, 1, '/assets/uploads/vehicles/Tesla Model S Plaid (2022).jpg', 1),
-
--- 2: Porsche 911 Carrera S (Silver/Gray Coupe)
-(2, 2, '/assets/uploads/vehicles/Porsche 911 Carrera S (2023).jpg', 1),
-
--- 3: Land Rover Defender 110 (Modern 4x4 SUV)
-(3, 3, '/assets/uploads/vehicles/Land Rover Defender 110 (2021).jpg', 1),
-
--- 4: BMW M4 Competition (Performance Sport Coupe)
-(4, 4, '/assets/uploads/vehicles/BMW M4 Competition (2022).jpg', 1),
-
--- 5: Mercedes-Benz S-Class S580 (Black Luxury Saloon)
-(5, 5, '/assets/uploads/vehicles/Mercedes-Benz S-Class S580 (2023).jpg', 1),
-
--- 6: Toyota Camry Hybrid (Silver Midsize Sedan)
-(6, 6, '/assets/uploads/vehicles/Toyota Camry Hybrid (2021).jpg', 1),
-
--- 7: Ford Mustang GT (Red V8 Muscle Coupe)
-(7, 7, '/assets/uploads/vehicles/Ford Mustang GT (2020).jpg', 1),
-
--- 8: Jeep Wrangler Rubicon (Trail 4x4 Offroader)
-(8, 8, '/assets/uploads/vehicles/Jeep Wrangler Rubicon (2021).jpg', 1),
-
--- 9: Audi RS6 Avant (High-Performance Sport Wagon)
-(9, 9, '/assets/uploads/vehicles/Audi RS6 Avant (2022).jpg', 1),
-
--- 10: Hyundai Ioniq 5 (Futuristic Geometric EV)
-(10, 10, '/assets/uploads/vehicles/Hyundai Ioniq 5 (2023).jpg', 1),
-
--- 11: Chevrolet Corvette Stingray (Mid-Engine C8 Coupe)
-(11, 11, '/assets/uploads/vehicles/Chevrolet Corvette Stingray (2022).jpg', 1),
-
--- 12: Subaru Outback Wilderness (Rugged AWD Wagon)
-(12, 12, '/assets/uploads/vehicles/Subaru Outback Wilderness (2022).jpg', 1),
-
--- 13: Mercedes-Benz G63 AMG (Black Luxury G-Wagon)
-(13, 13, '/assets/uploads/vehicles/Mercedes-Benz G63 AMG (2021).jpg', 1),
-
--- 14: Tesla Model Y Long Range (White Electric Crossover)
-(14, 14, '/assets/uploads/vehicles/Tesla Model Y Long Range (2023).jpg', 1),
-
--- 15: Honda Civic Sport (Modern Compact Sedan)
-(15, 15, '/assets/uploads/vehicles/Honda Civic Sport (2021).jpg', 1),
-
--- 16: Range Rover Autobiography (British Flagship SUV)
-(16, 16, '/assets/uploads/vehicles/Range Rover Autobiography (2023).jpg', 1),
-
--- 17: Toyota RAV4 Hybrid (White Compact SUV)
-(17, 17, '/assets/uploads/vehicles/Toyota RAV4 Hybrid (2022).jpg', 1),
-
--- 18: BMW X5 xDrive40i (Dark Metallic Executive SUV)
-(18, 18, '/assets/uploads/vehicles/BMW X5 xDrive40i (2022).jpg', 1),
-
--- 19: Ford F-150 Lightning (Full-Size Electric Pickup)
-(19, 19, '/assets/uploads/vehicles/Ford F-150 Lightning (2023).jpg', 1),
-
--- 20: Mazda CX-5 Carbon Edition (Polymetal Gray Compact Crossover)
-(20, 20, '/assets/uploads/vehicles/Mazda CX-5 Carbon Edition (2022).jpg', 1),
-
--- 21: Audi e-tron GT (Low-Slung Electric Sports Sedan)
-(21, 21, '/assets/uploads/vehicles/Audi e-tron GT (2023).jpg', 1),
-
--- 22: Toyota 4Runner TRD Pro (Offroad Trail Rig)
-(22, 22, '/assets/uploads/vehicles/Toyota 4Runner TRD Pro (2021).jpg', 1),
-
--- 23: Volvo XC90 Recharge (Three-Row Scandinavian Luxury SUV)
-(23, 23, '/assets/uploads/vehicles/Volvo XC90 Recharge (2023).jpg', 1),
-
--- 24: Nissan Versa SV (Economical Subcompact Sedan)
-(24, 24, '/assets/uploads/vehicles/Nissan Versa SV (2021).jpg', 1),
-
--- 25: Cadillac Escalade ESV (Full-Size Black Luxury SUV)
-(25, 25, '/assets/uploads/vehicles/Cadillac Escalade ESV (2022).jpg', 1),
-
--- 26: Polestar 2 Dual Motor (Scandinavian Electric Fastback)
-(26, 26, '/assets/uploads/vehicles/Polestar 2 Dual Motor (2023).jpg', 1),
-
--- 27: Lexus LC 500 Convertible (Luxury V8 Roadster)
-(27, 27, '/assets/uploads/vehicles/Lexus LC 500 Convertible (2023).jpg', 1),
-
--- 28: Kia Telluride SX Prestige (Three-Row Family Explorer)
-(28, 28, '/assets/uploads/vehicles/Kia Telluride SX Prestige (2022).jpg', 1),
-
--- 29: Ford Bronco Wildtrak (High-Clearance Offroader)
-(29, 29, '/assets/uploads/vehicles/Ford Bronco Wildtrak (2022).jpg', 1),
-
--- 30: Volkswagen Golf GTI (Sport Hatchback)
-(30, 30, '/assets/uploads/vehicles/Volkswagen Golf GTI (2021).jpg', 1),
-
--- 31: Rivian R1T Adventure (Electric Outdoor Adventure Pickup)
-(31, 31, '/assets/uploads/vehicles/Rivian R1T Adventure (2023).jpg', 1),
-
--- 32: Mercedes-Benz E-Class E450 (Executive Silver Sedan)
-(32, 32, '/assets/uploads/vehicles/Mercedes-Benz E-Class E450 (2022).jpg', 1),
-
--- 33: Tesla Model 3 Performance (Red Electric Compact Sedan)
-(33, 33, '/assets/uploads/vehicles/Tesla Model 3 Performance (2022).jpg', 1),
-
--- 34: Chevrolet Tahoe Premier (Full-Size High-Capacity SUV)
-(34, 34, '/assets/uploads/vehicles/Chevrolet Tahoe Premier (2022).jpg', 1),
-
--- 35: BMW M3 Competition (High-Performance Sport Sedan)
-(35, 35, '/assets/uploads/vehicles/BMW M3 Competition (2023).jpg', 1),
-
--- 36: Toyota Corolla LE (Compact Economical Daily Driver)
-(36, 36, '/assets/uploads/vehicles/Toyota Corolla LE (2021).jpg', 1),
-
--- 37: Porsche Cayenne GTS (Performance Sport Utility)
-(37, 37, '/assets/uploads/vehicles/Porsche Cayenne GTS (2022).jpg', 1),
-
--- 38: Ford Mustang Mach-E GT (Athletic Electric Crossover)
-(38, 38, '/assets/uploads/vehicles/Ford Mustang Mach-E GT (2023).jpg', 1),
-
--- 39: Lexus RX 350 F Sport (Midsize Luxury Crossover)
-(39, 39, '/assets/uploads/vehicles/Lexus RX 350 F Sport (2022).jpg', 1),
-
--- 40: Jeep Grand Cherokee 4xe (Mountain Trail Plug-in Hybrid)
-(40, 40, '/assets/uploads/vehicles/Jeep Grand Cherokee 4xe (2023).jpg', 1),
-
--- 41: Genesis G90 3.5T (Ultra-Luxury Executive Saloon)
-(41, 41, '/assets/uploads/vehicles/Genesis G90 3.5T (2023).jpg', 1),
-
--- 42: Chevrolet Camaro SS 1LE (V8 Performance Track Coupe)
-(42, 42, '/assets/uploads/vehicles/Chevrolet Camaro SS 1LE (2021).jpg', 1),
-
--- 43: Lucid Air Touring (Futuristic Aerodynamic Luxury EV)
-(43, 43, '/assets/uploads/vehicles/Lucid Air Touring (2023).jpg', 1),
-
--- 44: Subaru Crosstrek Limited (All-Weather Adventure Crossover)
-(44, 44, '/assets/uploads/vehicles/Subaru Crosstrek Limited (2022).jpg', 1),
-
--- 45: Audi Q7 55 TFSI (Three-Row Premium Family SUV)
-(45, 45, '/assets/uploads/vehicles/Audi Q7 55 TFSI (2022).jpg', 1),
-
--- 46: Kia EV6 GT-Line (Futuristic Electric Fastback Crossover)
-(46, 46, '/assets/uploads/vehicles/Kia EV6 GT-Line (2023).jpg', 1),
-
--- 47: Mazda MX-5 Miata Club (Lightweight Roadster)
-(47, 47, '/assets/uploads/vehicles/Mazda MX-5 Miata Club (2022).jpg', 1),
-
--- 48: Ram 1500 TRX (Supercharged Widebody Offroad Truck)
-(48, 48, '/assets/uploads/vehicles/Ram 1500 TRX (2022).jpg', 1),
-
--- 49: BMW i4 M50 (Performance Electric Gran Coupe)
-(49, 49, '/assets/uploads/vehicles/BMW i4 M50 (2023).jpg', 1),
-
--- 50: Mercedes-Benz GLS 580 4MATIC (Full-Size Flagship Luxury SUV)
-(50, 50, '/assets/uploads/vehicles/Mercedes-Benz GLS 580 4MATIC (2023)(1).jpg', 1),
-(51, 50, '/assets/uploads/vehicles/Mercedes-Benz GLS 580 4MATIC (2023)(2).jpg', 0),
-(52, 50, '/assets/uploads/vehicles/Mercedes-Benz GLS 580 4MATIC (2023)(3).jpg', 0);
+                                                                        (1, 1, '/assets/uploads/vehicles/Tesla Model S Plaid (2022).jpg', 1),
+                                                                        (2, 2, '/assets/uploads/vehicles/Porsche 911 Carrera S (2023).jpg', 1),
+                                                                        (3, 3, '/assets/uploads/vehicles/Land Rover Defender 110 (2021).jpg', 1),
+                                                                        (4, 4, '/assets/uploads/vehicles/BMW M4 Competition (2022).jpg', 1),
+                                                                        (5, 5, '/assets/uploads/vehicles/Mercedes-Benz S-Class S580 (2023).jpg', 1),
+                                                                        (6, 6, '/assets/uploads/vehicles/Toyota Camry Hybrid (2021).jpg', 1),
+                                                                        (7, 7, '/assets/uploads/vehicles/Ford Mustang GT (2020).jpg', 1),
+                                                                        (8, 8, '/assets/uploads/vehicles/Jeep Wrangler Rubicon (2021).jpg', 1),
+                                                                        (9, 9, '/assets/uploads/vehicles/Audi RS6 Avant (2022).jpg', 1),
+                                                                        (10, 10, '/assets/uploads/vehicles/Hyundai Ioniq 5 (2023).jpg', 1),
+                                                                        (11, 11, '/assets/uploads/vehicles/Chevrolet Corvette Stingray (2022).jpg', 1),
+                                                                        (12, 12, '/assets/uploads/vehicles/Subaru Outback Wilderness (2022).jpg', 1),
+                                                                        (13, 13, '/assets/uploads/vehicles/Mercedes-Benz G63 AMG (2021).jpg', 1),
+                                                                        (14, 14, '/assets/uploads/vehicles/Tesla Model Y Long Range (2023).jpg', 1),
+                                                                        (15, 15, '/assets/uploads/vehicles/Honda Civic Sport (2021).jpg', 1),
+                                                                        (16, 16, '/assets/uploads/vehicles/Range Rover Autobiography (2023).jpg', 1),
+                                                                        (17, 17, '/assets/uploads/vehicles/Toyota RAV4 Hybrid (2022).jpg', 1),
+                                                                        (18, 18, '/assets/uploads/vehicles/BMW X5 xDrive40i (2022).jpg', 1),
+                                                                        (19, 19, '/assets/uploads/vehicles/Ford F-150 Lightning (2023).jpg', 1),
+                                                                        (20, 20, '/assets/uploads/vehicles/Mazda CX-5 Carbon Edition (2022).jpg', 1),
+                                                                        (21, 21, '/assets/uploads/vehicles/Audi e-tron GT (2023).jpg', 1),
+                                                                        (22, 22, '/assets/uploads/vehicles/Toyota 4Runner TRD Pro (2021).jpg', 1),
+                                                                        (23, 23, '/assets/uploads/vehicles/Volvo XC90 Recharge (2023).jpg', 1),
+                                                                        (24, 24, '/assets/uploads/vehicles/Nissan Versa SV (2021).jpg', 1),
+                                                                        (25, 25, '/assets/uploads/vehicles/Cadillac Escalade ESV (2022).jpg', 1),
+                                                                        (26, 26, '/assets/uploads/vehicles/Polestar 2 Dual Motor (2023).jpg', 1),
+                                                                        (27, 27, '/assets/uploads/vehicles/Lexus LC 500 Convertible (2023).jpg', 1),
+                                                                        (28, 28, '/assets/uploads/vehicles/Kia Telluride SX Prestige (2022).jpg', 1),
+                                                                        (29, 29, '/assets/uploads/vehicles/Ford Bronco Wildtrak (2022).jpg', 1),
+                                                                        (30, 30, '/assets/uploads/vehicles/Volkswagen Golf GTI (2021).jpg', 1),
+                                                                        (31, 31, '/assets/uploads/vehicles/Rivian R1T Adventure (2023).jpg', 1),
+                                                                        (32, 32, '/assets/uploads/vehicles/Mercedes-Benz E-Class E450 (2022).jpg', 1),
+                                                                        (33, 33, '/assets/uploads/vehicles/Tesla Model 3 Performance (2022).jpg', 1),
+                                                                        (34, 34, '/assets/uploads/vehicles/Chevrolet Tahoe Premier (2022).jpg', 1),
+                                                                        (35, 35, '/assets/uploads/vehicles/BMW M3 Competition (2023).jpg', 1),
+                                                                        (36, 36, '/assets/uploads/vehicles/Toyota Corolla LE (2021).jpg', 1),
+                                                                        (37, 37, '/assets/uploads/vehicles/Porsche Cayenne GTS (2022).jpg', 1),
+                                                                        (38, 38, '/assets/uploads/vehicles/Ford Mustang Mach-E GT (2023).jpg', 1),
+                                                                        (39, 39, '/assets/uploads/vehicles/Lexus RX 350 F Sport (2022).jpg', 1),
+                                                                        (40, 40, '/assets/uploads/vehicles/Jeep Grand Cherokee 4xe (2023).jpg', 1),
+                                                                        (41, 41, '/assets/uploads/vehicles/Genesis G90 3.5T (2023).jpg', 1),
+                                                                        (42, 42, '/assets/uploads/vehicles/Chevrolet Camaro SS 1LE (2021).jpg', 1),
+                                                                        (43, 43, '/assets/uploads/vehicles/Lucid Air Touring (2023).jpg', 1),
+                                                                        (44, 44, '/assets/uploads/vehicles/Subaru Crosstrek Limited (2022).jpg', 1),
+                                                                        (45, 45, '/assets/uploads/vehicles/Audi Q7 55 TFSI (2022).jpg', 1),
+                                                                        (46, 46, '/assets/uploads/vehicles/Kia EV6 GT-Line (2023).jpg', 1),
+                                                                        (47, 47, '/assets/uploads/vehicles/Mazda MX-5 Miata Club (2022).jpg', 1),
+                                                                        (48, 48, '/assets/uploads/vehicles/Ram 1500 TRX (2022).jpg', 1),
+                                                                        (49, 49, '/assets/uploads/vehicles/BMW i4 M50 (2023).jpg', 1),
+                                                                        (50, 50, '/assets/uploads/vehicles/Mercedes-Benz GLS 580 4MATIC (2023)(1).jpg', 1),
+                                                                        (51, 50, '/assets/uploads/vehicles/Mercedes-Benz GLS 580 4MATIC (2023)(2).jpg', 0),
+                                                                        (52, 50, '/assets/uploads/vehicles/Mercedes-Benz GLS 580 4MATIC (2023)(3).jpg', 0);
 
 -- ----------------------------------------------------------
--- 8. BOOKINGS (50 Records - Populating newly added earning/commission columns)
+-- 8. BOOKINGS (66 Records - Jan 2026 to Sep 2026)
 -- ----------------------------------------------------------
 INSERT INTO bookings (
     id, vehicle_id, borrower_id, driver_arrangement, assigned_driver_id,
@@ -538,59 +438,108 @@ INSERT INTO bookings (
     total_price, commission_rate, commission_amount, owner_earnings, driver_earnings,
     status
 ) VALUES
-      (1, 1, 11, 'hired', 12, '2026-01-05 09:00:00', '2026-01-08 18:00:00', 'Los Angeles Downtown, CA', 'Los Angeles Downtown, CA', 76500.00, 15.00, 11475.00, 54525.00, 10500.00, 'completed'),
-      (2, 2, 12, 'self', NULL, '2026-01-10 10:00:00', '2026-01-13 10:00:00', 'Beverly Hills, CA', 'Beverly Hills, CA', 93000.00, 15.00, 13950.00, 79050.00, 0.00, 'completed'),
-      (3, 3, 13, 'owner', NULL, '2026-01-15 08:00:00', '2026-01-18 18:00:00', 'Denver Metro, CO', 'Denver Metro, CO', 55500.00, 15.00, 8325.00, 47175.00, 0.00, 'completed'),
-      (4, 4, 14, 'hired', 15, '2026-01-20 12:00:00', '2026-01-23 12:00:00', 'Miami South Beach, FL', 'Miami South Beach, FL', 87000.00, 15.00, 13050.00, 58950.00, 15000.00, 'completed'),
-      (5, 5, 15, 'self', NULL, '2026-01-25 09:00:00', '2026-01-27 19:00:00', 'Manhattan Midtown, NY', 'Manhattan Midtown, NY', 70000.00, 15.00, 10500.00, 59500.00, 0.00, 'completed'),
-      (6, 6, 16, 'self', NULL, '2026-01-30 11:00:00', '2026-02-02 11:00:00', 'Austin Central, TX', 'Austin Central, TX', 19500.00, 15.00, 2925.00, 16575.00, 0.00, 'completed'),
-      (7, 7, 17, 'hired', 18, '2026-02-04 14:00:00', '2026-02-07 14:00:00', 'Las Vegas Strip, NV', 'Las Vegas Strip, NV', 56400.00, 15.00, 8460.00, 33540.00, 14400.00, 'completed'),
-      (8, 8, 18, 'self', NULL, '2026-02-09 10:00:00', '2026-02-12 18:00:00', 'Phoenix North, AZ', 'Phoenix North, AZ', 48000.00, 15.00, 7200.00, 40800.00, 0.00, 'completed'),
-      (9, 9, 19, 'owner', NULL, '2026-02-14 09:30:00', '2026-02-17 17:30:00', 'Chicago Downtown, IL', 'Chicago Downtown, IL', 87000.00, 15.00, 13050.00, 73950.00, 0.00, 'completed'),
-      (10, 10, 20, 'self', NULL, '2026-02-19 08:00:00', '2026-02-22 18:00:00', 'Seattle Capitol Hill, WA', 'Seattle Capitol Hill, WA', 33000.00, 15.00, 4950.00, 28050.00, 0.00, 'completed'),
-      (11, 11, 21, 'hired', 22, '2026-02-24 11:00:00', '2026-02-27 11:00:00', 'San Diego Coastal, CA', 'San Diego Coastal, CA', 82005.00, 15.00, 12300.75, 56204.25, 13500.00, 'completed'),
-      (12, 12, 22, 'self', NULL, '2026-03-01 09:00:00', '2026-03-04 17:00:00', 'Portland Central, OR', 'Portland Central, OR', 28500.00, 15.00, 4275.00, 24225.00, 0.00, 'completed'),
-      (13, 13, 23, 'hired', 24, '2026-03-06 13:00:00', '2026-03-09 13:00:00', 'Dallas Uptown, TX', 'Dallas Uptown, TX', 153000.00, 15.00, 22950.00, 112050.00, 18000.00, 'completed'),
-      (14, 14, 24, 'self', NULL, '2026-03-11 10:00:00', '2026-03-14 10:00:00', 'San Jose Silicon Valley, CA', 'San Jose Silicon Valley, CA', 37500.00, 15.00, 5625.00, 31875.00, 0.00, 'completed'),
-      (15, 15, 25, 'self', NULL, '2026-03-16 08:30:00', '2026-03-18 18:30:00', 'Orlando International, FL', 'Orlando International, FL', 11000.00, 15.00, 1650.00, 9350.00, 0.00, 'completed'),
-      (16, 16, 26, 'hired', 27, '2026-03-21 12:00:00', '2026-03-24 12:00:00', 'Atlanta Buckhead, GA', 'Atlanta Buckhead, GA', 139800.00, 15.00, 20970.00, 105030.00, 13800.00, 'completed'),
-      (17, 17, 27, 'self', NULL, '2026-03-26 09:00:00', '2026-03-29 09:00:00', 'Salt Lake City, UT', 'Salt Lake City, UT', 22500.00, 15.00, 3375.00, 19125.00, 0.00, 'completed'),
-      (18, 18, 28, 'owner', NULL, '2026-03-31 10:00:00', '2026-04-03 18:00:00', 'Boston Back Bay, MA', 'Boston Back Bay, MA', 58500.00, 15.00, 8775.00, 49725.00, 0.00, 'completed'),
-      (19, 19, 29, 'hired', 30, '2026-04-05 14:00:00', '2026-04-08 14:00:00', 'Nashville Downtown, TN', 'Nashville Downtown, TN', 62700.00, 15.00, 9405.00, 41595.00, 11700.00, 'completed'),
-      (20, 20, 30, 'self', NULL, '2026-04-10 11:00:00', '2026-04-13 11:00:00', 'Charlotte Uptown, NC', 'Charlotte Uptown, NC', 21000.00, 15.00, 3150.00, 17850.00, 0.00, 'completed'),
-      (21, 21, 31, 'self', NULL, '2026-04-15 09:00:00', '2026-04-18 17:00:00', 'San Francisco Financial, CA', 'San Francisco Financial, CA', 84000.00, 15.00, 12600.00, 71400.00, 0.00, 'completed'),
-      (22, 22, 32, 'hired', 33, '2026-04-20 10:00:00', '2026-04-23 10:00:00', 'Albuquerque West, NM', 'Albuquerque West, NM', 62400.00, 15.00, 9360.00, 35640.00, 17400.00, 'completed'),
-      (23, 23, 33, 'self', NULL, '2026-04-25 08:00:00', '2026-04-28 18:00:00', 'Minneapolis Downtown, MN', 'Minneapolis Downtown, MN', 63000.00, 15.00, 9450.00, 53550.00, 0.00, 'completed'),
-      (24, 24, 34, 'self', NULL, '2026-04-30 12:00:00', '2026-05-02 12:00:00', 'Tampa Westshore, FL', 'Tampa Westshore, FL', 9600.00, 15.00, 1440.00, 8160.00, 0.00, 'completed'),
-      (25, 25, 35, 'hired', 36, '2026-05-04 09:00:00', '2026-05-07 09:00:00', 'Houston Galleria, TX', 'Houston Galleria, TX', 128100.00, 15.00, 19215.00, 94785.00, 14100.00, 'completed'),
-      (26, 26, 36, 'self', NULL, '2026-05-09 10:30:00', '2026-05-12 10:30:00', 'Portland Downtown, OR', 'Portland Downtown, OR', 39000.00, 15.00, 5850.00, 33150.00, 0.00, 'completed'),
-      (27, 27, 37, 'owner', NULL, '2026-05-14 11:00:00', '2026-05-17 18:00:00', 'Scottsdale Old Town, AZ', 'Scottsdale Old Town, AZ', 99000.00, 15.00, 14850.00, 84150.00, 0.00, 'completed'),
-      (28, 28, 38, 'self', NULL, '2026-05-19 14:00:00', '2026-05-22 14:00:00', 'Indianapolis Downtown, IN', 'Indianapolis Downtown, IN', 40500.00, 15.00, 6075.00, 34425.00, 0.00, 'completed'),
-      (29, 29, 39, 'hired', 40, '2026-05-24 08:00:00', '2026-05-27 18:00:00', 'Salt Lake City South, UT', 'Salt Lake City South, UT', 61800.00, 15.00, 9270.00, 40230.00, 12300.00, 'completed'),
-      (30, 30, 40, 'self', NULL, '2026-05-29 09:00:00', '2026-06-01 09:00:00', 'Columbus Short North, OH', 'Columbus Short North, OH', 24000.00, 15.00, 3600.00, 20400.00, 0.00, 'completed'),
-      (31, 31, 41, 'self', NULL, '2026-06-03 10:00:00', '2026-06-06 18:00:00', 'Boulder Pearl St, CO', 'Boulder Pearl St, CO', 78000.00, 15.00, 11700.00, 66300.00, 0.00, 'completed'),
-      (32, 32, 42, 'hired', 11, '2026-06-08 12:00:00', '2026-06-11 12:00:00', 'Philadelphia Center City, PA', 'Philadelphia Center City, PA', 68700.00, 15.00, 10305.00, 46395.00, 12000.00, 'completed'),
-      (33, 33, 43, 'self', NULL, '2026-06-13 09:00:00', '2026-06-16 09:00:00', 'San Jose Santana Row, CA', 'San Jose Santana Row, CA', 34500.00, 15.00, 5175.00, 29325.00, 0.00, 'completed'),
-      (34, 34, 44, 'self', NULL, '2026-06-18 11:00:00', '2026-06-21 18:00:00', 'Kansas City Plaza, MO', 'Kansas City Plaza, MO', 43500.00, 15.00, 6525.00, 36975.00, 0.00, 'completed'),
-      (35, 35, 45, 'hired', 35, '2026-06-23 14:00:00', '2026-06-26 14:00:00', 'Atlanta Midtown, GA', 'Atlanta Midtown, GA', 95400.00, 15.00, 14310.00, 61590.00, 19500.00, 'completed'),
-      (36, 36, 46, 'self', NULL, '2026-06-28 08:30:00', '2026-06-30 18:30:00', 'San Antonio Riverwalk, TX', 'San Antonio Riverwalk, TX', 10000.00, 15.00, 1500.00, 8500.00, 0.00, 'completed'),
-      (37, 37, 47, 'owner', NULL, '2026-07-02 10:00:00', '2026-07-05 18:00:00', 'Newport Beach, CA', 'Newport Beach, CA', 81000.00, 15.00, 12150.00, 68850.00, 0.00, 'completed'),
-      (38, 38, 48, 'hired', 23, '2026-07-07 13:00:00', '2026-07-10 13:00:00', 'Detroit Downtown, MI', 'Detroit Downtown, MI', 53100.00, 15.00, 7965.00, 33135.00, 12000.00, 'completed'),
-      (39, 39, 49, 'self', NULL, '2026-07-12 09:00:00', '2026-07-15 09:00:00', 'Richmond Downtown, VA', 'Richmond Downtown, VA', 39000.00, 15.00, 5850.00, 33150.00, 0.00, 'completed'),
-      (40, 40, 50, 'self', NULL, '2026-07-17 10:00:00', '2026-07-20 18:00:00', 'Jackson Hole, WY', 'Jackson Hole, WY', 48000.00, 15.00, 7200.00, 40800.00, 0.00, 'completed'),
-      (41, 41, 51, 'hired', 31, '2026-07-22 11:30:00', '2026-07-25 11:30:00', 'Nashville West End, TN', 'Nashville West End, TN', 91500.00, 15.00, 13725.00, 65475.00, 12300.00, 'completed'),
-      (42, 42, 52, 'self', NULL, '2026-07-27 09:00:00', '2026-07-30 09:00:00', 'Louisville Downtown, KY', 'Louisville Downtown, KY', 43500.00, 15.00, 6525.00, 36975.00, 0.00, 'completed'),
-      (43, 43, 53, 'self', NULL, '2026-08-01 12:00:00', '2026-08-04 18:00:00', 'Palo Alto University Ave, CA', 'Palo Alto University Ave, CA', 93000.00, 15.00, 13950.00, 79050.00, 0.00, 'completed'),
-      (44, 44, 54, 'hired', 19, '2026-08-06 08:00:00', '2026-08-09 18:00:00', 'Boise Downtown, ID', 'Boise Downtown, ID', 38400.00, 15.00, 5760.00, 23040.00, 9600.00, 'completed'),
-      (45, 45, 55, 'self', NULL, '2026-08-11 10:00:00', '2026-08-14 10:00:00', 'Milwaukee Lakefront, WI', 'Milwaukee Lakefront, WI', 52500.00, 15.00, 7875.00, 44625.00, 0.00, 'completed'),
-      (46, 46, 56, 'owner', NULL, '2026-08-16 14:00:00', '2026-08-19 14:00:00', 'Raleigh Downtown, NC', 'Raleigh Downtown, NC', 36000.00, 15.00, 5400.00, 30600.00, 0.00, 'completed'),
-      (47, 47, 57, 'self', NULL, '2026-08-21 09:00:00', '2026-08-24 09:00:00', 'San Diego Balboa Park, CA', 'San Diego Balboa Park, CA', 22500.00, 15.00, 3375.00, 19125.00, 0.00, 'completed'),
-      (48, 48, 58, 'hired', 36, '2026-08-24 11:00:00', '2026-08-27 18:00:00', 'Oklahoma City Bricktown, OK', 'Oklahoma City Bricktown, OK', 99300.00, 15.00, 14895.00, 70305.00, 14100.00, 'completed'),
-      (49, 49, 59, 'self', NULL, '2026-08-27 10:00:00', '2026-08-30 10:00:00', 'Ann Arbor Downtown, MI', 'Ann Arbor Downtown, MI', 54000.00, 15.00, 8100.00, 45900.00, 0.00, 'completed'),
-      (50, 50, 60, 'self', NULL, '2026-08-28 13:00:00', '2026-08-31 13:00:00', 'Greenwich Ave, CT', 'Greenwich Ave, CT', 96000.00, 15.00, 14400.00, 81600.00, 0.00, 'confirmed');
+-- 1-50: Completed Bookings across Jan - Aug 2026
+(1, 1, 11, 'hired', 12, '2026-01-05 09:00:00', '2026-01-08 18:00:00', 'Los Angeles Downtown, CA', 'Los Angeles Downtown, CA', 76500.00, 15.00, 11475.00, 54525.00, 10500.00, 'completed'),
+(2, 2, 12, 'self', NULL, '2026-01-10 10:00:00', '2026-01-13 10:00:00', 'Beverly Hills, CA', 'Beverly Hills, CA', 93000.00, 15.00, 13950.00, 79050.00, 0.00, 'completed'),
+(3, 3, 13, 'owner', NULL, '2026-01-15 08:00:00', '2026-01-18 18:00:00', 'Denver Metro, CO', 'Denver Metro, CO', 55500.00, 15.00, 8325.00, 47175.00, 0.00, 'completed'),
+(4, 4, 14, 'hired', 15, '2026-01-20 12:00:00', '2026-01-23 12:00:00', 'Miami South Beach, FL', 'Miami South Beach, FL', 87000.00, 15.00, 13050.00, 58950.00, 15000.00, 'completed'),
+(5, 5, 15, 'self', NULL, '2026-01-25 09:00:00', '2026-01-27 19:00:00', 'Manhattan Midtown, NY', 'Manhattan Midtown, NY', 70000.00, 15.00, 10500.00, 59500.00, 0.00, 'completed'),
+(6, 6, 16, 'self', NULL, '2026-01-30 11:00:00', '2026-02-02 11:00:00', 'Austin Central, TX', 'Austin Central, TX', 19500.00, 15.00, 2925.00, 16575.00, 0.00, 'completed'),
+(7, 7, 17, 'hired', 18, '2026-02-04 14:00:00', '2026-02-07 14:00:00', 'Las Vegas Strip, NV', 'Las Vegas Strip, NV', 56400.00, 15.00, 8460.00, 33540.00, 14400.00, 'completed'),
+(8, 8, 18, 'self', NULL, '2026-02-09 10:00:00', '2026-02-12 18:00:00', 'Phoenix North, AZ', 'Phoenix North, AZ', 48000.00, 15.00, 7200.00, 40800.00, 0.00, 'completed'),
+(9, 9, 19, 'owner', NULL, '2026-02-14 09:30:00', '2026-02-17 17:30:00', 'Chicago Downtown, IL', 'Chicago Downtown, IL', 87000.00, 15.00, 13050.00, 73950.00, 0.00, 'completed'),
+(10, 10, 20, 'self', NULL, '2026-02-19 08:00:00', '2026-02-22 18:00:00', 'Seattle Capitol Hill, WA', 'Seattle Capitol Hill, WA', 33000.00, 15.00, 4950.00, 28050.00, 0.00, 'completed'),
+(11, 11, 21, 'hired', 22, '2026-02-24 11:00:00', '2026-02-27 11:00:00', 'San Diego Coastal, CA', 'San Diego Coastal, CA', 82005.00, 15.00, 12300.75, 56204.25, 13500.00, 'completed'),
+(12, 12, 22, 'self', NULL, '2026-03-01 09:00:00', '2026-03-04 17:00:00', 'Portland Central, OR', 'Portland Central, OR', 28500.00, 15.00, 4275.00, 24225.00, 0.00, 'completed'),
+(13, 13, 23, 'hired', 24, '2026-03-06 13:00:00', '2026-03-09 13:00:00', 'Dallas Uptown, TX', 'Dallas Uptown, TX', 153000.00, 15.00, 22950.00, 112050.00, 18000.00, 'completed'),
+(14, 14, 24, 'self', NULL, '2026-03-11 10:00:00', '2026-03-14 10:00:00', 'San Jose Silicon Valley, CA', 'San Jose Silicon Valley, CA', 37500.00, 15.00, 5625.00, 31875.00, 0.00, 'completed'),
+(15, 15, 25, 'self', NULL, '2026-03-16 08:30:00', '2026-03-18 18:30:00', 'Orlando International, FL', 'Orlando International, FL', 11000.00, 15.00, 1650.00, 9350.00, 0.00, 'completed'),
+(16, 16, 26, 'hired', 27, '2026-03-21 12:00:00', '2026-03-24 12:00:00', 'Atlanta Buckhead, GA', 'Atlanta Buckhead, GA', 139800.00, 15.00, 20970.00, 105030.00, 13800.00, 'completed'),
+(17, 17, 27, 'self', NULL, '2026-03-26 09:00:00', '2026-03-29 09:00:00', 'Salt Lake City, UT', 'Salt Lake City, UT', 22500.00, 15.00, 3375.00, 19125.00, 0.00, 'completed'),
+(18, 18, 28, 'owner', NULL, '2026-03-31 10:00:00', '2026-04-03 18:00:00', 'Boston Back Bay, MA', 'Boston Back Bay, MA', 58500.00, 15.00, 8775.00, 49725.00, 0.00, 'completed'),
+(19, 19, 29, 'hired', 30, '2026-04-05 14:00:00', '2026-04-08 14:00:00', 'Nashville Downtown, TN', 'Nashville Downtown, TN', 62700.00, 15.00, 9405.00, 41595.00, 11700.00, 'completed'),
+(20, 20, 30, 'self', NULL, '2026-04-10 11:00:00', '2026-04-13 11:00:00', 'Charlotte Uptown, NC', 'Charlotte Uptown, NC', 21000.00, 15.00, 3150.00, 17850.00, 0.00, 'completed'),
+(21, 21, 31, 'self', NULL, '2026-04-15 09:00:00', '2026-04-18 17:00:00', 'San Francisco Financial, CA', 'San Francisco Financial, CA', 84000.00, 15.00, 12600.00, 71400.00, 0.00, 'completed'),
+(22, 22, 32, 'hired', 33, '2026-04-20 10:00:00', '2026-04-23 10:00:00', 'Albuquerque West, NM', 'Albuquerque West, NM', 62400.00, 15.00, 9360.00, 35640.00, 17400.00, 'completed'),
+(23, 23, 33, 'self', NULL, '2026-04-25 08:00:00', '2026-04-28 18:00:00', 'Minneapolis Downtown, MN', 'Minneapolis Downtown, MN', 63000.00, 15.00, 9450.00, 53550.00, 0.00, 'completed'),
+(24, 24, 34, 'self', NULL, '2026-04-30 12:00:00', '2026-05-02 12:00:00', 'Tampa Westshore, FL', 'Tampa Westshore, FL', 9600.00, 15.00, 1440.00, 8160.00, 0.00, 'completed'),
+(25, 25, 35, 'hired', 36, '2026-05-04 09:00:00', '2026-05-07 09:00:00', 'Houston Galleria, TX', 'Houston Galleria, TX', 128100.00, 15.00, 19215.00, 94785.00, 14100.00, 'completed'),
+(26, 26, 36, 'self', NULL, '2026-05-09 10:30:00', '2026-05-12 10:30:00', 'Portland Downtown, OR', 'Portland Downtown, OR', 39000.00, 15.00, 5850.00, 33150.00, 0.00, 'completed'),
+(27, 27, 37, 'owner', NULL, '2026-05-14 11:00:00', '2026-05-17 18:00:00', 'Scottsdale Old Town, AZ', 'Scottsdale Old Town, AZ', 99000.00, 15.00, 14850.00, 84150.00, 0.00, 'completed'),
+(28, 28, 38, 'self', NULL, '2026-05-19 14:00:00', '2026-05-22 14:00:00', 'Indianapolis Downtown, IN', 'Indianapolis Downtown, IN', 40500.00, 15.00, 6075.00, 34425.00, 0.00, 'completed'),
+(29, 29, 39, 'hired', 40, '2026-05-24 08:00:00', '2026-05-27 18:00:00', 'Salt Lake City South, UT', 'Salt Lake City South, UT', 61800.00, 15.00, 9270.00, 40230.00, 12300.00, 'completed'),
+(30, 30, 40, 'self', NULL, '2026-05-29 09:00:00', '2026-06-01 09:00:00', 'Columbus Short North, OH', 'Columbus Short North, OH', 24000.00, 15.00, 3600.00, 20400.00, 0.00, 'completed'),
+(31, 31, 41, 'self', NULL, '2026-06-03 10:00:00', '2026-06-06 18:00:00', 'Boulder Pearl St, CO', 'Boulder Pearl St, CO', 78000.00, 15.00, 11700.00, 66300.00, 0.00, 'completed'),
+(32, 32, 42, 'hired', 11, '2026-06-08 12:00:00', '2026-06-11 12:00:00', 'Philadelphia Center City, PA', 'Philadelphia Center City, PA', 68700.00, 15.00, 10305.00, 46395.00, 12000.00, 'completed'),
+(33, 33, 43, 'self', NULL, '2026-06-13 09:00:00', '2026-06-16 09:00:00', 'San Jose Santana Row, CA', 'San Jose Santana Row, CA', 34500.00, 15.00, 5175.00, 29325.00, 0.00, 'completed'),
+(34, 34, 44, 'self', NULL, '2026-06-18 11:00:00', '2026-06-21 18:00:00', 'Kansas City Plaza, MO', 'Kansas City Plaza, MO', 43500.00, 15.00, 6525.00, 36975.00, 0.00, 'completed'),
+(35, 35, 45, 'hired', 35, '2026-06-23 14:00:00', '2026-06-26 14:00:00', 'Atlanta Midtown, GA', 'Atlanta Midtown, GA', 95400.00, 15.00, 14310.00, 61590.00, 19500.00, 'completed'),
+(36, 36, 46, 'self', NULL, '2026-06-28 08:30:00', '2026-06-30 18:30:00', 'San Antonio Riverwalk, TX', 'San Antonio Riverwalk, TX', 10000.00, 15.00, 1500.00, 8500.00, 0.00, 'completed'),
+(37, 37, 47, 'owner', NULL, '2026-07-02 10:00:00', '2026-07-05 18:00:00', 'Newport Beach, CA', 'Newport Beach, CA', 81000.00, 15.00, 12150.00, 68850.00, 0.00, 'completed'),
+(38, 38, 48, 'hired', 23, '2026-07-07 13:00:00', '2026-07-10 13:00:00', 'Detroit Downtown, MI', 'Detroit Downtown, MI', 53100.00, 15.00, 7965.00, 33135.00, 12000.00, 'completed'),
+(39, 39, 49, 'self', NULL, '2026-07-12 09:00:00', '2026-07-15 09:00:00', 'Richmond Downtown, VA', 'Richmond Downtown, VA', 39000.00, 15.00, 5850.00, 33150.00, 0.00, 'completed'),
+(40, 40, 50, 'self', NULL, '2026-07-17 10:00:00', '2026-07-20 18:00:00', 'Jackson Hole, WY', 'Jackson Hole, WY', 48000.00, 15.00, 7200.00, 40800.00, 0.00, 'completed'),
+(41, 41, 51, 'hired', 31, '2026-07-22 11:30:00', '2026-07-25 11:30:00', 'Nashville West End, TN', 'Nashville West End, TN', 91500.00, 15.00, 13725.00, 65475.00, 12300.00, 'completed'),
+(42, 42, 52, 'self', NULL, '2026-07-27 09:00:00', '2026-07-30 09:00:00', 'Louisville Downtown, KY', 'Louisville Downtown, KY', 43500.00, 15.00, 6525.00, 36975.00, 0.00, 'completed'),
+(43, 43, 53, 'self', NULL, '2026-08-01 12:00:00', '2026-08-04 18:00:00', 'Palo Alto University Ave, CA', 'Palo Alto University Ave, CA', 93000.00, 15.00, 13950.00, 79050.00, 0.00, 'completed'),
+(44, 44, 54, 'hired', 19, '2026-08-06 08:00:00', '2026-08-09 18:00:00', 'Boise Downtown, ID', 'Boise Downtown, ID', 38400.00, 15.00, 5760.00, 23040.00, 9600.00, 'completed'),
+(45, 45, 55, 'self', NULL, '2026-08-11 10:00:00', '2026-08-14 10:00:00', 'Milwaukee Lakefront, WI', 'Milwaukee Lakefront, WI', 52500.00, 15.00, 7875.00, 44625.00, 0.00, 'completed'),
+(46, 46, 56, 'owner', NULL, '2026-08-16 14:00:00', '2026-08-19 14:00:00', 'Raleigh Downtown, NC', 'Raleigh Downtown, NC', 36000.00, 15.00, 5400.00, 30600.00, 0.00, 'completed'),
+(47, 47, 57, 'self', NULL, '2026-08-21 09:00:00', '2026-08-24 09:00:00', 'San Diego Balboa Park, CA', 'San Diego Balboa Park, CA', 22500.00, 15.00, 3375.00, 19125.00, 0.00, 'completed'),
+(48, 48, 58, 'hired', 36, '2026-08-24 11:00:00', '2026-08-27 18:00:00', 'Oklahoma City Bricktown, OK', 'Oklahoma City Bricktown, OK', 99300.00, 15.00, 14895.00, 70305.00, 14100.00, 'completed'),
+(49, 49, 59, 'self', NULL, '2026-08-27 10:00:00', '2026-08-30 10:00:00', 'Ann Arbor Downtown, MI', 'Ann Arbor Downtown, MI', 54000.00, 15.00, 8100.00, 45900.00, 0.00, 'completed'),
+(50, 50, 60, 'self', NULL, '2026-08-28 13:00:00', '2026-08-31 13:00:00', 'Greenwich Ave, CT', 'Greenwich Ave, CT', 96000.00, 15.00, 14400.00, 81600.00, 0.00, 'confirmed'),
+
+-- 51-56: Active, Confirmed & Pending Verification September 2026 Bookings
+(51, 1, 41, 'self', NULL, '2026-09-06 09:00:00', '2026-09-09 18:00:00', 'Colombo Fort Railway Station', 'Bandaranaike International Airport', 66000.00, 15.00, 9900.00, 56100.00, 0.00, 'active'),
+(52, 3, 42, 'hired', 14, '2026-09-07 08:00:00', '2026-09-10 17:00:00', 'Colombo Cinnamon Grand', 'Kandy City Centre', 69000.00, 15.00, 10350.00, 45150.00, 13500.00, 'active'),
+(53, 6, 43, 'self', NULL, '2026-09-12 10:00:00', '2026-09-15 10:00:00', 'Nugegoda Junction', 'Galle Fort Clock Tower', 34500.00, 15.00, 5175.00, 29325.00, 0.00, 'confirmed'),
+(54, 5, 44, 'hired', 20, '2026-09-16 14:00:00', '2026-09-19 14:00:00', 'Colombo Shangri-La', 'Mirissa Beachfront', 121500.00, 15.00, 18225.00, 86775.00, 16500.00, 'confirmed'),
+(55, 12, 45, 'owner', NULL, '2026-09-22 07:30:00', '2026-09-25 18:30:00', 'Kandy Peradeniya Road', 'Nuwara Eliya Town', 28500.00, 15.00, 4275.00, 24225.00, 0.00, 'confirmed'),
+(56, 10, 46, 'hired', 11, '2026-09-26 09:00:00', '2026-09-29 18:00:00', 'Battaramulla Central', 'Negombo Beach Road', 45000.00, 15.00, 6750.00, 26250.00, 12000.00, 'pending_verification'),
+
+-- 57-66: Additional September 2026 Pipeline Bookings (Pending Payment & Confirmed)
+(57, 2, 47, 'self', NULL, '2026-09-10 10:00:00', '2026-09-13 18:00:00', 'Colombo Galle Face Hotel', 'Bentota Beach Resort', 93000.00, 15.00, 13950.00, 79050.00, 0.00, 'confirmed'),
+(58, 4, 48, 'self', NULL, '2026-09-12 11:00:00', '2026-09-15 11:00:00', 'Colombo Kollupitiya', 'Hikkaduwa Coastal Strip', 72000.00, 15.00, 10800.00, 61200.00, 0.00, 'pending_payment'),
+(59, 7, 49, 'hired', 17, '2026-09-14 09:00:00', '2026-09-17 18:00:00', 'Kandy City Centre', 'Sigiriya Heritage Gate', 59600.00, 15.00, 8940.00, 38060.00, 12600.00, 'confirmed'),
+(60, 8, 50, 'hired', 21, '2026-09-16 08:30:00', '2026-09-19 17:30:00', 'Negombo Grand Street', 'Ella Gap Viewpoint', 59100.00, 15.00, 8865.00, 39135.00, 11100.00, 'pending_payment'),
+(61, 9, 51, 'owner', NULL, '2026-09-18 13:00:00', '2026-09-21 13:00:00', 'Colombo Town Hall', 'Bandaranaike International Airport', 87000.00, 15.00, 13050.00, 73950.00, 0.00, 'confirmed'),
+(62, 11, 52, 'self', NULL, '2026-09-20 10:00:00', '2026-09-22 18:00:00', 'Colombo Havelock City', 'Mount Lavinia Hotel', 58000.00, 15.00, 8700.00, 49300.00, 0.00, 'pending_payment'),
+(63, 13, 53, 'hired', 25, '2026-09-22 09:00:00', '2026-09-25 18:00:00', 'Colombo Cinnamon Life', 'Yala National Park Junction', 145200.00, 15.00, 21780.00, 113220.00, 10200.00, 'confirmed'),
+(64, 14, 54, 'self', NULL, '2026-09-24 08:00:00', '2026-09-27 18:00:00', 'Rajagiriya Gateway', 'Kandy Peradeniya Junction', 39600.00, 15.00, 5940.00, 33660.00, 0.00, 'pending_payment'),
+(65, 15, 55, 'self', NULL, '2026-09-26 11:00:00', '2026-09-29 11:00:00', 'Dehiwala Zoo Road', 'Galle Fort Ramparts', 20400.00, 15.00, 3060.00, 17340.00, 0.00, 'confirmed'),
+(66, 16, 56, 'hired', 28, '2026-09-28 07:00:00', '2026-09-30 19:00:00', 'Colombo Port City', 'Tangalle Bay Resort', 141400.00, 15.00, 21210.00, 112590.00, 7600.00, 'pending_payment'),
+(67, 18, 57, 'hired', NULL,
+ '2026-09-08 14:00:00', '2026-09-11 18:00:00',
+ 'Colombo Hilton', 'Kandy Earls Regency',
+ 78000.00, 15.00, 11700.00, 66300.00, 0.00, 'active'),
+
+-- 2. Confirmed upcoming booking (Vehicle 23: Volvo XC90, Owner 9, Borrower 58)
+(68, 23, 58, 'hired', NULL,
+ '2026-09-14 08:30:00', '2026-09-17 17:30:00',
+ 'Bandaranaike International Airport', 'Nuwara Eliya Grand Hotel',
+ 84000.00, 15.00, 12600.00, 71400.00, 0.00, 'confirmed'),
+
+-- 3. Confirmed coastal corporate trip (Vehicle 25: Cadillac Escalade, Owner 3, Borrower 59)
+(69, 25, 59, 'hired', NULL,
+ '2026-09-18 09:00:00', '2026-09-21 19:00:00',
+ 'Colombo World Trade Center', 'Galle Fort Lighthouse Street',
+ 152000.00, 15.00, 22800.00, 129200.00, 0.00, 'confirmed'),
+
+-- 4. Confirmed safari expedition (Vehicle 29: Ford Bronco, Owner 7, Borrower 60)
+(70, 29, 60, 'hired', NULL,
+ '2026-09-22 06:00:00', '2026-09-25 18:00:00',
+ 'Battaramulla Central', 'Wilpattu Safari Entrance',
+ 106000.00, 15.00, 15900.00, 90100.00, 0.00, 'confirmed'),
+
+-- 5. Confirmed executive EV transport (Vehicle 21: Audi e-tron GT, Owner 7, Borrower 57)
+(71, 21, 57, 'hired', NULL,
+ '2026-09-26 10:00:00', '2026-09-29 16:00:00',
+ 'Colombo Cinnamon Life', 'Negombo Jetwing Blue',
+ 112000.00, 15.00, 16800.00, 95200.00, 0.00, 'confirmed');
 
 -- ----------------------------------------------------------
--- 9. PAYMENTS (50 Records)
+-- 9. PAYMENTS (66 Records - 1:1 Booking Mapping)
 -- ----------------------------------------------------------
 INSERT INTO payments (id, booking_id, user_id, stripe_session_id, stripe_payment_intent_id, amount, currency, status) VALUES
                                                                                                                           (1, 1, 11, 'sess_live_001_A', 'pi_live_001_A', 76500.00, 'LKR', 'completed'),
@@ -642,66 +591,122 @@ INSERT INTO payments (id, booking_id, user_id, stripe_session_id, stripe_payment
                                                                                                                           (47, 47, 57, 'sess_live_047_UU', 'pi_live_047_UU', 22500.00, 'LKR', 'completed'),
                                                                                                                           (48, 48, 58, 'sess_live_048_VV', 'pi_live_048_VV', 99300.00, 'LKR', 'completed'),
                                                                                                                           (49, 49, 59, 'sess_live_049_WW', 'pi_live_049_WW', 54000.00, 'LKR', 'completed'),
-                                                                                                                          (50, 50, 60, 'sess_live_050_XX', 'pi_live_050_XX', 96000.00, 'LKR', 'completed');
+                                                                                                                          (50, 50, 60, 'sess_live_050_XX', 'pi_live_050_XX', 96000.00, 'LKR', 'completed'),
+                                                                                                                          (51, 51, 41, 'sess_live_051_YY', 'pi_live_051_YY', 66000.00, 'LKR', 'completed'),
+                                                                                                                          (52, 52, 42, 'sess_live_052_ZZ', 'pi_live_052_ZZ', 69000.00, 'LKR', 'completed'),
+                                                                                                                          (53, 53, 43, 'sess_live_053_AA', 'pi_live_053_AA', 34500.00, 'LKR', 'completed'),
+                                                                                                                          (54, 54, 44, 'sess_live_054_BB', 'pi_live_054_BB', 121500.00, 'LKR', 'completed'),
+                                                                                                                          (55, 55, 45, 'sess_live_055_CC', 'pi_live_055_CC', 28500.00, 'LKR', 'completed'),
+                                                                                                                          (56, 56, 46, 'sess_live_056_DD', 'pi_live_056_DD', 45000.00, 'LKR', 'pending'),
+                                                                                                                          (57, 57, 47, 'sess_live_057_EE', 'pi_live_057_EE', 93000.00, 'LKR', 'completed'),
+                                                                                                                          (58, 58, 48, 'sess_live_058_FF', 'pi_live_058_FF', 72000.00, 'LKR', 'pending'),
+                                                                                                                          (59, 59, 49, 'sess_live_059_GG', 'pi_live_059_GG', 59600.00, 'LKR', 'completed'),
+                                                                                                                          (60, 60, 50, 'sess_live_060_HH', 'pi_live_060_HH', 59100.00, 'LKR', 'pending'),
+                                                                                                                          (61, 61, 51, 'sess_live_061_II', 'pi_live_061_II', 87000.00, 'LKR', 'completed'),
+                                                                                                                          (62, 62, 52, 'sess_live_062_JJ', 'pi_live_062_JJ', 58000.00, 'LKR', 'pending'),
+                                                                                                                          (63, 63, 53, 'sess_live_063_KK', 'pi_live_063_KK', 145200.00, 'LKR', 'completed'),
+                                                                                                                          (64, 64, 54, 'sess_live_064_LL', 'pi_live_064_LL', 39600.00, 'LKR', 'pending'),
+                                                                                                                          (65, 65, 55, 'sess_live_065_MM', 'pi_live_065_MM', 20400.00, 'LKR', 'completed'),
+                                                                                                                          (66, 66, 56, 'sess_live_066_NN', 'pi_live_066_NN', 141400.00, 'LKR', 'pending'),
+                                                                                                                          (67, 67, 57, 'sess_live_067_OO', 'pi_live_067_OO', 78000.00, 'LKR', 'completed'),
+                                                                                                                          (68, 68, 58, 'sess_live_068_PP', 'pi_live_068_PP', 84000.00, 'LKR', 'completed'),
+                                                                                                                          (69, 69, 59, 'sess_live_069_QQ', 'pi_live_069_QQ', 152000.00, 'LKR', 'completed'),
+                                                                                                                          (70, 70, 60, 'sess_live_070_RR', 'pi_live_070_RR', 106000.00, 'LKR', 'completed'),
+                                                                                                                          (71, 71, 57, 'sess_live_071_SS', 'pi_live_071_SS', 112000.00, 'LKR', 'completed');
 
 -- ----------------------------------------------------------
--- 10. REVIEWS (50 Records - Strictly conforming to UNIQUE constraint)
+-- 10. REVIEWS (80 Records)
+-- Strict conformance to UNIQUE(booking_id, reviewer_id, target_id)
 -- ----------------------------------------------------------
 INSERT INTO reviews (id, booking_id, reviewer_id, target_id, target_type, rating, comment) VALUES
-                                                                                               (1, 1, 11, 1, 'vehicle', 5, 'Exceptional performance and quietness. The Model S exceeded all travel expectations!'),
-                                                                                               (2, 2, 12, 2, 'vehicle', 5, 'The 911 handled canyon roads flawlessly. Pure German engineering at its finest.'),
-                                                                                               (3, 3, 13, 3, 'vehicle', 5, 'Defender proved completely unstoppable during our weekend mountain expedition.'),
-                                                                                               (4, 4, 14, 4, 'vehicle', 4, 'Great speed and handling. Suspension is somewhat stiff on bumpy city streets.'),
-                                                                                               (5, 5, 15, 5, 'vehicle', 5, 'Supreme executive comfort. The quietest cabin I have ever traveled inside.'),
-                                                                                               (6, 6, 16, 6, 'vehicle', 4, 'Solid gas mileage and effortless operation around Austin downtown routes.'),
-                                                                                               (7, 7, 17, 7, 'vehicle', 5, 'Classic American muscle roar! The manual gearbox was crisp and engaging.'),
-                                                                                               (8, 8, 18, 8, 'vehicle', 5, 'Tackled rocky desert climbs with ease. Perfect setup for outdoor explorers.'),
-                                                                                               (9, 9, 19, 9, 'vehicle', 5, 'The ultimate all weather super wagon. Incredible acceleration with ample boot space.'),
-                                                                                               (10, 10, 20, 10, 'vehicle', 5, 'Fast charging and modern interior layout made the Pacific Northwest trip smooth.'),
-                                                                                               (11, 11, 21, 11, 'vehicle', 5, 'Mid engine balance feels like an exotic supercar. Highly recommended!'),
-                                                                                               (12, 12, 22, 12, 'vehicle', 4, 'Very capable wagon with comfortable ride height and easy roof loading options.'),
-                                                                                               (13, 13, 23, 13, 'vehicle', 5, 'Unmatched road presence and astonishing AMG exhaust rumble across Dallas.'),
-                                                                                               (14, 14, 24, 14, 'vehicle', 4, 'Practical and economical EV. Plenty of luggage storage in the frunk and rear.'),
-                                                                                               (15, 15, 25, 15, 'vehicle', 4, 'Economical city vehicle. Parked effortlessly in cramped theme park spaces.'),
-                                                                                               (16, 16, 26, 16, 'vehicle', 5, 'Pure luxury and serenity. The rear reclining seating felt like first class flight.'),
-                                                                                               (17, 17, 27, 17, 'vehicle', 5, 'Dependable hybrid SUV with low fuel consumption and great snowy road grip.'),
-                                                                                               (18, 18, 28, 18, 'vehicle', 5, 'Sophisticated German luxury and intuitive touchscreen navigation software.'),
-                                                                                               (19, 19, 29, 19, 'vehicle', 5, 'The front trunk and smooth electric pickup capabilities blew everyone away.'),
-                                                                                               (20, 20, 30, 20, 'vehicle', 4, 'Very stylish exterior and surprisingly engaging steering responsiveness.'),
-                                                                                               (21, 21, 31, 21, 'vehicle', 5, 'Breathtaking electric grand tourer. Attracted positive glances everywhere.'),
-                                                                                               (22, 22, 32, 22, 'vehicle', 5, 'Tough, reliable truck for remote New Mexico hiking trailhead access.'),
-                                                                                               (23, 23, 33, 23, 'vehicle', 5, 'Refined plug in hybrid SUV with serene interior woodwork and great safety tech.'),
-                                                                                               (24, 24, 34, 24, 'vehicle', 3, 'Great fuel mileage and budget rates, though interior amenities are basic.'),
-                                                                                               (25, 25, 35, 25, 'vehicle', 5, 'Magnificent full size luxury transporter for our corporate client team.'),
-                                                                                               (26, 26, 36, 26, 'vehicle', 5, 'Minimalist Nordic interior and razor sharp all wheel drive acceleration.'),
-                                                                                               (27, 27, 37, 27, 'vehicle', 5, 'Stunning convertible styling with a glorious naturally aspirated V8 soundtrack.'),
-                                                                                               (28, 28, 38, 28, 'vehicle', 5, 'Roomy three row SUV that kept the entire family comfortable across four states.'),
-                                                                                               (29, 29, 39, 29, 'vehicle', 5, 'Outstanding open air capability across Utah red rock trail routes.'),
-                                                                                               (30, 30, 40, 30, 'vehicle', 5, 'The gold standard hot hatch. Fun three pedal manual transmission feel.'),
-                                                                                               (31, 31, 41, 31, 'vehicle', 5, 'Quad motor setup offers otherworldly control on dirt trails and open highways.'),
-                                                                                               (32, 32, 42, 32, 'vehicle', 5, 'Executive elegance and silky smooth six cylinder acceleration.'),
-                                                                                               (33, 33, 43, 33, 'vehicle', 4, 'Rocket fast acceleration that makes interstate highway passing effortless.'),
-                                                                                               (34, 34, 44, 34, 'vehicle', 4, 'Spacious interior room with plenty of space for multiple sports luggage bags.'),
-                                                                                               (35, 35, 45, 35, 'vehicle', 5, 'Sharp cornering and roaring twin turbo engine. An absolute track weapon.'),
-                                                                                               (36, 36, 46, 36, 'vehicle', 4, 'Simple, reliable, and frugal transport for running urban errands smoothly.'),
-                                                                                               (37, 37, 47, 37, 'vehicle', 5, 'GTS exhaust sound gave me goosebumps. Brilliant high riding sports car dynamics.'),
-                                                                                               (38, 38, 48, 38, 'vehicle', 4, 'Muscular electric crossover with intuitive displays and agile handling.'),
-                                                                                               (39, 39, 49, 39, 'vehicle', 5, 'Peaceful cabin sound insulation and proven Japanese mechanical reliability.'),
-                                                                                               (40, 40, 50, 40, 'vehicle', 5, 'Cruised into Yellowstone quietly on electric mode. Supreme versatility!'),
-                                                                                               (41, 41, 51, 41, 'vehicle', 5, 'The Genesis G90 matches the finest European saloons in fit and finish.'),
-                                                                                               (42, 42, 52, 42, 'vehicle', 5, 'Raw American muscle roar and massive cornering grip from the 1LE package.'),
-                                                                                               (43, 43, 53, 43, 'vehicle', 5, 'Futuristic glass roof and incredible electric range on California highways.'),
-                                                                                               (44, 44, 54, 44, 'vehicle', 4, 'Great all weather compact crossover for outdoor trips around Idaho.'),
-                                                                                               (45, 45, 55, 45, 'vehicle', 5, 'Quiet highway cruising and comfortable seating for seven family members.'),
-                                                                                               (46, 46, 56, 46, 'vehicle', 5, 'Swift 800V charging speeds and handsome athletic exterior styling.'),
-                                                                                               (47, 47, 57, 47, 'vehicle', 5, 'The purest driver roadster available. Dropping the manual top takes seconds.'),
-                                                                                               (48, 48, 58, 48, 'vehicle', 5, 'Supercharged V8 power leaves an indelible grin on your face at every throttle dip.'),
-                                                                                               (49, 49, 59, 49, 'vehicle', 5, 'Sharp electric handling and practical Gran Coupe hatchback flexibility.'),
-                                                                                               (50, 50, 60, 50, 'vehicle', 5, 'First class family luxury cruiser that glides effortlessly over rough pavement.');
+-- 1-50: Vehicle Reviews
+(1, 1, 11, 1, 'vehicle', 5, 'Exceptional performance and quietness. The Model S exceeded all travel expectations!'),
+(2, 2, 12, 2, 'vehicle', 5, 'The 911 handled canyon roads flawlessly. Pure German engineering at its finest.'),
+(3, 3, 13, 3, 'vehicle', 5, 'Defender proved completely unstoppable during our weekend mountain expedition.'),
+(4, 4, 14, 4, 'vehicle', 4, 'Great speed and handling. Suspension is somewhat stiff on bumpy city streets.'),
+(5, 5, 15, 5, 'vehicle', 5, 'Supreme executive comfort. The quietest cabin I have ever traveled inside.'),
+(6, 6, 16, 6, 'vehicle', 4, 'Solid gas mileage and effortless operation around Austin downtown routes.'),
+(7, 7, 17, 7, 'vehicle', 5, 'Classic American muscle roar! The manual gearbox was crisp and engaging.'),
+(8, 8, 18, 8, 'vehicle', 5, 'Tackled rocky desert climbs with ease. Perfect setup for outdoor explorers.'),
+(9, 9, 19, 9, 'vehicle', 5, 'The ultimate all weather super wagon. Incredible acceleration with ample boot space.'),
+(10, 10, 20, 10, 'vehicle', 5, 'Fast charging and modern interior layout made the Pacific Northwest trip smooth.'),
+(11, 11, 21, 11, 'vehicle', 5, 'Mid engine balance feels like an exotic supercar. Highly recommended!'),
+(12, 12, 22, 12, 'vehicle', 4, 'Very capable wagon with comfortable ride height and easy roof loading options.'),
+(13, 13, 23, 13, 'vehicle', 5, 'Unmatched road presence and astonishing AMG exhaust rumble across Dallas.'),
+(14, 14, 24, 14, 'vehicle', 4, 'Practical and economical EV. Plenty of luggage storage in the frunk and rear.'),
+(15, 15, 25, 15, 'vehicle', 4, 'Economical city vehicle. Parked effortlessly in cramped theme park spaces.'),
+(16, 16, 26, 16, 'vehicle', 5, 'Pure luxury and serenity. The rear reclining seating felt like first class flight.'),
+(17, 17, 27, 17, 'vehicle', 5, 'Dependable hybrid SUV with low fuel consumption and great snowy road grip.'),
+(18, 18, 28, 18, 'vehicle', 5, 'Sophisticated German luxury and intuitive touchscreen navigation software.'),
+(19, 19, 29, 19, 'vehicle', 5, 'The front trunk and smooth electric pickup capabilities blew everyone away.'),
+(20, 20, 30, 20, 'vehicle', 4, 'Very stylish exterior and surprisingly engaging steering responsiveness.'),
+(21, 21, 31, 21, 'vehicle', 5, 'Breathtaking electric grand tourer. Attracted positive glances everywhere.'),
+(22, 22, 32, 22, 'vehicle', 5, 'Tough, reliable truck for remote New Mexico hiking trailhead access.'),
+(23, 23, 33, 23, 'vehicle', 5, 'Refined plug in hybrid SUV with serene interior woodwork and great safety tech.'),
+(24, 24, 34, 24, 'vehicle', 3, 'Great fuel mileage and budget rates, though interior amenities are basic.'),
+(25, 25, 35, 25, 'vehicle', 5, 'Magnificent full size luxury transporter for our corporate client team.'),
+(26, 26, 36, 26, 'vehicle', 5, 'Minimalist Nordic interior and razor sharp all wheel drive acceleration.'),
+(27, 27, 37, 27, 'vehicle', 5, 'Stunning convertible styling with a glorious naturally aspirated V8 soundtrack.'),
+(28, 28, 38, 28, 'vehicle', 5, 'Roomy three row SUV that kept the entire family comfortable across four states.'),
+(29, 29, 39, 29, 'vehicle', 5, 'Outstanding open air capability across Utah red rock trail routes.'),
+(30, 30, 40, 30, 'vehicle', 5, 'The gold standard hot hatch. Fun three pedal manual transmission feel.'),
+(31, 31, 41, 31, 'vehicle', 5, 'Quad motor setup offers otherworldly control on dirt trails and open highways.'),
+(32, 32, 42, 32, 'vehicle', 5, 'Executive elegance and silky smooth six cylinder acceleration.'),
+(33, 33, 43, 33, 'vehicle', 4, 'Rocket fast acceleration that makes interstate highway passing effortless.'),
+(34, 34, 44, 34, 'vehicle', 4, 'Spacious interior room with plenty of space for multiple sports luggage bags.'),
+(35, 35, 45, 35, 'vehicle', 5, 'Sharp cornering and roaring twin turbo engine. An absolute track weapon.'),
+(36, 36, 46, 36, 'vehicle', 4, 'Simple, reliable, and frugal transport for running urban errands smoothly.'),
+(37, 37, 47, 37, 'vehicle', 5, 'GTS exhaust sound gave me goosebumps. Brilliant high riding sports car dynamics.'),
+(38, 38, 48, 38, 'vehicle', 4, 'Muscular electric crossover with intuitive displays and agile handling.'),
+(39, 39, 49, 39, 'vehicle', 5, 'Peaceful cabin sound insulation and proven Japanese mechanical reliability.'),
+(40, 40, 50, 40, 'vehicle', 5, 'Cruised into Yellowstone quietly on electric mode. Supreme versatility!'),
+(41, 41, 51, 41, 'vehicle', 5, 'The Genesis G90 matches the finest European saloons in fit and finish.'),
+(42, 42, 52, 42, 'vehicle', 5, 'Raw American muscle roar and massive cornering grip from the 1LE package.'),
+(43, 43, 53, 43, 'vehicle', 5, 'Futuristic glass roof and incredible electric range on California highways.'),
+(44, 44, 54, 44, 'vehicle', 4, 'Great all weather compact crossover for outdoor trips around Idaho.'),
+(45, 45, 55, 45, 'vehicle', 5, 'Quiet highway cruising and comfortable seating for seven family members.'),
+(46, 46, 56, 46, 'vehicle', 5, 'Swift 800V charging speeds and handsome athletic exterior styling.'),
+(47, 47, 57, 47, 'vehicle', 5, 'The purest driver roadster available. Dropping the manual top takes seconds.'),
+(48, 48, 58, 48, 'vehicle', 5, 'Supercharged V8 power leaves an indelible grin on your face at every throttle dip.'),
+(49, 49, 59, 49, 'vehicle', 5, 'Sharp electric handling and practical Gran Coupe hatchback flexibility.'),
+(50, 50, 60, 50, 'vehicle', 5, 'First class family luxury cruiser that glides effortlessly over rough pavement.'),
+
+-- 51-65: Driver Reviews
+(51, 1, 11, 12, 'driver', 5, 'Pabasarani was punctual, polite, and navigated Colombo traffic with great patience.'),
+(52, 4, 14, 15, 'driver', 5, 'Asela is an exceptional chauffeur. Very smooth driving and knew all the scenic coastal bypasses.'),
+(53, 7, 17, 18, 'driver', 4, 'Menaka handled the manual Mustang skillfully. Punctual arrival and pleasant conversation.'),
+(54, 11, 21, 22, 'driver', 5, 'Hansani drove safely throughout our southern expressway trip. Highly professional behavior.'),
+(55, 13, 23, 24, 'driver', 5, 'Chathurika was fantastic with the G-Wagon. Confident handling and very respectful.'),
+(56, 16, 26, 27, 'driver', 5, 'Nuwan arrived fifteen minutes early and maintained a clean, relaxed driving atmosphere.'),
+(57, 19, 29, 30, 'driver', 4, 'Sewwandi was courteous and followed our planned itinerary perfectly.'),
+(58, 22, 32, 33, 'driver', 5, 'Supun is a master driver on mountain switchbacks. We felt completely safe the entire trip.'),
+(59, 25, 35, 36, 'driver', 5, 'Nadeesha provided executive-level service for our corporate delegates. Excellent work.'),
+(60, 29, 39, 40, 'driver', 5, 'Kavindya took great care of the vehicle and assisted with all our luggage effortlessly.'),
+(61, 32, 42, 11, 'driver', 4, 'Kavinda was polite and accommodating with our unexpected route changes.'),
+(62, 48, 58, 36, 'driver', 5, 'Nadeesha is an expert behind the wheel. Smooth braking and immaculate road manners.'),
+(63, 38, 48, 23, 'driver', 5, 'Suresh handled highway congestion calmly and kept the vehicle impeccably clean.'),
+(64, 41, 51, 31, 'driver', 5, 'Isuru was on time and very knowledgeable about local attractions along the route.'),
+(65, 44, 54, 19, 'driver', 4, 'Bhanuka was very responsive and ensured our airport drop-off was right on time.'),
+
+-- 66-80: Platform Reviews (target_id = 0 represents EliteDrive Platform)
+(66, 2, 12, 0, 'platform', 5, 'The mobile verification flow was lightning fast. Key handover took under five minutes.'),
+(67, 3, 13, 0, 'platform', 5, 'Seamless rental experience from start to finish. The pricing transparency is refreshing.'),
+(68, 5, 15, 0, 'platform', 4, 'Great vehicle selection in Sri Lanka. Would love to see more electric models added.'),
+(69, 6, 16, 0, 'platform', 5, 'Booking confirmation was instant and Stripe payment worked without any hitches.'),
+(70, 8, 18, 0, 'platform', 4, 'Clean user interface and clear communication between borrower and host throughout.'),
+(71, 10, 20, 0, 'platform', 5, 'Excellent customer support when we had a question regarding toll transponders.'),
+(72, 14, 24, 0, 'platform', 5, 'Easy booking modification tools. Made extending our trip completely hassle-free.'),
+(73, 15, 25, 0, 'platform', 4, 'Fair deposit policy and deposit hold was released promptly within 48 hours.'),
+(74, 18, 28, 0, 'platform', 5, 'EliteDrive made organizing transport for our corporate retreat effortless.'),
+(75, 21, 31, 0, 'platform', 5, 'Top-tier luxury fleet. Every detail matches what is shown in the vehicle photos.'),
+(76, 27, 37, 0, 'platform', 5, 'Direct messaging with the owner was fast and helpful. Highly recommended app.'),
+(77, 30, 40, 0, 'platform', 4, 'Intuitive navigation and filter options. Found the exact manual car I wanted.'),
+(78, 33, 43, 0, 'platform', 5, 'Transparent commission breakdown and straightforward check-in inspection checklists.'),
+(79, 39, 49, 0, 'platform', 5, 'Smooth experience. The GPS pickup instructions were accurate and easy to follow.'),
+(80, 47, 57, 0, 'platform', 5, 'Best car sharing platform in the country. Will definitely book again next month.');
 
 -- ----------------------------------------------------------
--- 11. REJECTION LOGS (50 Records)
--- Historical audits across licenses, vehicles, and bookings
+-- 11. REJECTION LOGS (50 Records - Jan 2026 to Sep 2026)
 -- ----------------------------------------------------------
 INSERT INTO rejection_logs (id, entity_type, entity_id, reason, rejected_by, created_at) VALUES
                                                                                              (1, 'license', 101, 'Uploaded driving license photo is blurry and illegible upon inspection.', 1, '2026-01-08 10:15:00'),
@@ -756,7 +761,7 @@ INSERT INTO rejection_logs (id, entity_type, entity_id, reason, rejected_by, cre
                                                                                              (50, 'other', 150, 'Automated scraper bot activity detected from originating user IP range.', 1, '2026-09-07 11:50:00');
 
 -- ----------------------------------------------------------
--- 12. INQUIRIES (50 Records - Sri Lankan Inquirers)
+-- 12. INQUIRIES (50 Records)
 -- ----------------------------------------------------------
 INSERT INTO inquiries (id, full_name, email, subject, message, status, admin_response, responded_at) VALUES
                                                                                                          (1, 'Kumari Weerakkody', 'kumari.w@example.com', 'Electric Charging', 'Are Tesla Supercharger fees included in the daily rental rate?', 'responded', 'Tesla Supercharger fees are billed to the owner account and invoiced post trip.', '2024-02-01 10:30:00'),
@@ -809,182 +814,3 @@ INSERT INTO inquiries (id, full_name, email, subject, message, status, admin_res
                                                                                                          (48, 'Wimal Weerawansa', 'wimal.w@example.com', 'Snow Chains', 'Are heavy terrain grip systems provided when traveling through wet central highland passes?', 'pending', NULL, NULL),
                                                                                                          (49, 'Chithra Warakagoda', 'chithra.w@example.com', 'App Notification Issue', 'I am not receiving mobile SMS alerts for host booking acceptance messages.', 'responded', 'Please check that SMS notifications are toggled on inside your user account settings.', '2024-03-20 13:00:00'),
                                                                                                          (50, 'Jackson Anthony', 'jackson.a@example.com', 'Supercar Security Deposit', 'Why does the Porsche 911 require a higher refundable security deposit?', 'responded', 'Higher value vehicles carry adjusted damage deductible holds as per underwriter terms.', '2024-03-21 15:45:00');
-
--- ----------------------------------------------------------
--- ADDITIONAL BOOKINGS (September 2026)
--- ----------------------------------------------------------
-INSERT INTO bookings (
-    id, vehicle_id, borrower_id, driver_arrangement, assigned_driver_id,
-    pickup_date, return_date, pickup_location, return_location,
-    total_price, commission_rate, commission_amount, owner_earnings, driver_earnings,
-    status
-) VALUES
--- 1. Active rental currently ongoing (Vehicle 1: Tesla Model S, Owner 3)
-(51, 1, 41, 'self', NULL,
- '2026-09-06 09:00:00', '2026-09-09 18:00:00',
- 'Colombo Fort Railway Station', 'Bandaranaike International Airport',
- 66000.00, 15.00, 9900.00, 56100.00, 0.00, 'active'),
-
--- 2. Active hired driver tour to Kandy (Vehicle 3: Defender 110, Driver 14: Oshadhi)
-(52, 3, 42, 'hired', 14,
- '2026-09-07 08:00:00', '2026-09-10 17:00:00',
- 'Colombo Cinnamon Grand', 'Kandy City Centre',
- 69000.00, 15.00, 10350.00, 45150.00, 13500.00, 'active'),
-
--- 3. Confirmed upcoming booking (Vehicle 6: Camry Hybrid, Owner 8)
-(53, 6, 43, 'self', NULL,
- '2026-09-12 10:00:00', '2026-09-15 10:00:00',
- 'Nugegoda Junction', 'Galle Fort Clock Tower',
- 34500.00, 15.00, 5175.00, 29325.00, 0.00, 'confirmed'),
-
--- 4. Confirmed luxury coastal trip with driver (Vehicle 5: Mercedes S580, Driver 20: Nethmi)
-(54, 5, 44, 'hired', 20,
- '2026-09-16 14:00:00', '2026-09-19 14:00:00',
- 'Colombo Shangri-La', 'Mirissa Beachfront',
- 121500.00, 15.00, 18225.00, 86775.00, 16500.00, 'confirmed'),
-
--- 5. Confirmed mountain getaway (Vehicle 12: Subaru Outback, Owner 6)
-(55, 12, 45, 'owner', NULL,
- '2026-09-22 07:30:00', '2026-09-25 18:30:00',
- 'Kandy Peradeniya Road', 'Nuwara Eliya Town',
- 28500.00, 15.00, 4275.00, 24225.00, 0.00, 'confirmed'),
-
--- 6. Late September booking pending verification (Vehicle 10: Ioniq 5, Driver 11: Kavinda)
-(56, 10, 46, 'hired', 11,
- '2026-09-26 09:00:00', '2026-09-29 18:00:00',
- 'Battaramulla Central', 'Negombo Beach Road',
- 45000.00, 15.00, 6750.00, 26250.00, 12000.00, 'pending_verification');
-
--- ----------------------------------------------------------
--- MATCHING PAYMENTS FOR SEPTEMBER BOOKINGS
--- ----------------------------------------------------------
-INSERT INTO payments (id, booking_id, user_id, stripe_session_id, stripe_payment_intent_id, amount, currency, status) VALUES
-                                                                                                                          (51, 51, 41, 'sess_live_051_YY', 'pi_live_051_YY', 66000.00, 'LKR', 'completed'),
-                                                                                                                          (52, 52, 42, 'sess_live_052_ZZ', 'pi_live_052_ZZ', 69000.00, 'LKR', 'completed'),
-                                                                                                                          (53, 53, 43, 'sess_live_053_AA', 'pi_live_053_AA', 34500.00, 'LKR', 'completed'),
-                                                                                                                          (54, 54, 44, 'sess_live_054_BB', 'pi_live_054_BB', 121500.00, 'LKR', 'completed'),
-                                                                                                                          (55, 55, 45, 'sess_live_055_CC', 'pi_live_055_CC', 28500.00, 'LKR', 'completed'),
-                                                                                                                          (56, 56, 46, 'sess_live_056_DD', 'pi_live_056_DD', 45000.00, 'LKR', 'pending');
-
--- ----------------------------------------------------------
--- ADDITIONAL REVIEWS: Platform & Driver (IDs 51 - 80)
--- ----------------------------------------------------------
-INSERT INTO reviews (id, booking_id, reviewer_id, target_id, target_type, rating, comment) VALUES
--- Driver Reviews (Targeting assigned_driver_id)
-(51, 1, 11, 12, 'driver', 5, 'Pabasarani was punctual, polite, and navigated Colombo traffic with great patience.'),
-(52, 4, 14, 15, 'driver', 5, 'Asela is an exceptional chauffeur. Very smooth driving and knew all the scenic coastal bypasses.'),
-(53, 7, 17, 18, 'driver', 4, 'Menaka handled the manual Mustang skillfully. Punctual arrival and pleasant conversation.'),
-(54, 11, 21, 22, 'driver', 5, 'Hansani drove safely throughout our southern expressway trip. Highly professional behavior.'),
-(55, 13, 23, 24, 'driver', 5, 'Chathurika was fantastic with the G-Wagon. Confident handling and very respectful.'),
-(56, 16, 26, 27, 'driver', 5, 'Nuwan arrived fifteen minutes early and maintained a clean, relaxed driving atmosphere.'),
-(57, 19, 29, 30, 'driver', 4, 'Sewwandi was courteous and followed our planned itinerary perfectly.'),
-(58, 22, 32, 33, 'driver', 5, 'Supun is a master driver on mountain switchbacks. We felt completely safe the entire trip.'),
-(59, 25, 35, 36, 'driver', 5, 'Nadeesha provided executive-level service for our corporate delegates. Excellent work.'),
-(60, 29, 39, 40, 'driver', 5, 'Kavindya took great care of the vehicle and assisted with all our luggage effortlessly.'),
-(61, 32, 42, 11, 'driver', 4, 'Kavinda was polite and accommodating with our unexpected route changes.'),
-(62, 35, 45, 35, 'driver', 5, 'Thilina is an expert behind the wheel. Smooth braking and immaculate road manners.'),
-(63, 38, 48, 23, 'driver', 5, 'Suresh handled highway congestion calmly and kept the vehicle impeccably clean.'),
-(64, 41, 51, 31, 'driver', 5, 'Isuru was on time and very knowledgeable about local attractions along the route.'),
-(65, 44, 54, 19, 'driver', 4, 'Bhanuka was very responsive and ensured our airport drop-off was right on time.'),
-
--- Platform Reviews (target_id = 0 representing EliteDrive Platform)
-(66, 2, 12, 0, 'platform', 5, 'The mobile verification flow was lightning fast. Key handover took under five minutes.'),
-(67, 3, 13, 0, 'platform', 5, 'Seamless rental experience from start to finish. The pricing transparency is refreshing.'),
-(68, 5, 15, 0, 'platform', 4, 'Great vehicle selection in Sri Lanka. Would love to see more electric models added.'),
-(69, 6, 16, 0, 'platform', 5, 'Booking confirmation was instant and Stripe payment worked without any hitches.'),
-(70, 8, 18, 0, 'platform', 4, 'Clean user interface and clear communication between borrower and host throughout.'),
-(71, 10, 20, 0, 'platform', 5, 'Excellent customer support when we had a question regarding toll transponders.'),
-(72, 14, 24, 0, 'platform', 5, 'Easy booking modification tools. Made extending our trip completely hassle-free.'),
-(73, 15, 25, 0, 'platform', 4, 'Fair deposit policy and deposit hold was released promptly within 48 hours.'),
-(74, 18, 28, 0, 'platform', 5, 'EliteDrive made organizing transport for our corporate retreat effortless.'),
-(75, 21, 31, 0, 'platform', 5, 'Top-tier luxury fleet. Every detail matches what is shown in the vehicle photos.'),
-(76, 27, 37, 0, 'platform', 5, 'Direct messaging with the owner was fast and helpful. Highly recommended app.'),
-(77, 30, 40, 0, 'platform', 4, 'Intuitive navigation and filter options. Found the exact manual car I wanted.'),
-(78, 33, 43, 0, 'platform', 5, 'Transparent commission breakdown and straightforward check-in inspection checklists.'),
-(79, 39, 49, 0, 'platform', 5, 'Smooth experience. The GPS pickup instructions were accurate and easy to follow.'),
-(80, 47, 57, 0, 'platform', 5, 'Best car sharing platform in the country. Will definitely book again next month.');
-
--- ----------------------------------------------------------
--- 10 ADDITIONAL BOOKINGS (September 2026: Pending Payment & Confirmed)
--- ----------------------------------------------------------
-INSERT INTO bookings (
-    id, vehicle_id, borrower_id, driver_arrangement, assigned_driver_id,
-    pickup_date, return_date, pickup_location, return_location,
-    total_price, commission_rate, commission_amount, owner_earnings, driver_earnings,
-    status
-) VALUES
--- 1. Confirmed Self-Drive (Vehicle 2: Porsche 911, Borrower 47)
-(57, 2, 47, 'self', NULL,
- '2026-09-10 10:00:00', '2026-09-13 18:00:00',
- 'Colombo Galle Face Hotel', 'Bentota Beach Resort',
- 93000.00, 15.00, 13950.00, 79050.00, 0.00, 'confirmed'),
-
--- 2. Pending Payment Self-Drive (Vehicle 4: BMW M4, Borrower 48)
-(58, 4, 48, 'self', NULL,
- '2026-09-12 11:00:00', '2026-09-15 11:00:00',
- 'Colombo Kollupitiya', 'Hikkaduwa Coastal Strip',
- 72000.00, 15.00, 10800.00, 61200.00, 0.00, 'pending_payment'),
-
--- 3. Confirmed Hired Driver (Vehicle 7: Mustang GT, Borrower 49, Driver 17: Pradeep)
-(59, 7, 49, 'hired', 17,
- '2026-09-14 09:00:00', '2026-09-17 18:00:00',
- 'Kandy City Centre', 'Sigiriya Heritage Gate',
- 59600.00, 15.00, 8940.00, 38060.00, 12600.00, 'confirmed'),
-
--- 4. Pending Payment Hired Driver (Vehicle 8: Wrangler Rubicon, Borrower 50, Driver 21: Mohamed)
-(60, 8, 50, 'hired', 21,
- '2026-09-16 08:30:00', '2026-09-19 17:30:00',
- 'Negombo Grand Street', 'Ella Gap Viewpoint',
- 59100.00, 15.00, 8865.00, 39135.00, 11100.00, 'pending_payment'),
-
--- 5. Confirmed Owner-Driven (Vehicle 9: Audi RS6, Borrower 51)
-(61, 9, 51, 'owner', NULL,
- '2026-09-18 13:00:00', '2026-09-21 13:00:00',
- 'Colombo Town Hall', 'Bandaranaike International Airport',
- 87000.00, 15.00, 13050.00, 73950.00, 0.00, 'confirmed'),
-
--- 6. Pending Payment Self-Drive (Vehicle 11: Corvette Stingray, Borrower 52)
-(62, 11, 52, 'self', NULL,
- '2026-09-20 10:00:00', '2026-09-22 18:00:00',
- 'Colombo Havelock City', 'Mount Lavinia Hotel',
- 58000.00, 15.00, 8700.00, 49300.00, 0.00, 'pending_payment'),
-
--- 7. Confirmed Hired Driver (Vehicle 13: Mercedes G63, Borrower 53, Driver 25: Farhan)
-(63, 13, 53, 'hired', 25,
- '2026-09-22 09:00:00', '2026-09-25 18:00:00',
- 'Colombo Cinnamon Life', 'Yala National Park Junction',
- 145200.00, 15.00, 21780.00, 113220.00, 10200.00, 'confirmed'),
-
--- 8. Pending Payment Self-Drive (Vehicle 14: Tesla Model Y, Borrower 54)
-(64, 14, 54, 'self', NULL,
- '2026-09-24 08:00:00', '2026-09-27 18:00:00',
- 'Rajagiriya Gateway', 'Kandy Peradeniya Junction',
- 39600.00, 15.00, 5940.00, 33660.00, 0.00, 'pending_payment'),
-
--- 9. Confirmed Self-Drive (Vehicle 15: Civic Sport, Borrower 55)
-(65, 15, 55, 'self', NULL,
- '2026-09-26 11:00:00', '2026-09-29 11:00:00',
- 'Dehiwala Zoo Road', 'Galle Fort Ramparts',
- 20400.00, 15.00, 3060.00, 17340.00, 0.00, 'confirmed'),
-
--- 10. Pending Payment Hired Driver (Vehicle 16: Range Rover, Borrower 56, Driver 28: Anuradha)
-(66, 16, 56, 'hired', 28,
- '2026-09-28 07:00:00', '2026-09-30 19:00:00',
- 'Colombo Port City', 'Tangalle Bay Resort',
- 141400.00, 15.00, 21210.00, 112590.00, 7600.00, 'pending_payment');
-
--- ----------------------------------------------------------
--- MATCHING PAYMENTS (Completed for confirmed, Pending for pending_payment)
--- ----------------------------------------------------------
-INSERT INTO payments (id, booking_id, user_id, stripe_session_id, stripe_payment_intent_id, amount, currency, status) VALUES
-                                                                                                                          (57, 57, 47, 'sess_live_057_EE', 'pi_live_057_EE', 93000.00, 'LKR', 'completed'),
-                                                                                                                          (58, 58, 48, 'sess_live_058_FF', 'pi_live_058_FF', 72000.00, 'LKR', 'pending'),
-                                                                                                                          (59, 59, 49, 'sess_live_059_GG', 'pi_live_059_GG', 59600.00, 'LKR', 'completed'),
-                                                                                                                          (60, 60, 50, 'sess_live_060_HH', 'pi_live_060_HH', 59100.00, 'LKR', 'pending'),
-                                                                                                                          (61, 61, 51, 'sess_live_061_II', 'pi_live_061_II', 87000.00, 'LKR', 'completed'),
-                                                                                                                          (62, 62, 52, 'sess_live_062_JJ', 'pi_live_062_JJ', 58000.00, 'LKR', 'pending'),
-                                                                                                                          (63, 63, 53, 'sess_live_063_KK', 'pi_live_063_KK', 145200.00, 'LKR', 'completed'),
-                                                                                                                          (64, 64, 54, 'sess_live_064_LL', 'pi_live_064_LL', 39600.00, 'LKR', 'pending'),
-                                                                                                                          (65, 65, 55, 'sess_live_065_MM', 'pi_live_065_MM', 20400.00, 'LKR', 'completed'),
-                                                                                                                          (66, 66, 56, 'sess_live_066_NN', 'pi_live_066_NN', 141400.00, 'LKR', 'pending');
-
