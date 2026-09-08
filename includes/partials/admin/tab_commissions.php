@@ -11,7 +11,7 @@
         <?php if (empty($commissions)): ?>
             <p style="text-align:center; padding: 40px; color: var(--color-secondary);">No commissions collected yet.</p>
         <?php else: ?>
-            <table class="mgmt-table">
+            <table class="table" style="width: 100%;">
                 <thead>
                     <tr>
                         <th>Booking ID</th>
