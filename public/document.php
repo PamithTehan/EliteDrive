@@ -53,7 +53,7 @@ if (!$path) {
     exit('Document not found');
 }
 
-$fullPath = __DIR__ . '/../storage/' . $path;
+$fullPath = __DIR__ . '/assets/uploads/' . $path;
 if (!file_exists($fullPath)) {
     http_response_code(404);
     exit('File missing on disk');
