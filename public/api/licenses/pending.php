@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: pending.php
+ * Purpose: Endpoint to fetch pending license approvals
+ */
 require_once __DIR__ . '/../../../includes/db.php';
 require_once __DIR__ . '/../../../includes/auth.php';
 

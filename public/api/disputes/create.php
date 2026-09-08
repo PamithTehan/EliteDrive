@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: create.php
+ * Purpose: Endpoint to submit a general dispute
+ */
 require_once __DIR__ . '/../../../includes/db.php';
 require_once __DIR__ . '/../../../includes/auth.php';
 require_once __DIR__ . '/../../../includes/functions.php';

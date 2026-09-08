@@ -1,3 +1,7 @@
+/**
+ * File: about.css
+ * Purpose: Styles specific to the About page
+ */
 .about-hero {
     background-image: linear-gradient(to right, rgba(15, 23, 42, 0.88) 0%, rgba(15, 23, 42, 0.4) 100%), url('https://images.unsplash.com/photo-1603386329225-868f9b1ee6c9?q=80&w=2069&auto=format&fit=crop');
     background-size: cover;

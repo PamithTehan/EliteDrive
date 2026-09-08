@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: search.php
+ * Purpose: JSON endpoint for fleet search filtering
+ */
 require_once __DIR__ . '/../../../includes/db.php';
 require_once __DIR__ . '/../../../includes/functions.php';
 

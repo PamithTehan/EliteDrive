@@ -1,3 +1,7 @@
+/**
+ * File: header-footer.css
+ * Purpose: Global navigation and footer styles
+ */
 body { 
   display: flex; 
   flex-direction: column; 

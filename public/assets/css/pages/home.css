@@ -1,3 +1,7 @@
+/**
+ * File: home.css
+ * Purpose: Hero banner and landing page styles
+ */
 .home-hero {
     position: relative;
     background-image: linear-gradient(to right, rgba(15, 23, 42, 0.88) 0%, rgba(15, 23, 42, 0.3) 100%), url('../../images/paul-kansonkho-9xjHQvdMi4c-unsplash%20(1).jpg');

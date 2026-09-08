@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: functions.php
+ * Purpose: Global helper functions
+ */
 // includes/functions.php
 if (defined('FUNCTIONS_PHP_LOADED')) return;
 

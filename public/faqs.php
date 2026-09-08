@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: faqs.php
+ * Purpose: Frequently Asked Questions
+ */
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/functions.php';

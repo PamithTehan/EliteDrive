@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: management_queries.php
+ * Purpose: Complex SQL aggregation logic for admin dashboards
+ */
 // Pagination Setup
 $perPage = 10;
 $pageBorrowers = isset($_GET['page_borrowers']) ? max(1, (int)$_GET['page_borrowers']) : 1;

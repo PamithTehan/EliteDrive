@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: upload.php
+ * Purpose: Secure file upload handler
+ */
 // includes/upload.php
 
 function handleSecureUpload(array $file, string $subfolder): string {

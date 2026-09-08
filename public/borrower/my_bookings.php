@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: my_bookings.php
+ * Purpose: Borrower's rental history
+ */
 require_once __DIR__ . '/../../includes/db.php';
 require_once __DIR__ . '/../../includes/auth.php';
 require_once __DIR__ . '/../../includes/functions.php';
@@ -233,26 +237,26 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             <input type="hidden" id="dispute-booking-id" name="booking_id">
             
             <div class="form-group">
-                <label for="dispute-reason">Reason</label>
-                <input type="text" id="dispute-reason" name="reason" class="form-control" placeholder="e.g. Damage, Late Return, No Show" required>
+                <label for="dispute-reason" class="form-label">Reason</label>
+                <input type="text" id="dispute-reason" name="reason" class="input" placeholder="e.g. Damage, Late Return, No Show" required>
             </div>
             
             <div class="form-group">
-                <label for="dispute-details">Details</label>
-                <textarea id="dispute-details" name="details" class="form-control" rows="4" placeholder="Please describe the issue..." required></textarea>
+                <label for="dispute-details" class="form-label">Details</label>
+                <textarea id="dispute-details" name="details" class="input" rows="4" placeholder="Please describe the issue..." required style="resize: vertical;"></textarea>
             </div>
             
             <div class="form-group">
-                <label for="dispute-contact-method">Preferred Contact Method</label>
-                <select id="dispute-contact-method" name="preferred_contact_method" class="form-control">
+                <label for="dispute-contact-method" class="form-label">Preferred Contact Method</label>
+                <select id="dispute-contact-method" name="preferred_contact_method" class="input">
                     <option value="email">Email</option>
                     <option value="phone">Phone</option>
                 </select>
             </div>
             
             <div class="form-group">
-                <label for="dispute-contact-info">Contact Information</label>
-                <input type="text" id="dispute-contact-info" name="contact_info" class="form-control" placeholder="Your email or phone number" required>
+                <label for="dispute-contact-info" class="form-label">Contact Information</label>
+                <input type="text" id="dispute-contact-info" name="contact_info" class="input" placeholder="Your email or phone number" required>
             </div>
             
             <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">

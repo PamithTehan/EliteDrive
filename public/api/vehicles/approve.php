@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: approve.php
+ * Purpose: Endpoint to approve/reject vehicles
+ */
 require_once __DIR__ . '/../../../includes/db.php';
 require_once __DIR__ . '/../../../includes/auth.php';
 require_once __DIR__ . '/../../../includes/functions.php';

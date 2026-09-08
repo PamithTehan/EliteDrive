@@ -1,3 +1,7 @@
+/**
+ * File: tokens.css
+ * Purpose: CSS variables (colors, fonts, sizing)
+ */
 :root {
   --color-surface: #f7f9fb;
   --color-on-surface: #0f172a;

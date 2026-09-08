@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: document.php
+ * Purpose: File serving endpoint for secure docs
+ */
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/auth.php';
 

@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: pagination.php
+ * Purpose: Reusable pagination logic
+ */
 // includes/partials/pagination.php
 // Expected variables:
 // $currentPage (int)

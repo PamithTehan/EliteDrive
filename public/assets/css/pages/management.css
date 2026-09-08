@@ -1,3 +1,7 @@
+/**
+ * File: management.css
+ * Purpose: Complex admin dashboard overrides
+ */
 @media print {
     body * {
         visibility: hidden;

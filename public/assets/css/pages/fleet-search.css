@@ -1,3 +1,7 @@
+/**
+ * File: fleet-search.css
+ * Purpose: Filter sidebar and search grid layout
+ */
 .fleet-hero {
     background-color: var(--color-surface);
     padding: 48px 0 32px;

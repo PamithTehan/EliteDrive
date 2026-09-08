@@ -1,3 +1,7 @@
+/**
+ * File: alerts.css
+ * Purpose: Toast notifications and inline alerts
+ */
 .alert {
     padding: var(--space-sm) var(--space-md);
     border-radius: var(--radius-sm);

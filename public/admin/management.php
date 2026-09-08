@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: management.php
+ * Purpose: Master dashboard for sysadmins
+ */
 require_once __DIR__ . '/../../includes/db.php';
 require_once __DIR__ . '/../../includes/auth.php';
 require_once __DIR__ . '/../../includes/functions.php';
@@ -54,16 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 require_once __DIR__ . '/../../includes/admin/management_queries.php';
 
 
-// User initials for avatar circle
-$initials = '';
-$parts = explode(' ', trim($user['full_name']));
-foreach ($parts as $p) {
-    if (!empty($p)) {
-        $initials .= strtoupper($p[0]);
-    }
-    if (strlen($initials) >= 2) break;
-}
-if (!$initials) $initials = 'U';
+
 
 $extraCss = ['profile', 'dashboard', 'management'];
 require_once __DIR__ . '/../../includes/partials/head.php';
@@ -79,55 +74,10 @@ require_once __DIR__ . '/../../includes/partials/head.php';
 
     <div class="container">
         <div class="profile-layout">
-            <aside>
-                <div class="profile-user-card">
-                    <div class="profile-avatar-circle">
-                        <?= escapeHtml($initials) ?>
-                    </div>
-                    <div class="profile-user-name"><?= escapeHtml($user['full_name']) ?></div>
-                    <div class="profile-user-email"><?= escapeHtml($user['email']) ?></div>
-                    
-                    <div class="profile-role-badges">
-                        <span class="role-badge admin">Admin</span>
-                    </div>
-
-                    <hr class="profile-stats-divider">
-                    
-                    <div class="profile-meta-list" style="margin-bottom: 24px;">
-                        <a href="<?= baseUrl('/admin/vehicle_approvals.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
-                            <span class="material-symbols-outlined">directions_car</span> Vehicle Approvals
-                        </a>
-                        <a href="<?= baseUrl('/admin/verification_queue.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
-                            <span class="material-symbols-outlined">verified</span> Verification Queue
-                        </a>
-                        <a href="<?= baseUrl('/admin/driver_assignments.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
-                            <span class="material-symbols-outlined">work</span> Driver Assignments
-                        </a>
-                        <a href="<?= baseUrl('/admin/ongoing_bookings.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
-                            <span class="material-symbols-outlined">event</span> Ongoing Bookings
-                        </a>
-                        <a href="<?= baseUrl('/admin/inquiries.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
-                            <span class="material-symbols-outlined">contact_support</span> Inquiries
-                        </a>
-                        <a href="<?= baseUrl('/admin/disputes.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
-                            <span class="material-symbols-outlined">gavel</span> Disputes
-                        </a>
-                        <a href="<?= baseUrl('/admin/income.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
-                            <span class="material-symbols-outlined">payments</span> Income
-                        </a>
-                        <a href="<?= baseUrl('/admin/management.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: #e0e7ff; font-weight: 600;">
-                            <span class="material-symbols-outlined">manage_accounts</span> System Management
-                        </a>
-                    </div>
-                </div>
-            </aside>
-            
-            <div class="profile-content-area">
-                
-                <?php if ($success): ?>
-                    <div class="alert alert-success" style="margin-bottom: 20px;"><?= escapeHtml($success) ?></div>
-                <?php endif; ?>
-                
+            <?php 
+            $activeAdminNav = 'management';
+            require __DIR__ . '/../../includes/partials/admin/sidebar.php'; 
+            ?>                
                 <?php if ($error): ?>
                     <div class="alert alert-error" style="margin-bottom: 20px;"><?= escapeHtml($error) ?></div>
                 <?php endif; ?>

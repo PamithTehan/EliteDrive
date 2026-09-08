@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: cancel.php
+ * Purpose: Endpoint to cancel a booking
+ */
 require_once __DIR__ . '/../../../includes/db.php';
 require_once __DIR__ . '/../../../includes/auth.php';
 require_once __DIR__ . '/../../../includes/functions.php';

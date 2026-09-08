@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: vehicle_form.php
+ * Purpose: Form to add or edit a listed vehicle
+ */
 require_once __DIR__ . '/../../includes/db.php';
 require_once __DIR__ . '/../../includes/auth.php';
 require_once __DIR__ . '/../../includes/functions.php';
