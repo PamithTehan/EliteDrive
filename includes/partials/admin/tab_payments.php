@@ -4,7 +4,7 @@
         <?php if (empty($payments)): ?>
             <p style="text-align:center; padding: 40px; color: var(--color-secondary);">No payments collected yet.</p>
         <?php else: ?>
-            <table class="mgmt-table">
+            <table class="table" style="width: 100%;">
                 <thead>
                     <tr>
                         <th>Payment ID</th>
