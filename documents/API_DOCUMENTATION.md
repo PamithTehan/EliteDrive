@@ -5,7 +5,7 @@ The EliteDrive backend handles asynchronous requests through a collection of PHP
 ## 1. Bookings (`/api/bookings/`)
 
 ### `POST /api/bookings/create.php`
-Creates a new booking and places it in `pending_payment` (or `pending_verification` if driver's license check is needed).
+Creates a new booking and places it in `pending_payment` (or `pending_verification` if driver's license check is needed, or `pending_assignment` if a hired driver is requested but none is specified).
 - **Parameters:**
   - `vehicle_id` (int)
   - `pickup_date`, `return_date` (datetime strings)
@@ -25,7 +25,16 @@ Allows an administrator to assign a driver from the unassigned pool to a specifi
   - `driver_id` (int)
 
 ### `GET /api/bookings/unassigned.php`
-Fetches a list of active bookings that currently require a hired driver but do not have one assigned.
+Fetches a list of active bookings that currently require a hired driver but do not have one assigned (e.g. `pending_assignment`).
+
+### `POST /api/bookings/dispute.php`
+Allows a borrower to submit a dispute for an active or completed booking.
+- **Parameters:**
+  - `booking_id` (int)
+  - `reason` (string)
+  - `details` (string)
+  - `preferred_contact_method` (string: email/phone)
+  - `contact_info` (string)
 
 ## 2. Drivers (`/api/drivers/`)
 

@@ -52,7 +52,7 @@ The central transactional table connecting borrowers, vehicles, and (optionally)
 - `pickup_date`, `return_date`: DATETIME (Used for 6-hour block calculation)
 - `pickup_location`, `return_location`: VARCHAR (Standardized hubs: CMB Katunayaka, HRI Mattala, EliteDrive HQ)
 - `total_price`: DECIMAL (Calculated via functions.php)
-- `status`: ENUM ('pending_payment', 'pending_verification', 'confirmed', 'active', 'completed', 'reviewed', 'rejected', 'cancelled', 'disputed')
+- `status`: ENUM ('pending_assignment', 'pending_payment', 'pending_verification', 'confirmed', 'active', 'completed', 'reviewed', 'rejected', 'cancelled', 'disputed', 'resolved')
 
 ## 6. `payments` Table
 Records Stripe payment intents and transactions associated with a booking.
@@ -84,3 +84,13 @@ Stores contact form submissions.
 - `full_name`, `email`, `subject`, `message`: Submitted by user
 - `status`: ENUM ('pending', 'responded', 'closed')
 - `admin_response`: TEXT (Admin's reply)
+
+## 10. `disputes` Table
+Tracks disputes submitted by borrowers for a booking.
+
+- `booking_id`, `user_id`: Foreign Keys
+- `reason`, `details`: TEXT (Reason and full description of the dispute)
+- `preferred_contact_method`: ENUM ('email', 'phone')
+- `contact_info`: VARCHAR
+- `status`: ENUM ('open', 'resolved')
+- `admin_notes`: TEXT
