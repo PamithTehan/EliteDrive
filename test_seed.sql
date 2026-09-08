@@ -24,7 +24,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 -- ----------------------------------------------------------
 -- 1. USERS (60 Records)
--- All users share the default password: Password123!
+-- Password Hash: $2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO
 -- ----------------------------------------------------------
 INSERT INTO users (id, full_name, email, password_hash, contact_number, is_admin, is_owner, is_borrower, is_driver, created_at) VALUES
                                                                                                                                     (1, 'Kasun Sandaruwan', 'kasun.sandaruwan@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-77-1234501', 1, 0, 0, 0, '2024-01-01 08:00:00'),
@@ -87,6 +87,7 @@ INSERT INTO users (id, full_name, email, password_hash, contact_number, is_admin
                                                                                                                                     (58, 'Praveen Jayawardena', 'praveen.j@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-71-8811258', 0, 0, 1, 0, '2024-02-27 21:30:00'),
                                                                                                                                     (59, 'Senuri Wijeratne', 'senuri.w@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-76-9922359', 0, 0, 1, 0, '2024-02-28 22:00:00'),
                                                                                                                                     (60, 'Sanjeeva Pushpakumara', 'sanjeeva.p@example.com', '$2y$10$8X/lm4arVK/zcK6LbnmJa.h.iKZ4sS2z0CJz0PtIVf3GE971csZqO', '+94-77-0033460', 0, 0, 1, 0, '2024-02-29 22:30:00');
+
 -- ----------------------------------------------------------
 -- 2. DRIVERS (30 Records: Users 11 to 40)
 -- ----------------------------------------------------------
@@ -219,7 +220,6 @@ INSERT INTO driving_license_images (id, license_id, front_image_path, back_image
 
 -- ----------------------------------------------------------
 -- 6. VEHICLES (50 Records)
--- Exact 150-word descriptions; km_rate formatted (km/L or km/charge)
 -- ----------------------------------------------------------
 INSERT INTO vehicles (id, owner_id, make, model, category, daily_rate, location, transmission, mileage, km_rate, yom, yor, status, rejection_reason, description, created_at) VALUES
                                                                                                                                                                                   (1, 3, 'Tesla', 'Model S Plaid', 'Electric,Luxury', 22000.00, 'Los Angeles Downtown, CA', 'Auto', 12400, 560.00, 2022, 2022, 'approved', NULL,
@@ -430,7 +430,10 @@ INSERT INTO vehicle_photos (id, vehicle_id, photo_path, is_primary) VALUES
                                                                         (52, 50, '/assets/uploads/vehicles/Mercedes-Benz GLS 580 4MATIC (2023)(3).jpg', 0);
 
 -- ----------------------------------------------------------
--- 8. BOOKINGS (66 Records - Jan 2026 to Sep 2026)
+-- 8. BOOKINGS (71 Records)
+-- 1-56: Completed Historical Pipeline (Jan 2026 - Sep 2026)
+-- 57-66: Active/Upcoming Testing Pipeline
+-- 67-71: Unassigned Hired Driver Pipeline for Admin Matching
 -- ----------------------------------------------------------
 INSERT INTO bookings (
     id, vehicle_id, borrower_id, driver_arrangement, assigned_driver_id,
@@ -438,7 +441,7 @@ INSERT INTO bookings (
     total_price, commission_rate, commission_amount, owner_earnings, driver_earnings,
     status
 ) VALUES
--- 1-50: Completed Bookings across Jan - Aug 2026
+-- 1-50: Completed (Jan - Aug 2026)
 (1, 1, 11, 'hired', 12, '2026-01-05 09:00:00', '2026-01-08 18:00:00', 'Los Angeles Downtown, CA', 'Los Angeles Downtown, CA', 76500.00, 15.00, 11475.00, 54525.00, 10500.00, 'completed'),
 (2, 2, 12, 'self', NULL, '2026-01-10 10:00:00', '2026-01-13 10:00:00', 'Beverly Hills, CA', 'Beverly Hills, CA', 93000.00, 15.00, 13950.00, 79050.00, 0.00, 'completed'),
 (3, 3, 13, 'owner', NULL, '2026-01-15 08:00:00', '2026-01-18 18:00:00', 'Denver Metro, CO', 'Denver Metro, CO', 55500.00, 15.00, 8325.00, 47175.00, 0.00, 'completed'),
@@ -488,17 +491,17 @@ INSERT INTO bookings (
 (47, 47, 57, 'self', NULL, '2026-08-21 09:00:00', '2026-08-24 09:00:00', 'San Diego Balboa Park, CA', 'San Diego Balboa Park, CA', 22500.00, 15.00, 3375.00, 19125.00, 0.00, 'completed'),
 (48, 48, 58, 'hired', 36, '2026-08-24 11:00:00', '2026-08-27 18:00:00', 'Oklahoma City Bricktown, OK', 'Oklahoma City Bricktown, OK', 99300.00, 15.00, 14895.00, 70305.00, 14100.00, 'completed'),
 (49, 49, 59, 'self', NULL, '2026-08-27 10:00:00', '2026-08-30 10:00:00', 'Ann Arbor Downtown, MI', 'Ann Arbor Downtown, MI', 54000.00, 15.00, 8100.00, 45900.00, 0.00, 'completed'),
-(50, 50, 60, 'self', NULL, '2026-08-28 13:00:00', '2026-08-31 13:00:00', 'Greenwich Ave, CT', 'Greenwich Ave, CT', 96000.00, 15.00, 14400.00, 81600.00, 0.00, 'confirmed'),
+(50, 50, 60, 'self', NULL, '2026-08-28 13:00:00', '2026-08-31 13:00:00', 'Greenwich Ave, CT', 'Greenwich Ave, CT', 96000.00, 15.00, 14400.00, 81600.00, 0.00, 'completed'),
 
--- 51-56: Active, Confirmed & Pending Verification September 2026 Bookings
-(51, 1, 41, 'self', NULL, '2026-09-06 09:00:00', '2026-09-09 18:00:00', 'Colombo Fort Railway Station', 'Bandaranaike International Airport', 66000.00, 15.00, 9900.00, 56100.00, 0.00, 'active'),
-(52, 3, 42, 'hired', 14, '2026-09-07 08:00:00', '2026-09-10 17:00:00', 'Colombo Cinnamon Grand', 'Kandy City Centre', 69000.00, 15.00, 10350.00, 45150.00, 13500.00, 'active'),
-(53, 6, 43, 'self', NULL, '2026-09-12 10:00:00', '2026-09-15 10:00:00', 'Nugegoda Junction', 'Galle Fort Clock Tower', 34500.00, 15.00, 5175.00, 29325.00, 0.00, 'confirmed'),
-(54, 5, 44, 'hired', 20, '2026-09-16 14:00:00', '2026-09-19 14:00:00', 'Colombo Shangri-La', 'Mirissa Beachfront', 121500.00, 15.00, 18225.00, 86775.00, 16500.00, 'confirmed'),
-(55, 12, 45, 'owner', NULL, '2026-09-22 07:30:00', '2026-09-25 18:30:00', 'Kandy Peradeniya Road', 'Nuwara Eliya Town', 28500.00, 15.00, 4275.00, 24225.00, 0.00, 'confirmed'),
-(56, 10, 46, 'hired', 11, '2026-09-26 09:00:00', '2026-09-29 18:00:00', 'Battaramulla Central', 'Negombo Beach Road', 45000.00, 15.00, 6750.00, 26250.00, 12000.00, 'pending_verification'),
+-- 51-56: Completed Early/Mid September 2026
+(51, 1, 41, 'self', NULL, '2026-09-01 09:00:00', '2026-09-04 18:00:00', 'Colombo Fort Railway Station', 'Bandaranaike International Airport', 66000.00, 15.00, 9900.00, 56100.00, 0.00, 'completed'),
+(52, 3, 42, 'hired', 14, '2026-09-05 08:00:00', '2026-09-08 17:00:00', 'Colombo Cinnamon Grand', 'Kandy City Centre', 69000.00, 15.00, 10350.00, 45150.00, 13500.00, 'completed'),
+(53, 6, 43, 'self', NULL, '2026-09-10 10:00:00', '2026-09-13 10:00:00', 'Nugegoda Junction', 'Galle Fort Clock Tower', 34500.00, 15.00, 5175.00, 29325.00, 0.00, 'completed'),
+(54, 5, 44, 'hired', 20, '2026-09-15 14:00:00', '2026-09-18 14:00:00', 'Colombo Shangri-La', 'Mirissa Beachfront', 121500.00, 15.00, 18225.00, 86775.00, 16500.00, 'completed'),
+(55, 12, 45, 'owner', NULL, '2026-09-20 07:30:00', '2026-09-23 18:30:00', 'Kandy Peradeniya Road', 'Nuwara Eliya Town', 28500.00, 15.00, 4275.00, 24225.00, 0.00, 'completed'),
+(56, 10, 46, 'hired', 11, '2026-09-25 09:00:00', '2026-09-28 18:00:00', 'Battaramulla Central', 'Negombo Beach Road', 45000.00, 15.00, 6750.00, 26250.00, 12000.00, 'completed'),
 
--- 57-66: Additional September 2026 Pipeline Bookings (Pending Payment & Confirmed)
+-- 57-66: Active/Upcoming Testing Pipeline
 (57, 2, 47, 'self', NULL, '2026-09-10 10:00:00', '2026-09-13 18:00:00', 'Colombo Galle Face Hotel', 'Bentota Beach Resort', 93000.00, 15.00, 13950.00, 79050.00, 0.00, 'confirmed'),
 (58, 4, 48, 'self', NULL, '2026-09-12 11:00:00', '2026-09-15 11:00:00', 'Colombo Kollupitiya', 'Hikkaduwa Coastal Strip', 72000.00, 15.00, 10800.00, 61200.00, 0.00, 'pending_payment'),
 (59, 7, 49, 'hired', 17, '2026-09-14 09:00:00', '2026-09-17 18:00:00', 'Kandy City Centre', 'Sigiriya Heritage Gate', 59600.00, 15.00, 8940.00, 38060.00, 12600.00, 'confirmed'),
@@ -509,37 +512,16 @@ INSERT INTO bookings (
 (64, 14, 54, 'self', NULL, '2026-09-24 08:00:00', '2026-09-27 18:00:00', 'Rajagiriya Gateway', 'Kandy Peradeniya Junction', 39600.00, 15.00, 5940.00, 33660.00, 0.00, 'pending_payment'),
 (65, 15, 55, 'self', NULL, '2026-09-26 11:00:00', '2026-09-29 11:00:00', 'Dehiwala Zoo Road', 'Galle Fort Ramparts', 20400.00, 15.00, 3060.00, 17340.00, 0.00, 'confirmed'),
 (66, 16, 56, 'hired', 28, '2026-09-28 07:00:00', '2026-09-30 19:00:00', 'Colombo Port City', 'Tangalle Bay Resort', 141400.00, 15.00, 21210.00, 112590.00, 7600.00, 'pending_payment'),
-(67, 18, 57, 'hired', NULL,
- '2026-09-08 14:00:00', '2026-09-11 18:00:00',
- 'Colombo Hilton', 'Kandy Earls Regency',
- 78000.00, 15.00, 11700.00, 66300.00, 0.00, 'active'),
 
--- 2. Confirmed upcoming booking (Vehicle 23: Volvo XC90, Owner 9, Borrower 58)
-(68, 23, 58, 'hired', NULL,
- '2026-09-14 08:30:00', '2026-09-17 17:30:00',
- 'Bandaranaike International Airport', 'Nuwara Eliya Grand Hotel',
- 84000.00, 15.00, 12600.00, 71400.00, 0.00, 'confirmed'),
-
--- 3. Confirmed coastal corporate trip (Vehicle 25: Cadillac Escalade, Owner 3, Borrower 59)
-(69, 25, 59, 'hired', NULL,
- '2026-09-18 09:00:00', '2026-09-21 19:00:00',
- 'Colombo World Trade Center', 'Galle Fort Lighthouse Street',
- 152000.00, 15.00, 22800.00, 129200.00, 0.00, 'confirmed'),
-
--- 4. Confirmed safari expedition (Vehicle 29: Ford Bronco, Owner 7, Borrower 60)
-(70, 29, 60, 'hired', NULL,
- '2026-09-22 06:00:00', '2026-09-25 18:00:00',
- 'Battaramulla Central', 'Wilpattu Safari Entrance',
- 106000.00, 15.00, 15900.00, 90100.00, 0.00, 'confirmed'),
-
--- 5. Confirmed executive EV transport (Vehicle 21: Audi e-tron GT, Owner 7, Borrower 57)
-(71, 21, 57, 'hired', NULL,
- '2026-09-26 10:00:00', '2026-09-29 16:00:00',
- 'Colombo Cinnamon Life', 'Negombo Jetwing Blue',
- 112000.00, 15.00, 16800.00, 95200.00, 0.00, 'confirmed');
+-- 67-71: Unassigned Hired Driver Pipeline (Admin Driver Assignment)
+(67, 18, 57, 'hired', NULL, '2026-09-08 14:00:00', '2026-09-11 18:00:00', 'Colombo Hilton', 'Kandy Earls Regency', 78000.00, 15.00, 11700.00, 66300.00, 0.00, 'active'),
+(68, 23, 58, 'hired', NULL, '2026-09-14 08:30:00', '2026-09-17 17:30:00', 'Bandaranaike International Airport', 'Nuwara Eliya Grand Hotel', 84000.00, 15.00, 12600.00, 71400.00, 0.00, 'confirmed'),
+(69, 25, 59, 'hired', NULL, '2026-09-18 09:00:00', '2026-09-21 19:00:00', 'Colombo World Trade Center', 'Galle Fort Lighthouse Street', 152000.00, 15.00, 22800.00, 129200.00, 0.00, 'confirmed'),
+(70, 29, 60, 'hired', NULL, '2026-09-22 06:00:00', '2026-09-25 18:00:00', 'Battaramulla Central', 'Wilpattu Safari Entrance', 106000.00, 15.00, 15900.00, 90100.00, 0.00, 'confirmed'),
+(71, 21, 57, 'hired', NULL, '2026-09-26 10:00:00', '2026-09-29 16:00:00', 'Colombo Cinnamon Life', 'Negombo Jetwing Blue', 112000.00, 15.00, 16800.00, 95200.00, 0.00, 'confirmed');
 
 -- ----------------------------------------------------------
--- 9. PAYMENTS (66 Records - 1:1 Booking Mapping)
+-- 9. PAYMENTS (71 Records - 1:1 Booking Mapping)
 -- ----------------------------------------------------------
 INSERT INTO payments (id, booking_id, user_id, stripe_session_id, stripe_payment_intent_id, amount, currency, status) VALUES
                                                                                                                           (1, 1, 11, 'sess_live_001_A', 'pi_live_001_A', 76500.00, 'LKR', 'completed'),
@@ -597,7 +579,7 @@ INSERT INTO payments (id, booking_id, user_id, stripe_session_id, stripe_payment
                                                                                                                           (53, 53, 43, 'sess_live_053_AA', 'pi_live_053_AA', 34500.00, 'LKR', 'completed'),
                                                                                                                           (54, 54, 44, 'sess_live_054_BB', 'pi_live_054_BB', 121500.00, 'LKR', 'completed'),
                                                                                                                           (55, 55, 45, 'sess_live_055_CC', 'pi_live_055_CC', 28500.00, 'LKR', 'completed'),
-                                                                                                                          (56, 56, 46, 'sess_live_056_DD', 'pi_live_056_DD', 45000.00, 'LKR', 'pending'),
+                                                                                                                          (56, 56, 46, 'sess_live_056_DD', 'pi_live_056_DD', 45000.00, 'LKR', 'completed'),
                                                                                                                           (57, 57, 47, 'sess_live_057_EE', 'pi_live_057_EE', 93000.00, 'LKR', 'completed'),
                                                                                                                           (58, 58, 48, 'sess_live_058_FF', 'pi_live_058_FF', 72000.00, 'LKR', 'pending'),
                                                                                                                           (59, 59, 49, 'sess_live_059_GG', 'pi_live_059_GG', 59600.00, 'LKR', 'completed'),
@@ -616,97 +598,91 @@ INSERT INTO payments (id, booking_id, user_id, stripe_session_id, stripe_payment
 
 -- ----------------------------------------------------------
 -- 10. REVIEWS (80 Records)
--- Strict conformance to UNIQUE(booking_id, reviewer_id, target_id)
 -- ----------------------------------------------------------
 INSERT INTO reviews (id, booking_id, reviewer_id, target_id, target_type, rating, comment) VALUES
--- 1-50: Vehicle Reviews
-(1, 1, 11, 1, 'vehicle', 5, 'Exceptional performance and quietness. The Model S exceeded all travel expectations!'),
-(2, 2, 12, 2, 'vehicle', 5, 'The 911 handled canyon roads flawlessly. Pure German engineering at its finest.'),
-(3, 3, 13, 3, 'vehicle', 5, 'Defender proved completely unstoppable during our weekend mountain expedition.'),
-(4, 4, 14, 4, 'vehicle', 4, 'Great speed and handling. Suspension is somewhat stiff on bumpy city streets.'),
-(5, 5, 15, 5, 'vehicle', 5, 'Supreme executive comfort. The quietest cabin I have ever traveled inside.'),
-(6, 6, 16, 6, 'vehicle', 4, 'Solid gas mileage and effortless operation around Austin downtown routes.'),
-(7, 7, 17, 7, 'vehicle', 5, 'Classic American muscle roar! The manual gearbox was crisp and engaging.'),
-(8, 8, 18, 8, 'vehicle', 5, 'Tackled rocky desert climbs with ease. Perfect setup for outdoor explorers.'),
-(9, 9, 19, 9, 'vehicle', 5, 'The ultimate all weather super wagon. Incredible acceleration with ample boot space.'),
-(10, 10, 20, 10, 'vehicle', 5, 'Fast charging and modern interior layout made the Pacific Northwest trip smooth.'),
-(11, 11, 21, 11, 'vehicle', 5, 'Mid engine balance feels like an exotic supercar. Highly recommended!'),
-(12, 12, 22, 12, 'vehicle', 4, 'Very capable wagon with comfortable ride height and easy roof loading options.'),
-(13, 13, 23, 13, 'vehicle', 5, 'Unmatched road presence and astonishing AMG exhaust rumble across Dallas.'),
-(14, 14, 24, 14, 'vehicle', 4, 'Practical and economical EV. Plenty of luggage storage in the frunk and rear.'),
-(15, 15, 25, 15, 'vehicle', 4, 'Economical city vehicle. Parked effortlessly in cramped theme park spaces.'),
-(16, 16, 26, 16, 'vehicle', 5, 'Pure luxury and serenity. The rear reclining seating felt like first class flight.'),
-(17, 17, 27, 17, 'vehicle', 5, 'Dependable hybrid SUV with low fuel consumption and great snowy road grip.'),
-(18, 18, 28, 18, 'vehicle', 5, 'Sophisticated German luxury and intuitive touchscreen navigation software.'),
-(19, 19, 29, 19, 'vehicle', 5, 'The front trunk and smooth electric pickup capabilities blew everyone away.'),
-(20, 20, 30, 20, 'vehicle', 4, 'Very stylish exterior and surprisingly engaging steering responsiveness.'),
-(21, 21, 31, 21, 'vehicle', 5, 'Breathtaking electric grand tourer. Attracted positive glances everywhere.'),
-(22, 22, 32, 22, 'vehicle', 5, 'Tough, reliable truck for remote New Mexico hiking trailhead access.'),
-(23, 23, 33, 23, 'vehicle', 5, 'Refined plug in hybrid SUV with serene interior woodwork and great safety tech.'),
-(24, 24, 34, 24, 'vehicle', 3, 'Great fuel mileage and budget rates, though interior amenities are basic.'),
-(25, 25, 35, 25, 'vehicle', 5, 'Magnificent full size luxury transporter for our corporate client team.'),
-(26, 26, 36, 26, 'vehicle', 5, 'Minimalist Nordic interior and razor sharp all wheel drive acceleration.'),
-(27, 27, 37, 27, 'vehicle', 5, 'Stunning convertible styling with a glorious naturally aspirated V8 soundtrack.'),
-(28, 28, 38, 28, 'vehicle', 5, 'Roomy three row SUV that kept the entire family comfortable across four states.'),
-(29, 29, 39, 29, 'vehicle', 5, 'Outstanding open air capability across Utah red rock trail routes.'),
-(30, 30, 40, 30, 'vehicle', 5, 'The gold standard hot hatch. Fun three pedal manual transmission feel.'),
-(31, 31, 41, 31, 'vehicle', 5, 'Quad motor setup offers otherworldly control on dirt trails and open highways.'),
-(32, 32, 42, 32, 'vehicle', 5, 'Executive elegance and silky smooth six cylinder acceleration.'),
-(33, 33, 43, 33, 'vehicle', 4, 'Rocket fast acceleration that makes interstate highway passing effortless.'),
-(34, 34, 44, 34, 'vehicle', 4, 'Spacious interior room with plenty of space for multiple sports luggage bags.'),
-(35, 35, 45, 35, 'vehicle', 5, 'Sharp cornering and roaring twin turbo engine. An absolute track weapon.'),
-(36, 36, 46, 36, 'vehicle', 4, 'Simple, reliable, and frugal transport for running urban errands smoothly.'),
-(37, 37, 47, 37, 'vehicle', 5, 'GTS exhaust sound gave me goosebumps. Brilliant high riding sports car dynamics.'),
-(38, 38, 48, 38, 'vehicle', 4, 'Muscular electric crossover with intuitive displays and agile handling.'),
-(39, 39, 49, 39, 'vehicle', 5, 'Peaceful cabin sound insulation and proven Japanese mechanical reliability.'),
-(40, 40, 50, 40, 'vehicle', 5, 'Cruised into Yellowstone quietly on electric mode. Supreme versatility!'),
-(41, 41, 51, 41, 'vehicle', 5, 'The Genesis G90 matches the finest European saloons in fit and finish.'),
-(42, 42, 52, 42, 'vehicle', 5, 'Raw American muscle roar and massive cornering grip from the 1LE package.'),
-(43, 43, 53, 43, 'vehicle', 5, 'Futuristic glass roof and incredible electric range on California highways.'),
-(44, 44, 54, 44, 'vehicle', 4, 'Great all weather compact crossover for outdoor trips around Idaho.'),
-(45, 45, 55, 45, 'vehicle', 5, 'Quiet highway cruising and comfortable seating for seven family members.'),
-(46, 46, 56, 46, 'vehicle', 5, 'Swift 800V charging speeds and handsome athletic exterior styling.'),
-(47, 47, 57, 47, 'vehicle', 5, 'The purest driver roadster available. Dropping the manual top takes seconds.'),
-(48, 48, 58, 48, 'vehicle', 5, 'Supercharged V8 power leaves an indelible grin on your face at every throttle dip.'),
-(49, 49, 59, 49, 'vehicle', 5, 'Sharp electric handling and practical Gran Coupe hatchback flexibility.'),
-(50, 50, 60, 50, 'vehicle', 5, 'First class family luxury cruiser that glides effortlessly over rough pavement.'),
-
--- 51-65: Driver Reviews
-(51, 1, 11, 12, 'driver', 5, 'Pabasarani was punctual, polite, and navigated Colombo traffic with great patience.'),
-(52, 4, 14, 15, 'driver', 5, 'Asela is an exceptional chauffeur. Very smooth driving and knew all the scenic coastal bypasses.'),
-(53, 7, 17, 18, 'driver', 4, 'Menaka handled the manual Mustang skillfully. Punctual arrival and pleasant conversation.'),
-(54, 11, 21, 22, 'driver', 5, 'Hansani drove safely throughout our southern expressway trip. Highly professional behavior.'),
-(55, 13, 23, 24, 'driver', 5, 'Chathurika was fantastic with the G-Wagon. Confident handling and very respectful.'),
-(56, 16, 26, 27, 'driver', 5, 'Nuwan arrived fifteen minutes early and maintained a clean, relaxed driving atmosphere.'),
-(57, 19, 29, 30, 'driver', 4, 'Sewwandi was courteous and followed our planned itinerary perfectly.'),
-(58, 22, 32, 33, 'driver', 5, 'Supun is a master driver on mountain switchbacks. We felt completely safe the entire trip.'),
-(59, 25, 35, 36, 'driver', 5, 'Nadeesha provided executive-level service for our corporate delegates. Excellent work.'),
-(60, 29, 39, 40, 'driver', 5, 'Kavindya took great care of the vehicle and assisted with all our luggage effortlessly.'),
-(61, 32, 42, 11, 'driver', 4, 'Kavinda was polite and accommodating with our unexpected route changes.'),
-(62, 48, 58, 36, 'driver', 5, 'Nadeesha is an expert behind the wheel. Smooth braking and immaculate road manners.'),
-(63, 38, 48, 23, 'driver', 5, 'Suresh handled highway congestion calmly and kept the vehicle impeccably clean.'),
-(64, 41, 51, 31, 'driver', 5, 'Isuru was on time and very knowledgeable about local attractions along the route.'),
-(65, 44, 54, 19, 'driver', 4, 'Bhanuka was very responsive and ensured our airport drop-off was right on time.'),
-
--- 66-80: Platform Reviews (target_id = 0 represents EliteDrive Platform)
-(66, 2, 12, 0, 'platform', 5, 'The mobile verification flow was lightning fast. Key handover took under five minutes.'),
-(67, 3, 13, 0, 'platform', 5, 'Seamless rental experience from start to finish. The pricing transparency is refreshing.'),
-(68, 5, 15, 0, 'platform', 4, 'Great vehicle selection in Sri Lanka. Would love to see more electric models added.'),
-(69, 6, 16, 0, 'platform', 5, 'Booking confirmation was instant and Stripe payment worked without any hitches.'),
-(70, 8, 18, 0, 'platform', 4, 'Clean user interface and clear communication between borrower and host throughout.'),
-(71, 10, 20, 0, 'platform', 5, 'Excellent customer support when we had a question regarding toll transponders.'),
-(72, 14, 24, 0, 'platform', 5, 'Easy booking modification tools. Made extending our trip completely hassle-free.'),
-(73, 15, 25, 0, 'platform', 4, 'Fair deposit policy and deposit hold was released promptly within 48 hours.'),
-(74, 18, 28, 0, 'platform', 5, 'EliteDrive made organizing transport for our corporate retreat effortless.'),
-(75, 21, 31, 0, 'platform', 5, 'Top-tier luxury fleet. Every detail matches what is shown in the vehicle photos.'),
-(76, 27, 37, 0, 'platform', 5, 'Direct messaging with the owner was fast and helpful. Highly recommended app.'),
-(77, 30, 40, 0, 'platform', 4, 'Intuitive navigation and filter options. Found the exact manual car I wanted.'),
-(78, 33, 43, 0, 'platform', 5, 'Transparent commission breakdown and straightforward check-in inspection checklists.'),
-(79, 39, 49, 0, 'platform', 5, 'Smooth experience. The GPS pickup instructions were accurate and easy to follow.'),
-(80, 47, 57, 0, 'platform', 5, 'Best car sharing platform in the country. Will definitely book again next month.');
+                                                                                               (1, 1, 11, 1, 'vehicle', 5, 'Exceptional performance and quietness. The Model S exceeded all travel expectations!'),
+                                                                                               (2, 2, 12, 2, 'vehicle', 5, 'The 911 handled canyon roads flawlessly. Pure German engineering at its finest.'),
+                                                                                               (3, 3, 13, 3, 'vehicle', 5, 'Defender proved completely unstoppable during our weekend mountain expedition.'),
+                                                                                               (4, 4, 14, 4, 'vehicle', 4, 'Great speed and handling. Suspension is somewhat stiff on bumpy city streets.'),
+                                                                                               (5, 5, 15, 5, 'vehicle', 5, 'Supreme executive comfort. The quietest cabin I have ever traveled inside.'),
+                                                                                               (6, 6, 16, 6, 'vehicle', 4, 'Solid gas mileage and effortless operation around Austin downtown routes.'),
+                                                                                               (7, 7, 17, 7, 'vehicle', 5, 'Classic American muscle roar! The manual gearbox was crisp and engaging.'),
+                                                                                               (8, 8, 18, 8, 'vehicle', 5, 'Tackled rocky desert climbs with ease. Perfect setup for outdoor explorers.'),
+                                                                                               (9, 9, 19, 9, 'vehicle', 5, 'The ultimate all weather super wagon. Incredible acceleration with ample boot space.'),
+                                                                                               (10, 10, 20, 10, 'vehicle', 5, 'Fast charging and modern interior layout made the Pacific Northwest trip smooth.'),
+                                                                                               (11, 11, 21, 11, 'vehicle', 5, 'Mid engine balance feels like an exotic supercar. Highly recommended!'),
+                                                                                               (12, 12, 22, 12, 'vehicle', 4, 'Very capable wagon with comfortable ride height and easy roof loading options.'),
+                                                                                               (13, 13, 23, 13, 'vehicle', 5, 'Unmatched road presence and astonishing AMG exhaust rumble across Dallas.'),
+                                                                                               (14, 14, 24, 14, 'vehicle', 4, 'Practical and economical EV. Plenty of luggage storage in the frunk and rear.'),
+                                                                                               (15, 15, 25, 15, 'vehicle', 4, 'Economical city vehicle. Parked effortlessly in cramped theme park spaces.'),
+                                                                                               (16, 16, 26, 16, 'vehicle', 5, 'Pure luxury and serenity. The rear reclining seating felt like first class flight.'),
+                                                                                               (17, 17, 27, 17, 'vehicle', 5, 'Dependable hybrid SUV with low fuel consumption and great snowy road grip.'),
+                                                                                               (18, 18, 28, 18, 'vehicle', 5, 'Sophisticated German luxury and intuitive touchscreen navigation software.'),
+                                                                                               (19, 19, 29, 19, 'vehicle', 5, 'The front trunk and smooth electric pickup capabilities blew everyone away.'),
+                                                                                               (20, 20, 30, 20, 'vehicle', 4, 'Very stylish exterior and surprisingly engaging steering responsiveness.'),
+                                                                                               (21, 21, 31, 21, 'vehicle', 5, 'Breathtaking electric grand tourer. Attracted positive glances everywhere.'),
+                                                                                               (22, 22, 32, 22, 'vehicle', 5, 'Tough, reliable truck for remote New Mexico hiking trailhead access.'),
+                                                                                               (23, 23, 33, 23, 'vehicle', 5, 'Refined plug in hybrid SUV with serene interior woodwork and great safety tech.'),
+                                                                                               (24, 24, 34, 24, 'vehicle', 3, 'Great fuel mileage and budget rates, though interior amenities are basic.'),
+                                                                                               (25, 25, 35, 25, 'vehicle', 5, 'Magnificent full size luxury transporter for our corporate client team.'),
+                                                                                               (26, 26, 36, 26, 'vehicle', 5, 'Minimalist Nordic interior and razor sharp all wheel drive acceleration.'),
+                                                                                               (27, 27, 37, 27, 'vehicle', 5, 'Stunning convertible styling with a glorious naturally aspirated V8 soundtrack.'),
+                                                                                               (28, 28, 38, 28, 'vehicle', 5, 'Roomy three row SUV that kept the entire family comfortable across four states.'),
+                                                                                               (29, 29, 39, 29, 'vehicle', 5, 'Outstanding open air capability across Utah red rock trail routes.'),
+                                                                                               (30, 30, 40, 30, 'vehicle', 5, 'The gold standard hot hatch. Fun three pedal manual transmission feel.'),
+                                                                                               (31, 31, 41, 31, 'vehicle', 5, 'Quad motor setup offers otherworldly control on dirt trails and open highways.'),
+                                                                                               (32, 32, 42, 32, 'vehicle', 5, 'Executive elegance and silky smooth six cylinder acceleration.'),
+                                                                                               (33, 33, 43, 33, 'vehicle', 4, 'Rocket fast acceleration that makes interstate highway passing effortless.'),
+                                                                                               (34, 34, 44, 34, 'vehicle', 4, 'Spacious interior room with plenty of space for multiple sports luggage bags.'),
+                                                                                               (35, 35, 45, 35, 'vehicle', 5, 'Sharp cornering and roaring twin turbo engine. An absolute track weapon.'),
+                                                                                               (36, 36, 46, 36, 'vehicle', 4, 'Simple, reliable, and frugal transport for running urban errands smoothly.'),
+                                                                                               (37, 37, 47, 37, 'vehicle', 5, 'GTS exhaust sound gave me goosebumps. Brilliant high riding sports car dynamics.'),
+                                                                                               (38, 38, 48, 38, 'vehicle', 4, 'Muscular electric crossover with intuitive displays and agile handling.'),
+                                                                                               (39, 39, 49, 39, 'vehicle', 5, 'Peaceful cabin sound insulation and proven Japanese mechanical reliability.'),
+                                                                                               (40, 40, 50, 40, 'vehicle', 5, 'Cruised into Yellowstone quietly on electric mode. Supreme versatility!'),
+                                                                                               (41, 41, 51, 41, 'vehicle', 5, 'The Genesis G90 matches the finest European saloons in fit and finish.'),
+                                                                                               (42, 42, 52, 42, 'vehicle', 5, 'Raw American muscle roar and massive cornering grip from the 1LE package.'),
+                                                                                               (43, 43, 53, 43, 'vehicle', 5, 'Futuristic glass roof and incredible electric range on California highways.'),
+                                                                                               (44, 44, 54, 44, 'vehicle', 4, 'Great all weather compact crossover for outdoor trips around Idaho.'),
+                                                                                               (45, 45, 55, 45, 'vehicle', 5, 'Quiet highway cruising and comfortable seating for seven family members.'),
+                                                                                               (46, 46, 56, 46, 'vehicle', 5, 'Swift 800V charging speeds and handsome athletic exterior styling.'),
+                                                                                               (47, 47, 57, 47, 'vehicle', 5, 'The purest driver roadster available. Dropping the manual top takes seconds.'),
+                                                                                               (48, 48, 58, 48, 'vehicle', 5, 'Supercharged V8 power leaves an indelible grin on your face at every throttle dip.'),
+                                                                                               (49, 49, 59, 49, 'vehicle', 5, 'Sharp electric handling and practical Gran Coupe hatchback flexibility.'),
+                                                                                               (50, 50, 60, 50, 'vehicle', 5, 'First class family luxury cruiser that glides effortlessly over rough pavement.'),
+                                                                                               (51, 1, 11, 12, 'driver', 5, 'Pabasarani was punctual, polite, and navigated Colombo traffic with great patience.'),
+                                                                                               (52, 4, 14, 15, 'driver', 5, 'Asela is an exceptional chauffeur. Very smooth driving and knew all the scenic coastal bypasses.'),
+                                                                                               (53, 7, 17, 18, 'driver', 4, 'Menaka handled the manual Mustang skillfully. Punctual arrival and pleasant conversation.'),
+                                                                                               (54, 11, 21, 22, 'driver', 5, 'Hansani drove safely throughout our southern expressway trip. Highly professional behavior.'),
+                                                                                               (55, 13, 23, 24, 'driver', 5, 'Chathurika was fantastic with the G-Wagon. Confident handling and very respectful.'),
+                                                                                               (56, 16, 26, 27, 'driver', 5, 'Nuwan arrived fifteen minutes early and maintained a clean, relaxed driving atmosphere.'),
+                                                                                               (57, 19, 29, 30, 'driver', 4, 'Sewwandi was courteous and followed our planned itinerary perfectly.'),
+                                                                                               (58, 22, 32, 33, 'driver', 5, 'Supun is a master driver on mountain switchbacks. We felt completely safe the entire trip.'),
+                                                                                               (59, 25, 35, 36, 'driver', 5, 'Nadeesha provided executive-level service for our corporate delegates. Excellent work.'),
+                                                                                               (60, 29, 39, 40, 'driver', 5, 'Kavindya took great care of the vehicle and assisted with all our luggage effortlessly.'),
+                                                                                               (61, 32, 42, 11, 'driver', 4, 'Kavinda was polite and accommodating with our unexpected route changes.'),
+                                                                                               (62, 48, 58, 36, 'driver', 5, 'Nadeesha is an expert behind the wheel. Smooth braking and immaculate road manners.'),
+                                                                                               (63, 38, 48, 23, 'driver', 5, 'Suresh handled highway congestion calmly and kept the vehicle impeccably clean.'),
+                                                                                               (64, 41, 51, 31, 'driver', 5, 'Isuru was on time and very knowledgeable about local attractions along the route.'),
+                                                                                               (65, 44, 54, 19, 'driver', 4, 'Bhanuka was very responsive and ensured our airport drop-off was right on time.'),
+                                                                                               (66, 2, 12, 0, 'platform', 5, 'The mobile verification flow was lightning fast. Key handover took under five minutes.'),
+                                                                                               (67, 3, 13, 0, 'platform', 5, 'Seamless rental experience from start to finish. The pricing transparency is refreshing.'),
+                                                                                               (68, 5, 15, 0, 'platform', 4, 'Great vehicle selection in Sri Lanka. Would love to see more electric models added.'),
+                                                                                               (69, 6, 16, 0, 'platform', 5, 'Booking confirmation was instant and Stripe payment worked without any hitches.'),
+                                                                                               (70, 8, 18, 0, 'platform', 4, 'Clean user interface and clear communication between borrower and host throughout.'),
+                                                                                               (71, 10, 20, 0, 'platform', 5, 'Excellent customer support when we had a question regarding toll transponders.'),
+                                                                                               (72, 14, 24, 0, 'platform', 5, 'Easy booking modification tools. Made extending our trip completely hassle-free.'),
+                                                                                               (73, 15, 25, 0, 'platform', 4, 'Fair deposit policy and deposit hold was released promptly within 48 hours.'),
+                                                                                               (74, 18, 28, 0, 'platform', 5, 'EliteDrive made organizing transport for our corporate retreat effortless.'),
+                                                                                               (75, 21, 31, 0, 'platform', 5, 'Top-tier luxury fleet. Every detail matches what is shown in the vehicle photos.'),
+                                                                                               (76, 27, 37, 0, 'platform', 5, 'Direct messaging with the owner was fast and helpful. Highly recommended app.'),
+                                                                                               (77, 30, 40, 0, 'platform', 4, 'Intuitive navigation and filter options. Found the exact manual car I wanted.'),
+                                                                                               (78, 33, 43, 0, 'platform', 5, 'Transparent commission breakdown and straightforward check-in inspection checklists.'),
+                                                                                               (79, 39, 49, 0, 'platform', 5, 'Smooth experience. The GPS pickup instructions were accurate and easy to follow.'),
+                                                                                               (80, 47, 57, 0, 'platform', 5, 'Best car sharing platform in the country. Will definitely book again next month.');
 
 -- ----------------------------------------------------------
--- 11. REJECTION LOGS (50 Records - Jan 2026 to Sep 2026)
+-- 11. REJECTION LOGS (50 Records)
 -- ----------------------------------------------------------
 INSERT INTO rejection_logs (id, entity_type, entity_id, reason, rejected_by, created_at) VALUES
                                                                                              (1, 'license', 101, 'Uploaded driving license photo is blurry and illegible upon inspection.', 1, '2026-01-08 10:15:00'),
