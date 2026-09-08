@@ -328,14 +328,16 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                         
                         new Chart(ctx, {
-                            type: 'bar',
+                            type: 'line',
                             data: {
                                 labels: months,
                                 datasets: [{
                                     label: 'Earnings (LKR)',
                                     data: monthlyData,
-                                    backgroundColor: '#202a3fff',
-                                    borderRadius: 4
+                                    borderColor: '#16a34a',
+                                    backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                                    fill: true,
+                                    tension: 0.4
                                 }]
                             },
                             options: {
