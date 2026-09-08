@@ -49,7 +49,7 @@ On the booking screen, borrower picks one:
 - **"I'll drive myself"** → system checks borrower has a `verified` license.
   - If none on file → prompted to upload now → booking held at `pending_verification` until Admin approves.
 - **"Provide the owner as driver"** (if the owner offers chauffeur service for that listing) → system checks Owner's license is `verified`. No license needed from borrower.
-- **"Assign a hired driver"** → borrower does not need a license; system shows available third-party Drivers certified for that vehicle's category/location; borrower selects one.
+- **"Assign a hired driver"** → borrower does not need a license. The borrower can either select a verified driver from the pool immediately or skip this step. If skipped, the booking enters `pending_assignment` state, where an Admin will assign a driver later.
 
 ### 2.4 Confirm & Pay
 1. Review trip summary, price breakdown, cancellation policy.
@@ -57,6 +57,7 @@ On the booking screen, borrower picks one:
 3. Payment execution:
    - If Online: Booking status → `Confirmed` (after successful payment and driver verification).
    - If Pay for Headquarters: Booking status stays `pending_payment` until Admin manually confirms the payment via the Ongoing Bookings tab.
+   - If the booking was placed into `pending_assignment`, the payment step is deferred until the Admin assigns a driver and calculates the final fee.
 
 ### 2.5 Trip
 1. Pickup: borrower (or driver) checks in at the designated pickup hub (CMB, HRI, or Colombo HQ).
@@ -67,7 +68,7 @@ On the booking screen, borrower picks one:
 ### 2.6 Post-Trip
 1. Borrower rates vehicle, owner, and driver (if hired) separately.
 2. Receipt & invoice available in dashboard.
-3. Disputes (damage, no-show, mismatch) can be raised → routed to Admin.
+3. Disputes (damage, no-show, mismatch) can be raised via the dashboard modal → routed to Admin for review. Once raised, the booking status moves to `disputed`.
 
 ---
 
@@ -108,7 +109,7 @@ On the booking screen, borrower picks one:
 
 ### 4.3 Dispute Resolution & Ongoing Bookings
 1. Ticket queue (damage claims, no-shows, payment disputes, driver conduct).
-2. Admin reviews trip data, messages, evidence → issues resolution (refund, payout adjustment, account warning/suspension).
+2. Admin reviews trip data, messages, evidence → issues resolution. When resolved, the booking status is updated to `resolved`.
 3. **Ongoing Bookings**: Admins monitor all active/upcoming bookings. If a user selected "Pay for Headquarters", the Admin can manually **Confirm** (update status to `confirmed`) once payment is received, or **Reject** the booking if the user fails to pay or verify (logs reason to `rejection_logs`).
 
 ### 4.4 Fleet & Category Management
