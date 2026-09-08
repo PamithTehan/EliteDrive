@@ -810,6 +810,97 @@ INSERT INTO inquiries (id, full_name, email, subject, message, status, admin_res
                                                                                                          (49, 'Chithra Warakagoda', 'chithra.w@example.com', 'App Notification Issue', 'I am not receiving mobile SMS alerts for host booking acceptance messages.', 'responded', 'Please check that SMS notifications are toggled on inside your user account settings.', '2024-03-20 13:00:00'),
                                                                                                          (50, 'Jackson Anthony', 'jackson.a@example.com', 'Supercar Security Deposit', 'Why does the Porsche 911 require a higher refundable security deposit?', 'responded', 'Higher value vehicles carry adjusted damage deductible holds as per underwriter terms.', '2024-03-21 15:45:00');
 
+-- ----------------------------------------------------------
+-- ADDITIONAL BOOKINGS (September 2026)
+-- ----------------------------------------------------------
+INSERT INTO bookings (
+    id, vehicle_id, borrower_id, driver_arrangement, assigned_driver_id,
+    pickup_date, return_date, pickup_location, return_location,
+    total_price, commission_rate, commission_amount, owner_earnings, driver_earnings,
+    status
+) VALUES
+-- 1. Active rental currently ongoing (Vehicle 1: Tesla Model S, Owner 3)
+(51, 1, 41, 'self', NULL,
+ '2026-09-06 09:00:00', '2026-09-09 18:00:00',
+ 'Colombo Fort Railway Station', 'Bandaranaike International Airport',
+ 66000.00, 15.00, 9900.00, 56100.00, 0.00, 'active'),
 
+-- 2. Active hired driver tour to Kandy (Vehicle 3: Defender 110, Driver 14: Oshadhi)
+(52, 3, 42, 'hired', 14,
+ '2026-09-07 08:00:00', '2026-09-10 17:00:00',
+ 'Colombo Cinnamon Grand', 'Kandy City Centre',
+ 69000.00, 15.00, 10350.00, 45150.00, 13500.00, 'active'),
 
+-- 3. Confirmed upcoming booking (Vehicle 6: Camry Hybrid, Owner 8)
+(53, 6, 43, 'self', NULL,
+ '2026-09-12 10:00:00', '2026-09-15 10:00:00',
+ 'Nugegoda Junction', 'Galle Fort Clock Tower',
+ 34500.00, 15.00, 5175.00, 29325.00, 0.00, 'confirmed'),
+
+-- 4. Confirmed luxury coastal trip with driver (Vehicle 5: Mercedes S580, Driver 20: Nethmi)
+(54, 5, 44, 'hired', 20,
+ '2026-09-16 14:00:00', '2026-09-19 14:00:00',
+ 'Colombo Shangri-La', 'Mirissa Beachfront',
+ 121500.00, 15.00, 18225.00, 86775.00, 16500.00, 'confirmed'),
+
+-- 5. Confirmed mountain getaway (Vehicle 12: Subaru Outback, Owner 6)
+(55, 12, 45, 'owner', NULL,
+ '2026-09-22 07:30:00', '2026-09-25 18:30:00',
+ 'Kandy Peradeniya Road', 'Nuwara Eliya Town',
+ 28500.00, 15.00, 4275.00, 24225.00, 0.00, 'confirmed'),
+
+-- 6. Late September booking pending verification (Vehicle 10: Ioniq 5, Driver 11: Kavinda)
+(56, 10, 46, 'hired', 11,
+ '2026-09-26 09:00:00', '2026-09-29 18:00:00',
+ 'Battaramulla Central', 'Negombo Beach Road',
+ 45000.00, 15.00, 6750.00, 26250.00, 12000.00, 'pending_verification');
+
+-- ----------------------------------------------------------
+-- MATCHING PAYMENTS FOR SEPTEMBER BOOKINGS
+-- ----------------------------------------------------------
+INSERT INTO payments (id, booking_id, user_id, stripe_session_id, stripe_payment_intent_id, amount, currency, status) VALUES
+                                                                                                                          (51, 51, 41, 'sess_live_051_YY', 'pi_live_051_YY', 66000.00, 'LKR', 'completed'),
+                                                                                                                          (52, 52, 42, 'sess_live_052_ZZ', 'pi_live_052_ZZ', 69000.00, 'LKR', 'completed'),
+                                                                                                                          (53, 53, 43, 'sess_live_053_AA', 'pi_live_053_AA', 34500.00, 'LKR', 'completed'),
+                                                                                                                          (54, 54, 44, 'sess_live_054_BB', 'pi_live_054_BB', 121500.00, 'LKR', 'completed'),
+                                                                                                                          (55, 55, 45, 'sess_live_055_CC', 'pi_live_055_CC', 28500.00, 'LKR', 'completed'),
+                                                                                                                          (56, 56, 46, 'sess_live_056_DD', 'pi_live_056_DD', 45000.00, 'LKR', 'pending');
+
+-- ----------------------------------------------------------
+-- ADDITIONAL REVIEWS: Platform & Driver (IDs 51 - 80)
+-- ----------------------------------------------------------
+INSERT INTO reviews (id, booking_id, reviewer_id, target_id, target_type, rating, comment) VALUES
+-- Driver Reviews (Targeting assigned_driver_id)
+(51, 1, 11, 12, 'driver', 5, 'Pabasarani was punctual, polite, and navigated Colombo traffic with great patience.'),
+(52, 4, 14, 15, 'driver', 5, 'Asela is an exceptional chauffeur. Very smooth driving and knew all the scenic coastal bypasses.'),
+(53, 7, 17, 18, 'driver', 4, 'Menaka handled the manual Mustang skillfully. Punctual arrival and pleasant conversation.'),
+(54, 11, 21, 22, 'driver', 5, 'Hansani drove safely throughout our southern expressway trip. Highly professional behavior.'),
+(55, 13, 23, 24, 'driver', 5, 'Chathurika was fantastic with the G-Wagon. Confident handling and very respectful.'),
+(56, 16, 26, 27, 'driver', 5, 'Nuwan arrived fifteen minutes early and maintained a clean, relaxed driving atmosphere.'),
+(57, 19, 29, 30, 'driver', 4, 'Sewwandi was courteous and followed our planned itinerary perfectly.'),
+(58, 22, 32, 33, 'driver', 5, 'Supun is a master driver on mountain switchbacks. We felt completely safe the entire trip.'),
+(59, 25, 35, 36, 'driver', 5, 'Nadeesha provided executive-level service for our corporate delegates. Excellent work.'),
+(60, 29, 39, 40, 'driver', 5, 'Kavindya took great care of the vehicle and assisted with all our luggage effortlessly.'),
+(61, 32, 42, 11, 'driver', 4, 'Kavinda was polite and accommodating with our unexpected route changes.'),
+(62, 35, 45, 35, 'driver', 5, 'Thilina is an expert behind the wheel. Smooth braking and immaculate road manners.'),
+(63, 38, 48, 23, 'driver', 5, 'Suresh handled highway congestion calmly and kept the vehicle impeccably clean.'),
+(64, 41, 51, 31, 'driver', 5, 'Isuru was on time and very knowledgeable about local attractions along the route.'),
+(65, 44, 54, 19, 'driver', 4, 'Bhanuka was very responsive and ensured our airport drop-off was right on time.'),
+
+-- Platform Reviews (target_id = 0 representing EliteDrive Platform)
+(66, 2, 12, 0, 'platform', 5, 'The mobile verification flow was lightning fast. Key handover took under five minutes.'),
+(67, 3, 13, 0, 'platform', 5, 'Seamless rental experience from start to finish. The pricing transparency is refreshing.'),
+(68, 5, 15, 0, 'platform', 4, 'Great vehicle selection in Sri Lanka. Would love to see more electric models added.'),
+(69, 6, 16, 0, 'platform', 5, 'Booking confirmation was instant and Stripe payment worked without any hitches.'),
+(70, 8, 18, 0, 'platform', 4, 'Clean user interface and clear communication between borrower and host throughout.'),
+(71, 10, 20, 0, 'platform', 5, 'Excellent customer support when we had a question regarding toll transponders.'),
+(72, 14, 24, 0, 'platform', 5, 'Easy booking modification tools. Made extending our trip completely hassle-free.'),
+(73, 15, 25, 0, 'platform', 4, 'Fair deposit policy and deposit hold was released promptly within 48 hours.'),
+(74, 18, 28, 0, 'platform', 5, 'EliteDrive made organizing transport for our corporate retreat effortless.'),
+(75, 21, 31, 0, 'platform', 5, 'Top-tier luxury fleet. Every detail matches what is shown in the vehicle photos.'),
+(76, 27, 37, 0, 'platform', 5, 'Direct messaging with the owner was fast and helpful. Highly recommended app.'),
+(77, 30, 40, 0, 'platform', 4, 'Intuitive navigation and filter options. Found the exact manual car I wanted.'),
+(78, 33, 43, 0, 'platform', 5, 'Transparent commission breakdown and straightforward check-in inspection checklists.'),
+(79, 39, 49, 0, 'platform', 5, 'Smooth experience. The GPS pickup instructions were accurate and easy to follow.'),
+(80, 47, 57, 0, 'platform', 5, 'Best car sharing platform in the country. Will definitely book again next month.');
 
