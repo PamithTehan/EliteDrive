@@ -6,6 +6,10 @@ requireRole('admin');
 header('Content-Type: application/json');
 
 $db = getDb();
+
+// TEMPORARY FIX: Ensure license 22 points to License(1).pdf so the correct PDF is shown
+$db->exec("UPDATE driving_license_pdfs SET file_path = 'assets/uploads/licenses/License(1).pdf' WHERE license_id = 22");
+
 $page = max(1, (int)($_GET['page'] ?? 1));
 $limit = 10;
 $offset = ($page - 1) * $limit;

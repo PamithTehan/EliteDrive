@@ -265,7 +265,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                     const loadingTask = pdfjsLib.getDocument({ data: uint8Array });
                     return loadingTask.promise;
                 }).then(pdf => {
-                    return pdf.getPage(1); // Render first page
+                    return pdf.getPage(1);
                 }).then(page => {
                     const scale = 1.5;
                     const viewport = page.getViewport({ scale: scale });
