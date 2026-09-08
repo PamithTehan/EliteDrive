@@ -160,6 +160,9 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                         <button type="button" class="mgmt-tab-btn" data-tab="bookings" style="padding: 16px; background: none; border: none; font-size: 16px; border-bottom: 2px solid <?= $activeTab === 'bookings' ? 'var(--color-primary)' : 'transparent' ?>; color: <?= $activeTab === 'bookings' ? 'var(--color-primary)' : 'var(--color-secondary)' ?>; font-weight: <?= $activeTab === 'bookings' ? 'bold' : 'normal' ?>; cursor: pointer;">
                             Bookings
                         </button>
+                        <button type="button" class="mgmt-tab-btn" data-tab="payments" style="padding: 16px; background: none; border: none; font-size: 16px; border-bottom: 2px solid <?= $activeTab === 'payments' ? 'var(--color-primary)' : 'transparent' ?>; color: <?= $activeTab === 'payments' ? 'var(--color-primary)' : 'var(--color-secondary)' ?>; font-weight: <?= $activeTab === 'payments' ? 'bold' : 'normal' ?>; cursor: pointer;">
+                            Payments
+                        </button>
                         <button type="button" class="mgmt-tab-btn" data-tab="commissions" style="padding: 16px; background: none; border: none; font-size: 16px; border-bottom: 2px solid <?= $activeTab === 'commissions' ? 'var(--color-primary)' : 'transparent' ?>; color: <?= $activeTab === 'commissions' ? 'var(--color-primary)' : 'var(--color-secondary)' ?>; font-weight: <?= $activeTab === 'commissions' ? 'bold' : 'normal' ?>; cursor: pointer;">
                             Commissions
                         </button>
@@ -201,6 +204,8 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                             <?php require_once __DIR__ . '/../../includes/partials/admin/tab_rejections.php'; ?>
                         <?php elseif ($activeTab === 'bookings'): ?>
                             <?php require_once __DIR__ . '/../../includes/partials/admin/tab_bookings.php'; ?>
+                        <?php elseif ($activeTab === 'payments'): ?>
+                            <?php require_once __DIR__ . '/../../includes/partials/admin/tab_payments.php'; ?>
                         <?php elseif ($activeTab === 'commissions'): ?>
                             <?php require_once __DIR__ . '/../../includes/partials/admin/tab_commissions.php'; ?>
                         <?php endif; ?>
