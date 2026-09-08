@@ -58,8 +58,11 @@ if ($booking['driver_arrangement'] === 'hired' && $booking['assigned_driver_id']
     }
 }
 
-// We always start with pending_payment now
+// Check if hired driver was requested but no driver selected
 $status = 'pending_payment';
+if ($booking['driver_arrangement'] === 'hired' && empty($booking['assigned_driver_id'])) {
+    $status = 'pending_assignment';
+}
 
 $stmt = $db->prepare(
     'INSERT INTO bookings
@@ -91,6 +94,15 @@ try {
             'ok' => true,
             'booking_id' => $bookingId,
             'message' => 'Booking created. Please pay at headquarters.'
+        ]);
+        exit;
+    }
+    
+    if ($status === 'pending_assignment') {
+        echo json_encode([
+            'ok' => true,
+            'booking_id' => $bookingId,
+            'message' => 'Booking created. An admin will assign a driver shortly.'
         ]);
         exit;
     }
