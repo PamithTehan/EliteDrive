@@ -124,10 +124,10 @@ $bookings = $stmtBookings->fetchAll();
 $totalPagesBookings = ceil($totalBookings / $perPage);
 
 // --- COMMISSIONS ---
-$totalRevenueStmt = $db->query('SELECT SUM(commission_amount) FROM bookings WHERE commission_amount > 0 AND status IN ("confirmed", "active", "completed", "reviewed")');
+$totalRevenueStmt = $db->query('SELECT SUM(commission_amount) FROM bookings WHERE commission_amount > 0 AND status IN ("completed", "reviewed")');
 $totalPlatformRevenue = (float)$totalRevenueStmt->fetchColumn();
 
-$stmtTotalCommissions = $db->query('SELECT COUNT(*) FROM bookings WHERE commission_amount > 0');
+$stmtTotalCommissions = $db->query('SELECT COUNT(*) FROM bookings WHERE commission_amount > 0 AND status IN ("completed", "reviewed")');
 $totalCommissions = $stmtTotalCommissions->fetchColumn();
 
 $stmtCommissions = $db->prepare('
@@ -136,7 +136,7 @@ $stmtCommissions = $db->prepare('
     FROM bookings b
     JOIN users u ON b.borrower_id = u.id
     JOIN vehicles v ON b.vehicle_id = v.id
-    WHERE b.commission_amount > 0
+    WHERE b.commission_amount > 0 AND b.status IN ("completed", "reviewed")
     ORDER BY b.created_at DESC 
     LIMIT ? OFFSET ?
 ');

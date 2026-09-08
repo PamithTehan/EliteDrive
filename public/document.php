@@ -53,7 +53,13 @@ if (!$path) {
     exit('Document not found');
 }
 
-$fullPath = __DIR__ . '/assets/uploads/' . $path;
+$cleanPath = ltrim($path, '/');
+if (strpos($cleanPath, 'assets/uploads/') === 0) {
+    $fullPath = __DIR__ . '/' . $cleanPath;
+} else {
+    $fullPath = __DIR__ . '/assets/uploads/' . $cleanPath;
+}
+
 if (!file_exists($fullPath)) {
     http_response_code(404);
     exit('File missing on disk');

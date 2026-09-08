@@ -101,7 +101,7 @@ CREATE TABLE bookings (
     commission_amount DECIMAL(10, 2) DEFAULT 0.00,
     owner_earnings DECIMAL(10, 2) DEFAULT 0.00,
     driver_earnings DECIMAL(10, 2) DEFAULT 0.00,
-    status ENUM('pending_payment', 'pending_verification', 'confirmed', 'active', 'completed', 'reviewed', 'rejected', 'cancelled', 'disputed') DEFAULT 'pending_payment',
+    status ENUM('pending_assignment', 'pending_payment', 'pending_verification', 'confirmed', 'active', 'completed', 'reviewed', 'resolved', 'rejected', 'cancelled', 'disputed') DEFAULT 'pending_payment',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (vehicle_id) REFERENCES vehicles(id),
@@ -160,4 +160,20 @@ CREATE TABLE inquiries (
     admin_response TEXT NULL,
     responded_at TIMESTAMP NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 12. DISPUTES TABLE
+CREATE TABLE disputes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    booking_id INT NOT NULL,
+    user_id INT NOT NULL,
+    reason VARCHAR(255) NOT NULL,
+    details TEXT NOT NULL,
+    preferred_contact_method ENUM('email', 'phone') NOT NULL DEFAULT 'email',
+    contact_info VARCHAR(255) NOT NULL,
+    status ENUM('open', 'resolved') DEFAULT 'open',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

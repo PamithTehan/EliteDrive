@@ -152,29 +152,30 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                                 <div style="text-align:right;">
                                     <h3 class="headline-md" style="color:var(--color-primary);">LKR <?= escapeHtml($b['total_price']) ?></h3>
                                     <?php
-                                    $badgeClass = match($b['status']) {
-                                        'confirmed', 'active', 'completed' => 'badge-status-verified',
-                                        'pending_verification' => 'badge-status-pending',
-                                        'rejected', 'cancelled' => 'badge-status-rejected',
-                                        default => 'badge-status-pending'
-                                    };
+                                     $badgeClass = match($b['status']) {
+                                         'confirmed', 'active', 'completed', 'resolved' => 'badge-status-verified',
+                                         'pending_verification', 'pending_assignment' => 'badge-status-pending',
+                                         'rejected', 'cancelled' => 'badge-status-rejected',
+                                         default => 'badge-status-pending'
+                                     };
                                     ?>
                                     <span class="badge <?= $badgeClass ?>"><?= str_replace('_', ' ', escapeHtml($b['status'])) ?></span>
                                 </div>
                             </div>
                             
-                            <?php if ($b['status'] === 'pending_verification'): ?>
+                            <?php if ($b['status'] === 'pending_assignment'): ?>
+                                <div class="alert alert-warning" style="margin-top: var(--space-md); margin-bottom: 0;">
+                                    <strong>Pending:</strong> Waiting for an admin to assign a driver to your booking. We will notify you once assigned.
+                                </div>
+                            <?php elseif ($b['status'] === 'pending_verification'): ?>
                                 <div class="alert alert-error" style="margin-top: var(--space-md); margin-bottom: 0;">
-                                    <?php if ($b['driver_arrangement'] === 'hired' && empty($b['assigned_driver_id'])): ?>
-                                        <strong>Pending:</strong> Waiting for an admin to assign a driver to your booking.
-                                    <?php else: ?>
-                                        <strong>Action Required:</strong> Your booking is held until the required driving license is verified by an admin.
-                                    <?php endif; ?>
+                                    <strong>Action Required:</strong> Your booking is held until the required driving license is verified by an admin.
                                 </div>
                             <?php elseif ($b['status'] === 'pending_payment'): ?>
                                 <div class="alert alert-warning" style="margin-top: var(--space-md); margin-bottom: 0; background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; padding: var(--space-sm); border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center;">
                                     <div>
-                                        <strong>Payment Required:</strong> Your booking is awaiting payment.
+                                        <strong>Payment Required:</strong> Your booking is awaiting payment. <br>
+                                        <small style="color: #666;">(Note: Email notification alerts will be implemented in a future update.)</small>
                                     </div>
                                     <button class="btn btn-primary btn-sm" onclick="payBooking(<?= $b['id'] ?>)">Pay Now</button>
                                 </div>
@@ -222,6 +223,46 @@ require_once __DIR__ . '/../../includes/partials/head.php';
     </div> <!-- container -->
 </div>
 
+<!-- Dispute Modal -->
+<div id="dispute-modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
+    <div style="background-color: var(--color-surface); margin: 10% auto; padding: var(--space-md); border-radius: var(--radius-md); width: 90%; max-width: 500px; box-shadow: var(--shadow-lg);">
+        <h3 class="headline-sm" style="margin-top: 0;">Report a Dispute</h3>
+        <p style="color: var(--color-on-surface-variant); margin-bottom: var(--space-md);">Please provide details about the issue with your booking.</p>
+        
+        <form id="dispute-form">
+            <input type="hidden" id="dispute-booking-id" name="booking_id">
+            
+            <div class="form-group">
+                <label for="dispute-reason">Reason</label>
+                <input type="text" id="dispute-reason" name="reason" class="form-control" placeholder="e.g. Damage, Late Return, No Show" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="dispute-details">Details</label>
+                <textarea id="dispute-details" name="details" class="form-control" rows="4" placeholder="Please describe the issue..." required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="dispute-contact-method">Preferred Contact Method</label>
+                <select id="dispute-contact-method" name="preferred_contact_method" class="form-control">
+                    <option value="email">Email</option>
+                    <option value="phone">Phone</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="dispute-contact-info">Contact Information</label>
+                <input type="text" id="dispute-contact-info" name="contact_info" class="form-control" placeholder="Your email or phone number" required>
+            </div>
+            
+            <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+                <button type="button" class="btn btn-ghost" onclick="document.getElementById('dispute-modal').style.display='none'">Cancel</button>
+                <button type="submit" class="btn btn-primary">Submit Dispute</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
     const csrfToken = "<?= csrfToken() ?>";
     
@@ -249,26 +290,31 @@ require_once __DIR__ . '/../../includes/partials/head.php';
         }
     }
     
-    async function reportDispute(bookingId) {
-        const reason = prompt("What is the reason for this dispute? (e.g. Damage, No Show)");
-        if (!reason) return;
-        
-        const desc = prompt("Please provide more details:");
-        
-        const formData = new FormData();
-        formData.append('csrf', csrfToken);
-        formData.append('booking_id', bookingId);
-        formData.append('reason', reason);
-        formData.append('description', desc || '');
-        
-        const res = await fetch('<?= baseUrl('/api/disputes/create.php') ?>', { method: 'POST', body: formData });
-        if (res.ok) {
-            alert('Dispute submitted successfully! An admin will review it.');
-        } else {
-            const data = await res.json();
-            alert(data.error || 'Failed to submit dispute');
-        }
+    function reportDispute(bookingId) {
+        document.getElementById('dispute-booking-id').value = bookingId;
+        document.getElementById('dispute-modal').style.display = 'block';
     }
+    
+    document.getElementById('dispute-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const form = e.target;
+        const formData = new FormData(form);
+        formData.append('csrf', csrfToken);
+        
+        try {
+            const res = await fetch('<?= baseUrl('/api/bookings/dispute.php') ?>', { method: 'POST', body: formData });
+            if (res.ok) {
+                alert('Dispute submitted successfully! An admin will review it.');
+                window.location.reload();
+            } else {
+                const data = await res.json();
+                alert(data.error || 'Failed to submit dispute');
+            }
+        } catch(err) {
+            alert('Network error');
+        }
+    });
     
     async function cancelBooking(bookingId) {
         if (!confirm("Are you sure you want to cancel this booking?")) return;

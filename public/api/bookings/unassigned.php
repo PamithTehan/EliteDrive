@@ -11,7 +11,7 @@ $page = max(1, (int)($_GET['page'] ?? 1));
 $limit = 10;
 $offset = ($page - 1) * $limit;
 
-$countStmt = $db->query('SELECT COUNT(*) FROM bookings b WHERE b.driver_arrangement = "hired" AND b.assigned_driver_id IS NULL AND b.status IN ("pending_verification", "confirmed", "active")');
+$countStmt = $db->query('SELECT COUNT(*) FROM bookings b WHERE b.driver_arrangement = "hired" AND b.assigned_driver_id IS NULL AND b.status IN ("pending_assignment", "pending_verification", "confirmed", "active")');
 $totalRecords = $countStmt->fetchColumn();
 $totalPages = ceil($totalRecords / $limit);
 
@@ -22,7 +22,7 @@ $stmt = $db->prepare('
     JOIN users u ON b.borrower_id = u.id
     WHERE b.driver_arrangement = "hired" 
       AND b.assigned_driver_id IS NULL 
-      AND b.status IN ("pending_verification", "confirmed", "active")
+      AND b.status IN ("pending_assignment", "pending_verification", "confirmed", "active")
     ORDER BY b.created_at ASC
     LIMIT ? OFFSET ?
 ');

@@ -75,6 +75,9 @@ $inquiries = $stmt->fetchAll();
                         <a href="<?= baseUrl('/admin/inquiries.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: #e0e7ff; font-weight: 600;">
                             <span class="material-symbols-outlined">contact_support</span> Inquiries
                         </a>
+                        <a href="<?= baseUrl('/admin/disputes.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
+                            <span class="material-symbols-outlined">gavel</span> Disputes
+                        </a>
                         <a href="<?= baseUrl('/admin/income.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
                             <span class="material-symbols-outlined">payments</span> Income
                         </a>
