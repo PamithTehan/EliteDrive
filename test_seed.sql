@@ -19,6 +19,7 @@ TRUNCATE TABLE driving_license_pdfs;
 TRUNCATE TABLE driving_licenses;
 TRUNCATE TABLE drivers;
 TRUNCATE TABLE users;
+TRUNCATE TABLE disputes;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -148,9 +149,9 @@ INSERT INTO driving_licenses (id, user_id, license_number, expiry_date, upload_f
                                                                                                                                                (19, 29, 'DL-MD-10019', '2028-10-01', 'pdf', 'verified', 2, '2024-01-30 10:00:00', NULL),
                                                                                                                                                (20, 30, 'DL-WI-10020', '2026-08-16', 'image', 'verified', 2, '2024-01-31 10:00:00', NULL),
                                                                                                                                                (21, 31, 'DL-CO-10021', '2028-12-09', 'pdf', 'verified', 1, '2024-02-01 10:00:00', NULL),
-                                                                                                                                               (22, 32, 'DL-MN-10022', '2027-04-19', 'pdf', 'pending', 1, '2024-02-02 10:00:00', NULL),
+                                                                                                                                               (22, 32, 'DL-MN-10022', '2027-04-19', 'image', 'pending', 1, '2024-02-02 10:00:00', NULL),
                                                                                                                                                (23, 33, 'DL-SC-10023', '2029-07-27', 'pdf', 'verified', 2, '2024-02-03 10:00:00', NULL),
-                                                                                                                                               (24, 34, 'DL-AL-10024', '2026-06-30', 'pdf', 'pending', 2, '2024-02-04 10:00:00', NULL),
+                                                                                                                                               (24, 34, 'DL-AL-10024', '2026-06-30', 'image', 'pending', 2, '2024-02-04 10:00:00', NULL),
                                                                                                                                                (25, 35, 'DL-LA-10025', '2028-11-21', 'pdf', 'verified', 1, '2024-02-05 10:00:00', NULL),
                                                                                                                                                (26, 36, 'DL-KY-10026', '2027-02-14', 'image', 'verified', 1, '2024-02-06 10:00:00', NULL),
                                                                                                                                                (27, 37, 'DL-OR-10027', '2029-09-08', 'pdf', 'pending', 2, '2024-02-07 10:00:00', NULL),
@@ -183,15 +184,15 @@ INSERT INTO driving_license_pdfs (id, license_id, file_path) VALUES
                                                                  (29, 7, 'assets/uploads/licenses/license.pdf'),
                                                                  (30, 9, 'assets/uploads/licenses/license.pdf'),
                                                                  (31, 11, 'assets/uploads/licenses/license.pdf'),
-                                                                 (32, 13, 'assets/uploads/licenses/License(1).pdf'),
+                                                                 (32, 13, 'assets/uploads/licenses/license.pdf'),
                                                                  (33, 15, 'assets/uploads/licenses/license.pdf'),
-                                                                 (34, 17, 'assets/uploads/licenses/License(2).pdf'),
+                                                                 (34, 17, 'assets/uploads/licenses/license.pdf'),
                                                                  (35, 19, 'assets/uploads/licenses/license.pdf'),
                                                                  (36, 21, 'assets/uploads/licenses/license.pdf'),
-                                                                 (37, 23, 'assets/uploads/licenses/License(3).pdf'),
+                                                                 (37, 23, 'assets/uploads/licenses/license.pdf'),
                                                                  (38, 25, 'assets/uploads/licenses/license.pdf'),
-                                                                 (39, 27, 'assets/uploads/licenses/License(4).pdf'),
-                                                                 (40, 29, 'assets/uploads/licenses/license.pdf');
+                                                                 (39, 27, 'assets/uploads/licenses/License(1).pdf'),
+                                                                 (40, 29, 'assets/uploads/licenses/License(2).pdf');
 
 -- ----------------------------------------------------------
 -- 5. DRIVING LICENSE IMAGES (20 Records)
@@ -207,17 +208,16 @@ INSERT INTO driving_license_images (id, license_id, front_image_path, back_image
                                                                                            (8, 16, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
                                                                                            (9, 18, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
                                                                                            (10, 20, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
-                                                                                           (11, 22, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
-                                                                                           (12, 24, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (11, 22, 'assets/uploads/licenses/license_front.jpg','assets/uploads/licenses/license_back.jpg'),
+                                                                                           (12, 24, 'assets/uploads/licenses/license_front.jpg','assets/uploads/licenses/license_back.jpg'),
                                                                                            (13, 26, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
                                                                                            (14, 28, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
                                                                                            (15, 30, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
-                                                                                           (26, 2, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
-                                                                                           (27, 4, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
-                                                                                           (28, 6, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
-                                                                                           (29, 8, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
-                                                                                           (30, 10, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf');
-
+                                                                                           (16, 2, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (17, 4, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (18, 6, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (19, 8, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf'),
+                                                                                           (20, 10, 'assets/uploads/licenses/license.pdf', 'assets/uploads/licenses/license.pdf');
 -- ----------------------------------------------------------
 -- 6. VEHICLES (50 Records)
 -- ----------------------------------------------------------
@@ -514,11 +514,11 @@ INSERT INTO bookings (
 (66, 16, 56, 'hired', 28, '2026-09-28 07:00:00', '2026-09-30 19:00:00', 'Colombo Port City', 'Tangalle Bay Resort', 141400.00, 15.00, 21210.00, 112590.00, 7600.00, 'pending_payment'),
 
 -- 67-71: Unassigned Hired Driver Pipeline (Admin Driver Assignment)
-(67, 18, 57, 'hired', NULL, '2026-09-08 14:00:00', '2026-09-11 18:00:00', 'Colombo Hilton', 'Kandy Earls Regency', 78000.00, 15.00, 11700.00, 66300.00, 0.00, 'active'),
-(68, 23, 58, 'hired', NULL, '2026-09-14 08:30:00', '2026-09-17 17:30:00', 'Bandaranaike International Airport', 'Nuwara Eliya Grand Hotel', 84000.00, 15.00, 12600.00, 71400.00, 0.00, 'confirmed'),
-(69, 25, 59, 'hired', NULL, '2026-09-18 09:00:00', '2026-09-21 19:00:00', 'Colombo World Trade Center', 'Galle Fort Lighthouse Street', 152000.00, 15.00, 22800.00, 129200.00, 0.00, 'confirmed'),
-(70, 29, 60, 'hired', NULL, '2026-09-22 06:00:00', '2026-09-25 18:00:00', 'Battaramulla Central', 'Wilpattu Safari Entrance', 106000.00, 15.00, 15900.00, 90100.00, 0.00, 'confirmed'),
-(71, 21, 57, 'hired', NULL, '2026-09-26 10:00:00', '2026-09-29 16:00:00', 'Colombo Cinnamon Life', 'Negombo Jetwing Blue', 112000.00, 15.00, 16800.00, 95200.00, 0.00, 'confirmed');
+(67, 18, 57, 'hired', NULL, '2026-09-09 14:00:00', '2026-09-11 18:00:00', 'Colombo Hilton', 'Kandy Earls Regency', 78000.00, 15.00, 11700.00, 66300.00, 0.00, 'pending_assignment'),
+(68, 23, 58, 'hired', NULL, '2026-09-14 08:30:00', '2026-09-17 17:30:00', 'Bandaranaike International Airport', 'Nuwara Eliya Grand Hotel', 84000.00, 15.00, 12600.00, 71400.00, 0.00, 'pending_assignment'),
+(69, 25, 59, 'hired', NULL, '2026-09-18 09:00:00', '2026-09-21 19:00:00', 'Colombo World Trade Center', 'Galle Fort Lighthouse Street', 152000.00, 15.00, 22800.00, 129200.00, 0.00, 'pending_assignment'),
+(70, 29, 60, 'hired', NULL, '2026-09-22 06:00:00', '2026-09-25 18:00:00', 'Battaramulla Central', 'Wilpattu Safari Entrance', 106000.00, 15.00, 15900.00, 90100.00, 0.00, 'pending_assignment'),
+(71, 21, 57, 'hired', NULL, '2026-09-26 10:00:00', '2026-09-29 16:00:00', 'Colombo Cinnamon Life', 'Negombo Jetwing Blue', 112000.00, 15.00, 16800.00, 95200.00, 0.00, 'pending_assignment');
 
 -- ----------------------------------------------------------
 -- 9. PAYMENTS (71 Records - 1:1 Booking Mapping)
@@ -589,12 +589,7 @@ INSERT INTO payments (id, booking_id, user_id, stripe_session_id, stripe_payment
                                                                                                                           (63, 63, 53, 'sess_live_063_KK', 'pi_live_063_KK', 145200.00, 'LKR', 'completed'),
                                                                                                                           (64, 64, 54, 'sess_live_064_LL', 'pi_live_064_LL', 39600.00, 'LKR', 'pending'),
                                                                                                                           (65, 65, 55, 'sess_live_065_MM', 'pi_live_065_MM', 20400.00, 'LKR', 'completed'),
-                                                                                                                          (66, 66, 56, 'sess_live_066_NN', 'pi_live_066_NN', 141400.00, 'LKR', 'pending'),
-                                                                                                                          (67, 67, 57, 'sess_live_067_OO', 'pi_live_067_OO', 78000.00, 'LKR', 'completed'),
-                                                                                                                          (68, 68, 58, 'sess_live_068_PP', 'pi_live_068_PP', 84000.00, 'LKR', 'completed'),
-                                                                                                                          (69, 69, 59, 'sess_live_069_QQ', 'pi_live_069_QQ', 152000.00, 'LKR', 'completed'),
-                                                                                                                          (70, 70, 60, 'sess_live_070_RR', 'pi_live_070_RR', 106000.00, 'LKR', 'completed'),
-                                                                                                                          (71, 71, 57, 'sess_live_071_SS', 'pi_live_071_SS', 112000.00, 'LKR', 'completed');
+                                                                                                                          (66, 66, 56, 'sess_live_066_NN', 'pi_live_066_NN', 141400.00, 'LKR', 'pending');
 
 -- ----------------------------------------------------------
 -- 10. REVIEWS (80 Records)
@@ -791,4 +786,89 @@ INSERT INTO inquiries (id, full_name, email, subject, message, status, admin_res
                                                                                                          (49, 'Chithra Warakagoda', 'chithra.w@example.com', 'App Notification Issue', 'I am not receiving mobile SMS alerts for host booking acceptance messages.', 'responded', 'Please check that SMS notifications are toggled on inside your user account settings.', '2024-03-20 13:00:00'),
                                                                                                          (50, 'Jackson Anthony', 'jackson.a@example.com', 'Supercar Security Deposit', 'Why does the Porsche 911 require a higher refundable security deposit?', 'responded', 'Higher value vehicles carry adjusted damage deductible holds as per underwriter terms.', '2024-03-21 15:45:00');
 
+-- ----------------------------------------------------------
+-- 13. DISPUTES (20 Records)
+-- ----------------------------------------------------------
+INSERT INTO disputes (
+    id, booking_id, user_id, reason, details,
+    preferred_contact_method, contact_info, status, created_at
+) VALUES
+      (1, 2, 12, 'Security Deposit Deduction',
+       'Host claimed rim scuffs occurred during my rental period, but the pre-trip walkthrough photos clearly show preexisting curb rash on the rear passenger wheel.',
+       'email', 'pabasarani.m@example.com', 'resolved', '2026-01-14 11:30:00'),
 
+      (2, 4, 14, 'Driver Overtime Overcharge',
+       'The hired driver logged three additional overtime hours due to traffic delays on the Southern Expressway which were outside our control and not part of the itinerary.',
+       'phone', '+94-78-4455614', 'resolved', '2026-01-24 16:15:00'),
+
+      (3, 6, 16, 'Vehicle Fuel Reimbursement Discrepancy',
+       'I returned the Camry Hybrid with a full tank of fuel and uploaded the gas station receipt, yet I was assessed a LKR 4,500 refueling penalty.',
+       'email', 'ruwanthi.d@example.com', 'resolved', '2026-02-03 09:40:00'),
+
+      (4, 8, 18, 'Mechanical Issue During Trip',
+       'The air conditioning compressor failed completely on day two during a trip through dry zone heat. Host refused to provide a partial rate adjustment.',
+       'phone', '+94-71-8899018', 'resolved', '2026-02-13 14:20:00'),
+
+      (5, 11, 21, 'Late Vehicle Handover by Host',
+       'Vehicle delivery was delayed by nearly three hours past the confirmed reservation pickup time at San Diego Coastal, disrupting our schedule.',
+       'email', 'mohamed.rizwan@example.com', 'resolved', '2026-02-28 10:10:00'),
+
+      (6, 13, 23, 'Unwarranted Interior Detailing Fee',
+       'Host billed a premium interior detailing charge claiming excessive sand, despite the vehicle having only trace floorboard dust removable with routine vacuuming.',
+       'phone', '+94-72-3355623', 'resolved', '2026-03-10 17:05:00'),
+
+      (7, 15, 25, 'Toll Charge Calculation Error',
+       'Electronic expressway toll pass debits were billed twice on my final invoice for the trip segment between Peliyagoda and Galle.',
+       'email', 'farhan.naushad@example.com', 'resolved', '2026-03-19 12:00:00'),
+
+      (8, 17, 27, 'Vehicle Cleanliness at Pickup',
+       'The RAV4 interior was handed over with discarded drink bottles and stained upholstery from the preceding renter, forcing us to wash it ourselves.',
+       'email', 'nuwan.gamage@example.com', 'resolved', '2026-03-30 15:45:00'),
+
+      (9, 20, 30, 'Mileage Overage Dispute',
+       'The return inspection logged an incorrect finishing odometer value that resulted in an unjustified 180 km excess mileage surcharge.',
+       'phone', '+94-78-0022330', 'resolved', '2026-04-14 11:25:00'),
+
+      (10, 22, 32, 'Driver Professionalism & Route Deviation',
+       'The assigned driver made unscheduled personal stops en route to Albuquerque without our consent, adding over ninety minutes of transit time.',
+       'phone', '+94-75-2244632', 'resolved', '2026-04-24 18:30:00'),
+
+      (11, 26, 36, 'EV Charging Adapter Missing',
+       'The Polestar 2 was supplied without the Type 2 public charging cable, leaving us stranded at an intermediate charging station for four hours.',
+       'email', 'nadeesha.m@example.com', 'resolved', '2026-05-13 13:15:00'),
+
+      (12, 30, 40, 'Host Cancellation Penalty Dispute',
+       'I requested trip adjustments within the allowable 24-hour grace window, but the automated billing system applied a non-refundable one-day cancellation fee.',
+       'email', 'kavindya.s@example.com', 'resolved', '2026-06-02 10:50:00'),
+
+      (13, 34, 44, 'Luggage Rack Functionality Failure',
+       'The factory roof crossbars failed to secure our luggage safely due to damaged mounting hardware that was not disclosed prior to key handover.',
+       'phone', '+94-77-4466844', 'resolved', '2026-06-22 16:40:00'),
+
+      (14, 38, 48, 'Flat Tire Replacement Reimbursement',
+       'Tire sidewall bubble failure occurred on day one due to worn tread depth. I had to purchase an emergency replacement tire out of pocket and request a full refund.',
+       'email', 'kasun.kalhara@example.com', 'resolved', '2026-07-11 09:20:00'),
+
+      (15, 42, 52, 'Incorrect Fuel Grade Accusation',
+       'Host claims regular octane fuel was used instead of premium octane and billed an engine diagnostic fee, but all submitted fuel receipts show 95 Octane.',
+       'email', 'danushka.s@example.com', 'resolved', '2026-07-31 14:10:00'),
+
+      (16, 45, 55, 'Smoking Fine Assessment Contest',
+       'Assessed a LKR 25,000 deep cleaning smoking violation penalty despite neither myself nor any passengers being smokers. Requesting a scent inspection appeal.',
+       'phone', '+94-72-5588955', 'open', '2026-08-15 11:00:00'),
+
+      (17, 51, 41, 'Supercharger Auto-Debit Discrepancy',
+       'Tesla supercharger idling fees were billed to my account for charging sessions that occurred after the vehicle was returned to the host.',
+       'email', 'santhush.w@example.com', 'open', '2026-09-05 15:30:00'),
+
+      (18, 52, 42, 'Driver Punctuality Dispute',
+       'Assigned driver arrived over two hours late for the morning departure to Kandy, causing delegates to miss the opening morning conference session.',
+       'phone', '+94-71-2244642', 'open', '2026-09-08 19:15:00'),
+
+      (19, 53, 43, 'Unnotified Vehicle Specification Swap',
+       'Listing stated Camry Hybrid with navigation package, but an older generation vehicle without Apple CarPlay or ADAS safety sensors was provided.',
+       'email', 'fathima.z@example.com', 'open', '2026-09-13 12:45:00'),
+
+      (20, 55, 45, 'Transmission Hesitation Breakdown Claim',
+       'Vehicle transmission slipped into limp mode while climbing Nuwara Eliya inclines. Host claims renter abuse, but this is an inherent mechanical clutch issue.',
+       'phone', '+94-70-5577945', 'open', '2026-09-24 10:20:00');
