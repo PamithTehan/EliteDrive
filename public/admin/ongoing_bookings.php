@@ -85,36 +85,10 @@ require_once __DIR__ . '/../../includes/partials/head.php';
 
     <div class="container">
         <div class="profile-layout">
-            <aside>
-                <div class="profile-user-card" style="padding: 24px 16px;">
-                    <div class="profile-meta-list">
-                        <a href="<?= baseUrl('/admin/vehicle_approvals.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
-                            <span class="material-symbols-outlined">directions_car</span> Vehicle Approvals
-                        </a>
-                        <a href="<?= baseUrl('/admin/verification_queue.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
-                            <span class="material-symbols-outlined">verified</span> Verification Queue
-                        </a>
-                        <a href="<?= baseUrl('/admin/driver_assignments.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
-                            <span class="material-symbols-outlined">work</span> Driver Assignments
-                        </a>
-                        <a href="<?= baseUrl('/admin/ongoing_bookings.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: #e0e7ff; font-weight: 600;">
-                            <span class="material-symbols-outlined">event</span> Ongoing Bookings
-                        </a>
-                        <a href="<?= baseUrl('/admin/inquiries.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
-                            <span class="material-symbols-outlined">contact_support</span> Inquiries
-                        </a>
-                        <a href="<?= baseUrl('/admin/disputes.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
-                            <span class="material-symbols-outlined">gavel</span> Disputes
-                        </a>
-                        <a href="<?= baseUrl('/admin/income.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
-                            <span class="material-symbols-outlined">payments</span> Income
-                        </a>
-                        <a href="<?= baseUrl('/admin/management.php') ?>" style="display:flex; align-items:center; gap:8px; color: var(--color-primary); text-decoration: none; padding: 8px 12px; border-radius: 6px; background-color: transparent; font-weight: 400;">
-                            <span class="material-symbols-outlined">manage_accounts</span> System Management
-                        </a>
-                    </div>
-                </div>
-            </aside>
+            <?php 
+            $activeAdminNav = 'ongoing_bookings';
+            require __DIR__ . '/../../includes/partials/admin/sidebar.php'; 
+            ?>
             
             <div class="profile-content-area">
                 
