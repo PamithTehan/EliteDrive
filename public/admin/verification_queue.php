@@ -111,10 +111,17 @@ require_once __DIR__ . '/../../includes/partials/head.php';
 <div id="doc-modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8);">
     <div style="background-color: var(--color-surface); margin: 5% auto; padding: var(--space-md); border-radius: var(--radius-md); width: 90%; max-width: 900px; height: 85vh; display: flex; flex-direction: column; box-shadow: var(--shadow-lg);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm);">
-            <h3 class="headline-sm" style="margin: 0;">Document Viewer</h3>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <h3 class="headline-sm" style="margin: 0;">Document Viewer</h3>
+                <div style="display: flex; align-items: center; gap: 4px; background: var(--color-background); padding: 4px; border-radius: var(--radius-sm); border: 1px solid var(--color-outline);">
+                    <button id="zoom-out" class="btn btn-ghost" style="padding: 2px 8px; font-weight: bold;" title="Zoom Out">-</button>
+                    <button id="zoom-reset" class="btn btn-ghost" style="padding: 2px 8px; font-size: 12px;" title="Reset Zoom">Reset</button>
+                    <button id="zoom-in" class="btn btn-ghost" style="padding: 2px 8px; font-weight: bold;" title="Zoom In">+</button>
+                </div>
+            </div>
             <button id="close-modal" class="btn btn-ghost" style="padding: 4px 12px; font-size: 20px;">&times;</button>
         </div>
-        <div id="doc-container" style="width: 100%; flex-grow: 1; border: 1px solid var(--color-outline); border-radius: var(--radius-sm); background: #eee; display: flex; align-items: center; justify-content: center; overflow: auto;">
+        <div id="doc-container" style="position: relative; width: 100%; flex-grow: 1; min-height: 0; border: 1px solid var(--color-outline); border-radius: var(--radius-sm); background: #eee; overflow: hidden;">
             <!-- Content loaded dynamically -->
         </div>
     </div>
@@ -249,7 +256,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
             const container = document.getElementById('doc-container');
             
             if (url.includes('license_pdf')) {
-                container.innerHTML = `<canvas id="pdf-canvas" style="max-width:100%; object-fit:contain;"></canvas>`;
+                container.innerHTML = `<canvas id="pdf-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;"></canvas>`;
                 
                 const b64Url = url.replace('type=license_pdf', 'type=license_pdf_b64');
                 
@@ -265,9 +272,10 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                     const loadingTask = pdfjsLib.getDocument({ data: uint8Array });
                     return loadingTask.promise;
                 }).then(pdf => {
+                    currentPdf = pdf;
                     return pdf.getPage(1);
                 }).then(page => {
-                    const scale = 1.5;
+                    const scale = 2.0; // Higher base scale for crisp zooming
                     const viewport = page.getViewport({ scale: scale });
                     const canvas = document.getElementById('pdf-canvas');
                     const context = canvas.getContext('2d');
@@ -279,11 +287,15 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                         viewport: viewport
                     };
                     page.render(renderContext);
+                    currentZoom = 0.5;
+                    applyZoom();
                 }).catch(err => {
                     container.innerHTML = `<p style="color:red;">Error loading PDF: ${err.message}</p>`;
                 });
             } else {
-                container.innerHTML = `<img src="${url}" style="max-width:100%; max-height:100%; object-fit:contain;">`;
+                currentZoom = 1.0;
+                applyZoom();
+                container.innerHTML = `<img src="${url}" id="pdf-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;">`;
             }
             
             document.getElementById('doc-modal').style.display = 'block';
@@ -308,6 +320,41 @@ require_once __DIR__ . '/../../includes/partials/head.php';
         if (!str) return '';
         return str.toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     }
+
+    let currentZoom = 1.0;
+    
+    function applyZoom() {
+        const el = document.getElementById('pdf-canvas');
+        if (!el) return;
+        
+        const container = document.getElementById('doc-container');
+        if (currentZoom <= 1.0) {
+            el.style.position = 'absolute';
+            el.style.width = '100%';
+            el.style.height = '100%';
+            container.style.overflow = 'hidden';
+        } else {
+            el.style.position = 'relative';
+            el.style.width = `${currentZoom * 100}%`;
+            el.style.height = `${currentZoom * 100}%`;
+            container.style.overflow = 'auto';
+        }
+    }
+    
+    document.getElementById('zoom-in').addEventListener('click', () => {
+        currentZoom += 0.5;
+        applyZoom();
+    });
+    
+    document.getElementById('zoom-out').addEventListener('click', () => {
+        currentZoom = Math.max(0.5, currentZoom - 0.5);
+        applyZoom();
+    });
+    
+    document.getElementById('zoom-reset').addEventListener('click', () => {
+        currentZoom = 1.0;
+        applyZoom();
+    });
 
     loadQueue();
 </script>
