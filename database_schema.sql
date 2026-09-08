@@ -137,7 +137,7 @@ CREATE TABLE reviews (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (booking_id) REFERENCES bookings(id),
     FOREIGN KEY (reviewer_id) REFERENCES users(id),
-    UNIQUE (booking_id, reviewer_id, target_id)
+    UNIQUE (booking_id, reviewer_id, target_type, target_id)
 );
 
 CREATE TABLE rejection_logs (

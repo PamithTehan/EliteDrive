@@ -220,11 +220,6 @@ INSERT INTO driving_license_images (id, license_id, front_image_path, back_image
 
 -- ----------------------------------------------------------
 -- 6. VEHICLES (50 Records)
--- Every record has values populated, rejection_reason IS NULL,
--- and each description contains exactly 150 words.
--- ----------------------------------------------------------
--- ----------------------------------------------------------
--- 6. VEHICLES (50 Records)
 -- km_rate: Real-world values representing km/L for ICE/Hybrids
 --          or km/charge for Electric models.
 -- ----------------------------------------------------------
@@ -543,56 +538,56 @@ INSERT INTO bookings (
     total_price, commission_rate, commission_amount, owner_earnings, driver_earnings,
     status
 ) VALUES
-      (1, 1, 11, 'hired', 12, '2024-03-01 09:00:00', '2024-03-04 18:00:00', 'Los Angeles Downtown, CA', 'Los Angeles Downtown, CA', 76500.00, 15.00, 11475.00, 54525.00, 10500.00, 'completed'),
-      (2, 2, 12, 'self', NULL, '2024-03-02 10:00:00', '2024-03-05 10:00:00', 'Beverly Hills, CA', 'Beverly Hills, CA', 93000.00, 15.00, 13950.00, 79050.00, 0.00, 'completed'),
-      (3, 3, 13, 'owner', NULL, '2024-03-03 08:00:00', '2024-03-06 18:00:00', 'Denver Metro, CO', 'Denver Metro, CO', 55500.00, 15.00, 8325.00, 47175.00, 0.00, 'completed'),
-      (4, 4, 14, 'hired', 15, '2024-03-04 12:00:00', '2024-03-07 12:00:00', 'Miami South Beach, FL', 'Miami South Beach, FL', 87000.00, 15.00, 13050.00, 58950.00, 15000.00, 'completed'),
-      (5, 5, 15, 'self', NULL, '2024-03-05 09:00:00', '2024-03-07 19:00:00', 'Manhattan Midtown, NY', 'Manhattan Midtown, NY', 70000.00, 15.00, 10500.00, 59500.00, 0.00, 'completed'),
-      (6, 6, 16, 'self', NULL, '2024-03-06 11:00:00', '2024-03-09 11:00:00', 'Austin Central, TX', 'Austin Central, TX', 19500.00, 15.00, 2925.00, 16575.00, 0.00, 'completed'),
-      (7, 7, 17, 'hired', 18, '2024-03-07 14:00:00', '2024-03-10 14:00:00', 'Las Vegas Strip, NV', 'Las Vegas Strip, NV', 56400.00, 15.00, 8460.00, 33540.00, 14400.00, 'completed'),
-      (8, 8, 18, 'self', NULL, '2024-03-08 10:00:00', '2024-03-11 18:00:00', 'Phoenix North, AZ', 'Phoenix North, AZ', 48000.00, 15.00, 7200.00, 40800.00, 0.00, 'completed'),
-      (9, 9, 19, 'owner', NULL, '2024-03-09 09:30:00', '2024-03-12 17:30:00', 'Chicago Downtown, IL', 'Chicago Downtown, IL', 87000.00, 15.00, 13050.00, 73950.00, 0.00, 'completed'),
-      (10, 10, 20, 'self', NULL, '2024-03-10 08:00:00', '2024-03-13 18:00:00', 'Seattle Capitol Hill, WA', 'Seattle Capitol Hill, WA', 33000.00, 15.00, 4950.00, 28050.00, 0.00, 'completed'),
-      (11, 11, 21, 'hired', 22, '2024-03-11 11:00:00', '2024-03-14 11:00:00', 'San Diego Coastal, CA', 'San Diego Coastal, CA', 82005.00, 15.00, 12300.75, 56204.25, 13500.00, 'completed'),
-      (12, 12, 22, 'self', NULL, '2024-03-12 09:00:00', '2024-03-15 17:00:00', 'Portland Central, OR', 'Portland Central, OR', 28500.00, 15.00, 4275.00, 24225.00, 0.00, 'completed'),
-      (13, 13, 23, 'hired', 24, '2024-03-13 13:00:00', '2024-03-16 13:00:00', 'Dallas Uptown, TX', 'Dallas Uptown, TX', 153000.00, 15.00, 22950.00, 112050.00, 18000.00, 'completed'),
-      (14, 14, 24, 'self', NULL, '2024-03-14 10:00:00', '2024-03-17 10:00:00', 'San Jose Silicon Valley, CA', 'San Jose Silicon Valley, CA', 37500.00, 15.00, 5625.00, 31875.00, 0.00, 'completed'),
-      (15, 15, 25, 'self', NULL, '2024-03-15 08:30:00', '2024-03-17 18:30:00', 'Orlando International, FL', 'Orlando International, FL', 11000.00, 15.00, 1650.00, 9350.00, 0.00, 'completed'),
-      (16, 16, 26, 'hired', 27, '2024-03-16 12:00:00', '2024-03-19 12:00:00', 'Atlanta Buckhead, GA', 'Atlanta Buckhead, GA', 139800.00, 15.00, 20970.00, 105030.00, 13800.00, 'completed'),
-      (17, 17, 27, 'self', NULL, '2024-03-17 09:00:00', '2024-03-20 09:00:00', 'Salt Lake City, UT', 'Salt Lake City, UT', 22500.00, 15.00, 3375.00, 19125.00, 0.00, 'completed'),
-      (18, 18, 28, 'owner', NULL, '2024-03-18 10:00:00', '2024-03-21 18:00:00', 'Boston Back Bay, MA', 'Boston Back Bay, MA', 58500.00, 15.00, 8775.00, 49725.00, 0.00, 'completed'),
-      (19, 19, 29, 'hired', 30, '2024-03-19 14:00:00', '2024-03-22 14:00:00', 'Nashville Downtown, TN', 'Nashville Downtown, TN', 62700.00, 15.00, 9405.00, 41595.00, 11700.00, 'completed'),
-      (20, 20, 30, 'self', NULL, '2024-03-20 11:00:00', '2024-03-23 11:00:00', 'Charlotte Uptown, NC', 'Charlotte Uptown, NC', 21000.00, 15.00, 3150.00, 17850.00, 0.00, 'completed'),
-      (21, 21, 31, 'self', NULL, '2024-03-21 09:00:00', '2024-03-24 17:00:00', 'San Francisco Financial, CA', 'San Francisco Financial, CA', 84000.00, 15.00, 12600.00, 71400.00, 0.00, 'completed'),
-      (22, 22, 32, 'hired', 33, '2024-03-22 10:00:00', '2024-03-25 10:00:00', 'Albuquerque West, NM', 'Albuquerque West, NM', 62400.00, 15.00, 9360.00, 35640.00, 17400.00, 'completed'),
-      (23, 23, 33, 'self', NULL, '2024-03-23 08:00:00', '2024-03-26 18:00:00', 'Minneapolis Downtown, MN', 'Minneapolis Downtown, MN', 63000.00, 15.00, 9450.00, 53550.00, 0.00, 'completed'),
-      (24, 24, 34, 'self', NULL, '2024-03-24 12:00:00', '2024-03-26 12:00:00', 'Tampa Westshore, FL', 'Tampa Westshore, FL', 9600.00, 15.00, 1440.00, 8160.00, 0.00, 'completed'),
-      (25, 25, 35, 'hired', 36, '2024-03-25 09:00:00', '2024-03-28 09:00:00', 'Houston Galleria, TX', 'Houston Galleria, TX', 128100.00, 15.00, 19215.00, 94785.00, 14100.00, 'completed'),
-      (26, 26, 36, 'self', NULL, '2024-03-26 10:30:00', '2024-03-29 10:30:00', 'Portland Downtown, OR', 'Portland Downtown, OR', 39000.00, 15.00, 5850.00, 33150.00, 0.00, 'completed'),
-      (27, 27, 37, 'owner', NULL, '2024-03-27 11:00:00', '2024-03-30 18:00:00', 'Scottsdale Old Town, AZ', 'Scottsdale Old Town, AZ', 99000.00, 15.00, 14850.00, 84150.00, 0.00, 'completed'),
-      (28, 28, 38, 'self', NULL, '2024-03-28 14:00:00', '2024-03-31 14:00:00', 'Indianapolis Downtown, IN', 'Indianapolis Downtown, IN', 40500.00, 15.00, 6075.00, 34425.00, 0.00, 'completed'),
-      (29, 29, 39, 'hired', 40, '2024-03-29 08:00:00', '2024-04-01 18:00:00', 'Salt Lake City South, UT', 'Salt Lake City South, UT', 61800.00, 15.00, 9270.00, 40230.00, 12300.00, 'completed'),
-      (30, 30, 40, 'self', NULL, '2024-03-30 09:00:00', '2024-04-02 09:00:00', 'Columbus Short North, OH', 'Columbus Short North, OH', 24000.00, 15.00, 3600.00, 20400.00, 0.00, 'completed'),
-      (31, 31, 41, 'self', NULL, '2024-03-31 10:00:00', '2024-04-03 18:00:00', 'Boulder Pearl St, CO', 'Boulder Pearl St, CO', 78000.00, 15.00, 11700.00, 66300.00, 0.00, 'completed'),
-      (32, 32, 42, 'hired', 11, '2024-04-01 12:00:00', '2024-04-04 12:00:00', 'Philadelphia Center City, PA', 'Philadelphia Center City, PA', 68700.00, 15.00, 10305.00, 46395.00, 12000.00, 'completed'),
-      (33, 33, 43, 'self', NULL, '2024-04-02 09:00:00', '2024-04-05 09:00:00', 'San Jose Santana Row, CA', 'San Jose Santana Row, CA', 34500.00, 15.00, 5175.00, 29325.00, 0.00, 'completed'),
-      (34, 34, 44, 'self', NULL, '2024-04-03 11:00:00', '2024-04-06 18:00:00', 'Kansas City Plaza, MO', 'Kansas City Plaza, MO', 43500.00, 15.00, 6525.00, 36975.00, 0.00, 'completed'),
-      (35, 35, 45, 'hired', 35, '2024-04-04 14:00:00', '2024-04-07 14:00:00', 'Atlanta Midtown, GA', 'Atlanta Midtown, GA', 95400.00, 15.00, 14310.00, 61590.00, 19500.00, 'completed'),
-      (36, 36, 46, 'self', NULL, '2024-04-05 08:30:00', '2024-04-07 18:30:00', 'San Antonio Riverwalk, TX', 'San Antonio Riverwalk, TX', 10000.00, 15.00, 1500.00, 8500.00, 0.00, 'completed'),
-      (37, 37, 47, 'owner', NULL, '2024-04-06 10:00:00', '2024-04-09 18:00:00', 'Newport Beach, CA', 'Newport Beach, CA', 81000.00, 15.00, 12150.00, 68850.00, 0.00, 'completed'),
-      (38, 38, 48, 'hired', 23, '2024-04-07 13:00:00', '2024-04-10 13:00:00', 'Detroit Downtown, MI', 'Detroit Downtown, MI', 53100.00, 15.00, 7965.00, 33135.00, 12000.00, 'completed'),
-      (39, 39, 49, 'self', NULL, '2024-04-08 09:00:00', '2024-04-11 09:00:00', 'Richmond Downtown, VA', 'Richmond Downtown, VA', 39000.00, 15.00, 5850.00, 33150.00, 0.00, 'completed'),
-      (40, 40, 50, 'self', NULL, '2024-04-09 10:00:00', '2024-04-12 18:00:00', 'Jackson Hole, WY', 'Jackson Hole, WY', 48000.00, 15.00, 7200.00, 40800.00, 0.00, 'completed'),
-      (41, 41, 51, 'hired', 31, '2024-04-10 11:30:00', '2024-04-13 11:30:00', 'Nashville West End, TN', 'Nashville West End, TN', 91500.00, 15.00, 13725.00, 65475.00, 12300.00, 'completed'),
-      (42, 42, 52, 'self', NULL, '2024-04-11 09:00:00', '2024-04-14 09:00:00', 'Louisville Downtown, KY', 'Louisville Downtown, KY', 43500.00, 15.00, 6525.00, 36975.00, 0.00, 'completed'),
-      (43, 43, 53, 'self', NULL, '2024-04-12 12:00:00', '2024-04-15 18:00:00', 'Palo Alto University Ave, CA', 'Palo Alto University Ave, CA', 93000.00, 15.00, 13950.00, 79050.00, 0.00, 'completed'),
-      (44, 44, 54, 'hired', 19, '2024-04-13 08:00:00', '2024-04-16 18:00:00', 'Boise Downtown, ID', 'Boise Downtown, ID', 38400.00, 15.00, 5760.00, 23040.00, 9600.00, 'completed'),
-      (45, 45, 55, 'self', NULL, '2024-04-14 10:00:00', '2024-04-17 10:00:00', 'Milwaukee Lakefront, WI', 'Milwaukee Lakefront, WI', 52500.00, 15.00, 7875.00, 44625.00, 0.00, 'completed'),
-      (46, 46, 56, 'owner', NULL, '2024-04-15 14:00:00', '2024-04-18 14:00:00', 'Raleigh Downtown, NC', 'Raleigh Downtown, NC', 36000.00, 15.00, 5400.00, 30600.00, 0.00, 'completed'),
-      (47, 47, 57, 'self', NULL, '2024-04-16 09:00:00', '2024-04-19 09:00:00', 'San Diego Balboa Park, CA', 'San Diego Balboa Park, CA', 22500.00, 15.00, 3375.00, 19125.00, 0.00, 'completed'),
-      (48, 48, 58, 'hired', 36, '2024-04-17 11:00:00', '2024-04-20 18:00:00', 'Oklahoma City Bricktown, OK', 'Oklahoma City Bricktown, OK', 99300.00, 15.00, 14895.00, 70305.00, 14100.00, 'completed'),
-      (49, 49, 59, 'self', NULL, '2024-04-18 10:00:00', '2024-04-21 10:00:00', 'Ann Arbor Downtown, MI', 'Ann Arbor Downtown, MI', 54000.00, 15.00, 8100.00, 45900.00, 0.00, 'completed'),
-      (50, 50, 60, 'self', NULL, '2024-04-19 13:00:00', '2024-04-22 13:00:00', 'Greenwich Ave, CT', 'Greenwich Ave, CT', 96000.00, 15.00, 14400.00, 81600.00, 0.00, 'confirmed');
+      (1, 1, 11, 'hired', 12, '2026-01-05 09:00:00', '2026-01-08 18:00:00', 'Los Angeles Downtown, CA', 'Los Angeles Downtown, CA', 76500.00, 15.00, 11475.00, 54525.00, 10500.00, 'completed'),
+      (2, 2, 12, 'self', NULL, '2026-01-10 10:00:00', '2026-01-13 10:00:00', 'Beverly Hills, CA', 'Beverly Hills, CA', 93000.00, 15.00, 13950.00, 79050.00, 0.00, 'completed'),
+      (3, 3, 13, 'owner', NULL, '2026-01-15 08:00:00', '2026-01-18 18:00:00', 'Denver Metro, CO', 'Denver Metro, CO', 55500.00, 15.00, 8325.00, 47175.00, 0.00, 'completed'),
+      (4, 4, 14, 'hired', 15, '2026-01-20 12:00:00', '2026-01-23 12:00:00', 'Miami South Beach, FL', 'Miami South Beach, FL', 87000.00, 15.00, 13050.00, 58950.00, 15000.00, 'completed'),
+      (5, 5, 15, 'self', NULL, '2026-01-25 09:00:00', '2026-01-27 19:00:00', 'Manhattan Midtown, NY', 'Manhattan Midtown, NY', 70000.00, 15.00, 10500.00, 59500.00, 0.00, 'completed'),
+      (6, 6, 16, 'self', NULL, '2026-01-30 11:00:00', '2026-02-02 11:00:00', 'Austin Central, TX', 'Austin Central, TX', 19500.00, 15.00, 2925.00, 16575.00, 0.00, 'completed'),
+      (7, 7, 17, 'hired', 18, '2026-02-04 14:00:00', '2026-02-07 14:00:00', 'Las Vegas Strip, NV', 'Las Vegas Strip, NV', 56400.00, 15.00, 8460.00, 33540.00, 14400.00, 'completed'),
+      (8, 8, 18, 'self', NULL, '2026-02-09 10:00:00', '2026-02-12 18:00:00', 'Phoenix North, AZ', 'Phoenix North, AZ', 48000.00, 15.00, 7200.00, 40800.00, 0.00, 'completed'),
+      (9, 9, 19, 'owner', NULL, '2026-02-14 09:30:00', '2026-02-17 17:30:00', 'Chicago Downtown, IL', 'Chicago Downtown, IL', 87000.00, 15.00, 13050.00, 73950.00, 0.00, 'completed'),
+      (10, 10, 20, 'self', NULL, '2026-02-19 08:00:00', '2026-02-22 18:00:00', 'Seattle Capitol Hill, WA', 'Seattle Capitol Hill, WA', 33000.00, 15.00, 4950.00, 28050.00, 0.00, 'completed'),
+      (11, 11, 21, 'hired', 22, '2026-02-24 11:00:00', '2026-02-27 11:00:00', 'San Diego Coastal, CA', 'San Diego Coastal, CA', 82005.00, 15.00, 12300.75, 56204.25, 13500.00, 'completed'),
+      (12, 12, 22, 'self', NULL, '2026-03-01 09:00:00', '2026-03-04 17:00:00', 'Portland Central, OR', 'Portland Central, OR', 28500.00, 15.00, 4275.00, 24225.00, 0.00, 'completed'),
+      (13, 13, 23, 'hired', 24, '2026-03-06 13:00:00', '2026-03-09 13:00:00', 'Dallas Uptown, TX', 'Dallas Uptown, TX', 153000.00, 15.00, 22950.00, 112050.00, 18000.00, 'completed'),
+      (14, 14, 24, 'self', NULL, '2026-03-11 10:00:00', '2026-03-14 10:00:00', 'San Jose Silicon Valley, CA', 'San Jose Silicon Valley, CA', 37500.00, 15.00, 5625.00, 31875.00, 0.00, 'completed'),
+      (15, 15, 25, 'self', NULL, '2026-03-16 08:30:00', '2026-03-18 18:30:00', 'Orlando International, FL', 'Orlando International, FL', 11000.00, 15.00, 1650.00, 9350.00, 0.00, 'completed'),
+      (16, 16, 26, 'hired', 27, '2026-03-21 12:00:00', '2026-03-24 12:00:00', 'Atlanta Buckhead, GA', 'Atlanta Buckhead, GA', 139800.00, 15.00, 20970.00, 105030.00, 13800.00, 'completed'),
+      (17, 17, 27, 'self', NULL, '2026-03-26 09:00:00', '2026-03-29 09:00:00', 'Salt Lake City, UT', 'Salt Lake City, UT', 22500.00, 15.00, 3375.00, 19125.00, 0.00, 'completed'),
+      (18, 18, 28, 'owner', NULL, '2026-03-31 10:00:00', '2026-04-03 18:00:00', 'Boston Back Bay, MA', 'Boston Back Bay, MA', 58500.00, 15.00, 8775.00, 49725.00, 0.00, 'completed'),
+      (19, 19, 29, 'hired', 30, '2026-04-05 14:00:00', '2026-04-08 14:00:00', 'Nashville Downtown, TN', 'Nashville Downtown, TN', 62700.00, 15.00, 9405.00, 41595.00, 11700.00, 'completed'),
+      (20, 20, 30, 'self', NULL, '2026-04-10 11:00:00', '2026-04-13 11:00:00', 'Charlotte Uptown, NC', 'Charlotte Uptown, NC', 21000.00, 15.00, 3150.00, 17850.00, 0.00, 'completed'),
+      (21, 21, 31, 'self', NULL, '2026-04-15 09:00:00', '2026-04-18 17:00:00', 'San Francisco Financial, CA', 'San Francisco Financial, CA', 84000.00, 15.00, 12600.00, 71400.00, 0.00, 'completed'),
+      (22, 22, 32, 'hired', 33, '2026-04-20 10:00:00', '2026-04-23 10:00:00', 'Albuquerque West, NM', 'Albuquerque West, NM', 62400.00, 15.00, 9360.00, 35640.00, 17400.00, 'completed'),
+      (23, 23, 33, 'self', NULL, '2026-04-25 08:00:00', '2026-04-28 18:00:00', 'Minneapolis Downtown, MN', 'Minneapolis Downtown, MN', 63000.00, 15.00, 9450.00, 53550.00, 0.00, 'completed'),
+      (24, 24, 34, 'self', NULL, '2026-04-30 12:00:00', '2026-05-02 12:00:00', 'Tampa Westshore, FL', 'Tampa Westshore, FL', 9600.00, 15.00, 1440.00, 8160.00, 0.00, 'completed'),
+      (25, 25, 35, 'hired', 36, '2026-05-04 09:00:00', '2026-05-07 09:00:00', 'Houston Galleria, TX', 'Houston Galleria, TX', 128100.00, 15.00, 19215.00, 94785.00, 14100.00, 'completed'),
+      (26, 26, 36, 'self', NULL, '2026-05-09 10:30:00', '2026-05-12 10:30:00', 'Portland Downtown, OR', 'Portland Downtown, OR', 39000.00, 15.00, 5850.00, 33150.00, 0.00, 'completed'),
+      (27, 27, 37, 'owner', NULL, '2026-05-14 11:00:00', '2026-05-17 18:00:00', 'Scottsdale Old Town, AZ', 'Scottsdale Old Town, AZ', 99000.00, 15.00, 14850.00, 84150.00, 0.00, 'completed'),
+      (28, 28, 38, 'self', NULL, '2026-05-19 14:00:00', '2026-05-22 14:00:00', 'Indianapolis Downtown, IN', 'Indianapolis Downtown, IN', 40500.00, 15.00, 6075.00, 34425.00, 0.00, 'completed'),
+      (29, 29, 39, 'hired', 40, '2026-05-24 08:00:00', '2026-05-27 18:00:00', 'Salt Lake City South, UT', 'Salt Lake City South, UT', 61800.00, 15.00, 9270.00, 40230.00, 12300.00, 'completed'),
+      (30, 30, 40, 'self', NULL, '2026-05-29 09:00:00', '2026-06-01 09:00:00', 'Columbus Short North, OH', 'Columbus Short North, OH', 24000.00, 15.00, 3600.00, 20400.00, 0.00, 'completed'),
+      (31, 31, 41, 'self', NULL, '2026-06-03 10:00:00', '2026-06-06 18:00:00', 'Boulder Pearl St, CO', 'Boulder Pearl St, CO', 78000.00, 15.00, 11700.00, 66300.00, 0.00, 'completed'),
+      (32, 32, 42, 'hired', 11, '2026-06-08 12:00:00', '2026-06-11 12:00:00', 'Philadelphia Center City, PA', 'Philadelphia Center City, PA', 68700.00, 15.00, 10305.00, 46395.00, 12000.00, 'completed'),
+      (33, 33, 43, 'self', NULL, '2026-06-13 09:00:00', '2026-06-16 09:00:00', 'San Jose Santana Row, CA', 'San Jose Santana Row, CA', 34500.00, 15.00, 5175.00, 29325.00, 0.00, 'completed'),
+      (34, 34, 44, 'self', NULL, '2026-06-18 11:00:00', '2026-06-21 18:00:00', 'Kansas City Plaza, MO', 'Kansas City Plaza, MO', 43500.00, 15.00, 6525.00, 36975.00, 0.00, 'completed'),
+      (35, 35, 45, 'hired', 35, '2026-06-23 14:00:00', '2026-06-26 14:00:00', 'Atlanta Midtown, GA', 'Atlanta Midtown, GA', 95400.00, 15.00, 14310.00, 61590.00, 19500.00, 'completed'),
+      (36, 36, 46, 'self', NULL, '2026-06-28 08:30:00', '2026-06-30 18:30:00', 'San Antonio Riverwalk, TX', 'San Antonio Riverwalk, TX', 10000.00, 15.00, 1500.00, 8500.00, 0.00, 'completed'),
+      (37, 37, 47, 'owner', NULL, '2026-07-02 10:00:00', '2026-07-05 18:00:00', 'Newport Beach, CA', 'Newport Beach, CA', 81000.00, 15.00, 12150.00, 68850.00, 0.00, 'completed'),
+      (38, 38, 48, 'hired', 23, '2026-07-07 13:00:00', '2026-07-10 13:00:00', 'Detroit Downtown, MI', 'Detroit Downtown, MI', 53100.00, 15.00, 7965.00, 33135.00, 12000.00, 'completed'),
+      (39, 39, 49, 'self', NULL, '2026-07-12 09:00:00', '2026-07-15 09:00:00', 'Richmond Downtown, VA', 'Richmond Downtown, VA', 39000.00, 15.00, 5850.00, 33150.00, 0.00, 'completed'),
+      (40, 40, 50, 'self', NULL, '2026-07-17 10:00:00', '2026-07-20 18:00:00', 'Jackson Hole, WY', 'Jackson Hole, WY', 48000.00, 15.00, 7200.00, 40800.00, 0.00, 'completed'),
+      (41, 41, 51, 'hired', 31, '2026-07-22 11:30:00', '2026-07-25 11:30:00', 'Nashville West End, TN', 'Nashville West End, TN', 91500.00, 15.00, 13725.00, 65475.00, 12300.00, 'completed'),
+      (42, 42, 52, 'self', NULL, '2026-07-27 09:00:00', '2026-07-30 09:00:00', 'Louisville Downtown, KY', 'Louisville Downtown, KY', 43500.00, 15.00, 6525.00, 36975.00, 0.00, 'completed'),
+      (43, 43, 53, 'self', NULL, '2026-08-01 12:00:00', '2026-08-04 18:00:00', 'Palo Alto University Ave, CA', 'Palo Alto University Ave, CA', 93000.00, 15.00, 13950.00, 79050.00, 0.00, 'completed'),
+      (44, 44, 54, 'hired', 19, '2026-08-06 08:00:00', '2026-08-09 18:00:00', 'Boise Downtown, ID', 'Boise Downtown, ID', 38400.00, 15.00, 5760.00, 23040.00, 9600.00, 'completed'),
+      (45, 45, 55, 'self', NULL, '2026-08-11 10:00:00', '2026-08-14 10:00:00', 'Milwaukee Lakefront, WI', 'Milwaukee Lakefront, WI', 52500.00, 15.00, 7875.00, 44625.00, 0.00, 'completed'),
+      (46, 46, 56, 'owner', NULL, '2026-08-16 14:00:00', '2026-08-19 14:00:00', 'Raleigh Downtown, NC', 'Raleigh Downtown, NC', 36000.00, 15.00, 5400.00, 30600.00, 0.00, 'completed'),
+      (47, 47, 57, 'self', NULL, '2026-08-21 09:00:00', '2026-08-24 09:00:00', 'San Diego Balboa Park, CA', 'San Diego Balboa Park, CA', 22500.00, 15.00, 3375.00, 19125.00, 0.00, 'completed'),
+      (48, 48, 58, 'hired', 36, '2026-08-24 11:00:00', '2026-08-27 18:00:00', 'Oklahoma City Bricktown, OK', 'Oklahoma City Bricktown, OK', 99300.00, 15.00, 14895.00, 70305.00, 14100.00, 'completed'),
+      (49, 49, 59, 'self', NULL, '2026-08-27 10:00:00', '2026-08-30 10:00:00', 'Ann Arbor Downtown, MI', 'Ann Arbor Downtown, MI', 54000.00, 15.00, 8100.00, 45900.00, 0.00, 'completed'),
+      (50, 50, 60, 'self', NULL, '2026-08-28 13:00:00', '2026-08-31 13:00:00', 'Greenwich Ave, CT', 'Greenwich Ave, CT', 96000.00, 15.00, 14400.00, 81600.00, 0.00, 'confirmed');
 
 -- ----------------------------------------------------------
 -- 9. PAYMENTS (50 Records)
@@ -709,60 +704,57 @@ INSERT INTO reviews (id, booking_id, reviewer_id, target_id, target_type, rating
 -- Historical audits across licenses, vehicles, and bookings
 -- ----------------------------------------------------------
 INSERT INTO rejection_logs (id, entity_type, entity_id, reason, rejected_by, created_at) VALUES
-                                                                                             (1, 'license', 101, 'Uploaded driving license photo is blurry and illegible upon inspection.', 1, '2024-01-05 10:15:00'),
-                                                                                             (2, 'license', 102, 'Expired document: the submitted permit expired three months prior.', 1, '2024-01-06 11:20:00'),
-                                                                                             (3, 'license', 103, 'Document corners cropped out; full license perimeter must be visible.', 2, '2024-01-07 14:00:00'),
-                                                                                             (4, 'license', 104, 'Mismatched legal name between user account profile and uploaded document.', 2, '2024-01-08 09:45:00'),
-                                                                                             (5, 'license', 105, 'Reverse side image of the driving license was omitted during upload.', 1, '2024-01-09 16:30:00'),
-                                                                                             (6, 'vehicle', 106, 'Vehicle photos depict heavy front fender collision damage.', 1, '2024-01-10 13:10:00'),
-                                                                                             (7, 'vehicle', 107, 'Vehicle registration papers do not match the nominated owner account.', 2, '2024-01-11 15:40:00'),
-                                                                                             (8, 'vehicle', 108, 'Odometer reading significantly exceeds maximum platform safety threshold.', 1, '2024-01-12 11:05:00'),
-                                                                                             (9, 'vehicle', 109, 'Commercial livery and exterior advertising wraps are strictly prohibited.', 2, '2024-01-13 17:25:00'),
-                                                                                             (10, 'vehicle', 110, 'Missing mandatory proof of commercial insurance coverage document.', 1, '2024-01-14 12:50:00'),
-                                                                                             (11, 'booking', 111, 'Borrower background check flagged active major moving violations.', 2, '2024-01-15 08:30:00'),
-                                                                                             (12, 'booking', 112, 'Cardholder address does not match verified borrower account residency.', 1, '2024-01-16 10:15:00'),
-                                                                                             (13, 'booking', 113, 'Vehicle scheduled for required routine maintenance during booking window.', 2, '2024-01-17 14:40:00'),
-                                                                                             (14, 'booking', 114, 'Requested pickup location is outside permissible regional boundary.', 1, '2024-01-18 16:20:00'),
-                                                                                             (15, 'booking', 115, 'Selected hired driver is already committed to an overlapping reservation.', 2, '2024-01-19 11:10:00'),
-                                                                                             (16, 'license', 116, 'Severe flash glare obscures the driving license number and birthdate.', 1, '2024-01-20 09:35:00'),
-                                                                                             (17, 'license', 117, 'Provisional learner permits are not eligible for driver onboarding.', 2, '2024-01-21 13:55:00'),
-                                                                                             (18, 'license', 118, 'Tampering detected on document birthdate font styling.', 1, '2024-01-22 15:15:00'),
-                                                                                             (19, 'license', 119, 'Driver must hold a full unrestricted license for at least two years.', 2, '2024-01-23 10:45:00'),
-                                                                                             (20, 'license', 120, 'Unreadable PDF scan resolution prevents optical character recognition.', 1, '2024-01-24 12:00:00'),
-                                                                                             (21, 'vehicle', 121, 'Vehicle model year is older than platform maximum vehicle age policy.', 2, '2024-01-25 14:30:00'),
-                                                                                             (22, 'vehicle', 122, 'Interior photographs reveal torn leather and stained upholstery.', 1, '2024-01-26 16:50:00'),
-                                                                                             (23, 'vehicle', 123, 'Aftermarket exhaust modifications exceed municipal decibel noise limits.', 2, '2024-01-27 11:25:00'),
-                                                                                             (24, 'vehicle', 124, 'Windshield glass displays structural star cracks across driver eye line.', 1, '2024-01-28 09:10:00'),
-                                                                                             (25, 'vehicle', 125, 'Vehicle title document indicates salvage or rebuilt branding.', 2, '2024-01-29 13:40:00'),
-                                                                                             (26, 'booking', 126, 'Payment processing gateway flagged transaction as potentially fraudulent.', 1, '2024-01-30 17:05:00'),
-                                                                                             (27, 'booking', 127, 'Borrower failed identity verification via third-party biometric vendor.', 2, '2024-01-31 10:30:00'),
-                                                                                             (28, 'booking', 128, 'Vehicle host unavailable to facilitate key handover on chosen dates.', 1, '2024-02-01 12:15:00'),
-                                                                                             (29, 'booking', 129, 'Reservation duration exceeds maximum allowable consecutive rental days.', 2, '2024-02-02 15:00:00'),
-                                                                                             (30, 'booking', 130, 'Borrower under minimum age requirement for luxury vehicle category.', 1, '2024-02-03 16:45:00'),
-                                                                                             (31, 'license', 131, 'License suspended according to state department of motor vehicles records.', 2, '2024-02-04 11:20:00'),
-                                                                                             (32, 'license', 132, 'Scanned photocopy submitted instead of original plastic license card.', 1, '2024-02-05 14:10:00'),
-                                                                                             (33, 'license', 133, 'License jurisdiction is outside supported national operational areas.', 2, '2024-02-06 09:50:00'),
-                                                                                             (34, 'license', 134, 'Driver facial photograph does not match submitted biometric selfie.', 1, '2024-02-07 13:15:00'),
-                                                                                             (35, 'license', 135, 'File damaged or corrupted during transmission; upload again.', 2, '2024-02-08 15:40:00'),
-                                                                                             (36, 'vehicle', 136, 'Tires fail minimum tread depth safety test across multiple wheels.', 1, '2024-02-09 10:05:00'),
-                                                                                             (37, 'vehicle', 137, 'Dashboard indicates active check engine and airbag malfunction lamps.', 2, '2024-02-10 12:35:00'),
-                                                                                             (38, 'vehicle', 138, 'Missing front license plate required by state traffic statutes.', 1, '2024-02-11 16:15:00'),
-                                                                                             (39, 'vehicle', 139, 'Host requested daily rate exceeds fair market platform guidelines.', 2, '2024-02-12 11:45:00'),
-                                                                                             (40, 'vehicle', 140, 'Host failed to verify physical vehicle location within listed zip code.', 1, '2024-02-13 14:25:00'),
-                                                                                             (41, 'booking', 141, 'Security deposit authorization failed by issuing banking institution.', 2, '2024-02-14 09:30:00'),
-                                                                                             (42, 'booking', 142, 'Cross border travel requested which violates platform terms of service.', 1, '2024-02-15 13:00:00'),
-                                                                                             (43, 'booking', 143, 'Booking overlaps with scheduled manufacturer safety recall inspection.', 2, '2024-02-16 15:20:00'),
-                                                                                             (44, 'booking', 144, 'Borrower account currently under review for prior billing infraction.', 1, '2024-02-17 11:10:00'),
-                                                                                             (45, 'booking', 145, 'Designated driver failed mandatory pre-trip breathalyzer protocol.', 2, '2024-02-18 17:35:00'),
-                                                                                             (46, 'other', 146, 'Duplicate host registration detected under alternative email alias.', 1, '2024-02-19 10:40:00'),
-                                                                                             (47, 'other', 147, 'Affiliate promotional abuse flagged by system fraud detection logic.', 2, '2024-02-20 12:55:00'),
-                                                                                             (48, 'other', 148, 'Commercial transport operator attempted private fleet listing circumvention.', 1, '2024-02-21 14:45:00'),
-                                                                                             (49, 'other', 149, 'Incomplete tax compliance documentation provided during merchant onboarding.', 2, '2024-02-22 16:30:00'),
-                                                                                             (50, 'other', 150, 'Automated scraper bot activity detected from originating user IP range.', 1, '2024-02-23 11:50:00');
+                                                                                             (1, 'license', 101, 'Uploaded driving license photo is blurry and illegible upon inspection.', 1, '2026-01-08 10:15:00'),
+                                                                                             (2, 'license', 102, 'Expired document: the submitted permit expired three months prior.', 1, '2026-01-14 11:20:00'),
+                                                                                             (3, 'license', 103, 'Document corners cropped out; full license perimeter must be visible.', 2, '2026-01-21 14:00:00'),
+                                                                                             (4, 'license', 104, 'Mismatched legal name between user account profile and uploaded document.', 2, '2026-01-27 09:45:00'),
+                                                                                             (5, 'license', 105, 'Reverse side image of the driving license was omitted during upload.', 1, '2026-02-03 16:30:00'),
+                                                                                             (6, 'vehicle', 106, 'Vehicle photos depict heavy front fender collision damage.', 1, '2026-02-09 13:10:00'),
+                                                                                             (7, 'vehicle', 107, 'Vehicle registration papers do not match the nominated owner account.', 2, '2026-02-15 15:40:00'),
+                                                                                             (8, 'vehicle', 108, 'Odometer reading significantly exceeds maximum platform safety threshold.', 1, '2026-02-21 11:05:00'),
+                                                                                             (9, 'vehicle', 109, 'Commercial livery and exterior advertising wraps are strictly prohibited.', 2, '2026-02-26 17:25:00'),
+                                                                                             (10, 'vehicle', 110, 'Missing mandatory proof of commercial insurance coverage document.', 1, '2026-03-03 12:50:00'),
+                                                                                             (11, 'booking', 111, 'Borrower background check flagged active major moving violations.', 2, '2026-03-08 08:30:00'),
+                                                                                             (12, 'booking', 112, 'Cardholder address does not match verified borrower account residency.', 1, '2026-03-13 10:15:00'),
+                                                                                             (13, 'booking', 113, 'Vehicle scheduled for required routine maintenance during booking window.', 2, '2026-03-18 14:40:00'),
+                                                                                             (14, 'booking', 114, 'Requested pickup location is outside permissible regional boundary.', 1, '2026-03-23 16:20:00'),
+                                                                                             (15, 'booking', 115, 'Selected hired driver is already committed to an overlapping reservation.', 2, '2026-03-29 11:10:00'),
+                                                                                             (16, 'license', 116, 'Severe flash glare obscures the driving license number and birthdate.', 1, '2026-04-03 09:35:00'),
+                                                                                             (17, 'license', 117, 'Provisional learner permits are not eligible for driver onboarding.', 2, '2026-04-08 13:55:00'),
+                                                                                             (18, 'license', 118, 'Tampering detected on document birthdate font styling.', 1, '2026-04-14 15:15:00'),
+                                                                                             (19, 'license', 119, 'Driver must hold a full unrestricted license for at least two years.', 2, '2026-04-19 10:45:00'),
+                                                                                             (20, 'license', 120, 'Unreadable PDF scan resolution prevents optical character recognition.', 1, '2026-04-24 12:00:00'),
+                                                                                             (21, 'vehicle', 121, 'Vehicle model year is older than platform maximum vehicle age policy.', 2, '2026-04-30 14:30:00'),
+                                                                                             (22, 'vehicle', 122, 'Interior photographs reveal torn leather and stained upholstery.', 1, '2026-05-05 16:50:00'),
+                                                                                             (23, 'vehicle', 123, 'Aftermarket exhaust modifications exceed municipal decibel noise limits.', 2, '2026-05-11 11:25:00'),
+                                                                                             (24, 'vehicle', 124, 'Windshield glass displays structural star cracks across driver eye line.', 1, '2026-05-16 09:10:00'),
+                                                                                             (25, 'vehicle', 125, 'Vehicle title document indicates salvage or rebuilt branding.', 2, '2026-05-22 13:40:00'),
+                                                                                             (26, 'booking', 126, 'Payment processing gateway flagged transaction as potentially fraudulent.', 1, '2026-05-27 17:05:00'),
+                                                                                             (27, 'booking', 127, 'Borrower failed identity verification via third-party biometric vendor.', 2, '2026-06-01 10:30:00'),
+                                                                                             (28, 'booking', 128, 'Vehicle host unavailable to facilitate key handover on chosen dates.', 1, '2026-06-06 12:15:00'),
+                                                                                             (29, 'booking', 129, 'Reservation duration exceeds maximum allowable consecutive rental days.', 2, '2026-06-11 15:00:00'),
+                                                                                             (30, 'booking', 130, 'Borrower under minimum age requirement for luxury vehicle category.', 1, '2026-06-16 16:45:00'),
+                                                                                             (31, 'license', 131, 'License suspended according to state department of motor vehicles records.', 2, '2026-06-21 11:20:00'),
+                                                                                             (32, 'license', 132, 'Scanned photocopy submitted instead of original plastic license card.', 1, '2026-06-26 14:10:00'),
+                                                                                             (33, 'license', 133, 'License jurisdiction is outside supported national operational areas.', 2, '2026-07-01 09:50:00'),
+                                                                                             (34, 'license', 134, 'Driver facial photograph does not match submitted biometric selfie.', 1, '2026-07-06 13:15:00'),
+                                                                                             (35, 'license', 135, 'File damaged or corrupted during transmission; upload again.', 2, '2026-07-11 15:40:00'),
+                                                                                             (36, 'vehicle', 136, 'Tires fail minimum tread depth safety test across multiple wheels.', 1, '2026-07-16 10:05:00'),
+                                                                                             (37, 'vehicle', 137, 'Dashboard indicates active check engine and airbag malfunction lamps.', 2, '2026-07-21 12:35:00'),
+                                                                                             (38, 'vehicle', 138, 'Missing front license plate required by state traffic statutes.', 1, '2026-07-26 16:15:00'),
+                                                                                             (39, 'vehicle', 139, 'Host requested daily rate exceeds fair market platform guidelines.', 2, '2026-07-31 11:45:00'),
+                                                                                             (40, 'vehicle', 140, 'Host failed to verify physical vehicle location within listed zip code.', 1, '2026-08-04 14:25:00'),
+                                                                                             (41, 'booking', 141, 'Security deposit authorization failed by issuing banking institution.', 2, '2026-08-08 09:30:00'),
+                                                                                             (42, 'booking', 142, 'Cross border travel requested which violates platform terms of service.', 1, '2026-08-12 13:00:00'),
+                                                                                             (43, 'booking', 143, 'Booking overlaps with scheduled manufacturer safety recall inspection.', 2, '2026-08-16 15:20:00'),
+                                                                                             (44, 'booking', 144, 'Borrower account currently under review for prior billing infraction.', 1, '2026-08-20 11:10:00'),
+                                                                                             (45, 'booking', 145, 'Designated driver failed mandatory pre-trip breathalyzer protocol.', 2, '2026-08-24 17:35:00'),
+                                                                                             (46, 'other', 146, 'Duplicate host registration detected under alternative email alias.', 1, '2026-08-28 10:40:00'),
+                                                                                             (47, 'other', 147, 'Affiliate promotional abuse flagged by system fraud detection logic.', 2, '2026-08-31 12:55:00'),
+                                                                                             (48, 'other', 148, 'Commercial transport operator attempted private fleet listing circumvention.', 1, '2026-09-02 14:45:00'),
+                                                                                             (49, 'other', 149, 'Incomplete tax compliance documentation provided during merchant onboarding.', 2, '2026-09-05 16:30:00'),
+                                                                                             (50, 'other', 150, 'Automated scraper bot activity detected from originating user IP range.', 1, '2026-09-07 11:50:00');
 
--- ----------------------------------------------------------
--- 12. INQUIRIES (50 Records)
--- ----------------------------------------------------------
 -- ----------------------------------------------------------
 -- 12. INQUIRIES (50 Records - Sri Lankan Inquirers)
 -- ----------------------------------------------------------
@@ -818,7 +810,97 @@ INSERT INTO inquiries (id, full_name, email, subject, message, status, admin_res
                                                                                                          (49, 'Chithra Warakagoda', 'chithra.w@example.com', 'App Notification Issue', 'I am not receiving mobile SMS alerts for host booking acceptance messages.', 'responded', 'Please check that SMS notifications are toggled on inside your user account settings.', '2024-03-20 13:00:00'),
                                                                                                          (50, 'Jackson Anthony', 'jackson.a@example.com', 'Supercar Security Deposit', 'Why does the Porsche 911 require a higher refundable security deposit?', 'responded', 'Higher value vehicles carry adjusted damage deductible holds as per underwriter terms.', '2024-03-21 15:45:00');
 
-USE elitedrive;
+-- ----------------------------------------------------------
+-- ADDITIONAL BOOKINGS (September 2026)
+-- ----------------------------------------------------------
+INSERT INTO bookings (
+    id, vehicle_id, borrower_id, driver_arrangement, assigned_driver_id,
+    pickup_date, return_date, pickup_location, return_location,
+    total_price, commission_rate, commission_amount, owner_earnings, driver_earnings,
+    status
+) VALUES
+-- 1. Active rental currently ongoing (Vehicle 1: Tesla Model S, Owner 3)
+(51, 1, 41, 'self', NULL,
+ '2026-09-06 09:00:00', '2026-09-09 18:00:00',
+ 'Colombo Fort Railway Station', 'Bandaranaike International Airport',
+ 66000.00, 15.00, 9900.00, 56100.00, 0.00, 'active'),
 
+-- 2. Active hired driver tour to Kandy (Vehicle 3: Defender 110, Driver 14: Oshadhi)
+(52, 3, 42, 'hired', 14,
+ '2026-09-07 08:00:00', '2026-09-10 17:00:00',
+ 'Colombo Cinnamon Grand', 'Kandy City Centre',
+ 69000.00, 15.00, 10350.00, 45150.00, 13500.00, 'active'),
 
+-- 3. Confirmed upcoming booking (Vehicle 6: Camry Hybrid, Owner 8)
+(53, 6, 43, 'self', NULL,
+ '2026-09-12 10:00:00', '2026-09-15 10:00:00',
+ 'Nugegoda Junction', 'Galle Fort Clock Tower',
+ 34500.00, 15.00, 5175.00, 29325.00, 0.00, 'confirmed'),
+
+-- 4. Confirmed luxury coastal trip with driver (Vehicle 5: Mercedes S580, Driver 20: Nethmi)
+(54, 5, 44, 'hired', 20,
+ '2026-09-16 14:00:00', '2026-09-19 14:00:00',
+ 'Colombo Shangri-La', 'Mirissa Beachfront',
+ 121500.00, 15.00, 18225.00, 86775.00, 16500.00, 'confirmed'),
+
+-- 5. Confirmed mountain getaway (Vehicle 12: Subaru Outback, Owner 6)
+(55, 12, 45, 'owner', NULL,
+ '2026-09-22 07:30:00', '2026-09-25 18:30:00',
+ 'Kandy Peradeniya Road', 'Nuwara Eliya Town',
+ 28500.00, 15.00, 4275.00, 24225.00, 0.00, 'confirmed'),
+
+-- 6. Late September booking pending verification (Vehicle 10: Ioniq 5, Driver 11: Kavinda)
+(56, 10, 46, 'hired', 11,
+ '2026-09-26 09:00:00', '2026-09-29 18:00:00',
+ 'Battaramulla Central', 'Negombo Beach Road',
+ 45000.00, 15.00, 6750.00, 26250.00, 12000.00, 'pending_verification');
+
+-- ----------------------------------------------------------
+-- MATCHING PAYMENTS FOR SEPTEMBER BOOKINGS
+-- ----------------------------------------------------------
+INSERT INTO payments (id, booking_id, user_id, stripe_session_id, stripe_payment_intent_id, amount, currency, status) VALUES
+                                                                                                                          (51, 51, 41, 'sess_live_051_YY', 'pi_live_051_YY', 66000.00, 'LKR', 'completed'),
+                                                                                                                          (52, 52, 42, 'sess_live_052_ZZ', 'pi_live_052_ZZ', 69000.00, 'LKR', 'completed'),
+                                                                                                                          (53, 53, 43, 'sess_live_053_AA', 'pi_live_053_AA', 34500.00, 'LKR', 'completed'),
+                                                                                                                          (54, 54, 44, 'sess_live_054_BB', 'pi_live_054_BB', 121500.00, 'LKR', 'completed'),
+                                                                                                                          (55, 55, 45, 'sess_live_055_CC', 'pi_live_055_CC', 28500.00, 'LKR', 'completed'),
+                                                                                                                          (56, 56, 46, 'sess_live_056_DD', 'pi_live_056_DD', 45000.00, 'LKR', 'pending');
+
+-- ----------------------------------------------------------
+-- ADDITIONAL REVIEWS: Platform & Driver (IDs 51 - 80)
+-- ----------------------------------------------------------
+INSERT INTO reviews (id, booking_id, reviewer_id, target_id, target_type, rating, comment) VALUES
+-- Driver Reviews (Targeting assigned_driver_id)
+(51, 1, 11, 12, 'driver', 5, 'Pabasarani was punctual, polite, and navigated Colombo traffic with great patience.'),
+(52, 4, 14, 15, 'driver', 5, 'Asela is an exceptional chauffeur. Very smooth driving and knew all the scenic coastal bypasses.'),
+(53, 7, 17, 18, 'driver', 4, 'Menaka handled the manual Mustang skillfully. Punctual arrival and pleasant conversation.'),
+(54, 11, 21, 22, 'driver', 5, 'Hansani drove safely throughout our southern expressway trip. Highly professional behavior.'),
+(55, 13, 23, 24, 'driver', 5, 'Chathurika was fantastic with the G-Wagon. Confident handling and very respectful.'),
+(56, 16, 26, 27, 'driver', 5, 'Nuwan arrived fifteen minutes early and maintained a clean, relaxed driving atmosphere.'),
+(57, 19, 29, 30, 'driver', 4, 'Sewwandi was courteous and followed our planned itinerary perfectly.'),
+(58, 22, 32, 33, 'driver', 5, 'Supun is a master driver on mountain switchbacks. We felt completely safe the entire trip.'),
+(59, 25, 35, 36, 'driver', 5, 'Nadeesha provided executive-level service for our corporate delegates. Excellent work.'),
+(60, 29, 39, 40, 'driver', 5, 'Kavindya took great care of the vehicle and assisted with all our luggage effortlessly.'),
+(61, 32, 42, 11, 'driver', 4, 'Kavinda was polite and accommodating with our unexpected route changes.'),
+(62, 35, 45, 35, 'driver', 5, 'Thilina is an expert behind the wheel. Smooth braking and immaculate road manners.'),
+(63, 38, 48, 23, 'driver', 5, 'Suresh handled highway congestion calmly and kept the vehicle impeccably clean.'),
+(64, 41, 51, 31, 'driver', 5, 'Isuru was on time and very knowledgeable about local attractions along the route.'),
+(65, 44, 54, 19, 'driver', 4, 'Bhanuka was very responsive and ensured our airport drop-off was right on time.'),
+
+-- Platform Reviews (target_id = 0 representing EliteDrive Platform)
+(66, 2, 12, 0, 'platform', 5, 'The mobile verification flow was lightning fast. Key handover took under five minutes.'),
+(67, 3, 13, 0, 'platform', 5, 'Seamless rental experience from start to finish. The pricing transparency is refreshing.'),
+(68, 5, 15, 0, 'platform', 4, 'Great vehicle selection in Sri Lanka. Would love to see more electric models added.'),
+(69, 6, 16, 0, 'platform', 5, 'Booking confirmation was instant and Stripe payment worked without any hitches.'),
+(70, 8, 18, 0, 'platform', 4, 'Clean user interface and clear communication between borrower and host throughout.'),
+(71, 10, 20, 0, 'platform', 5, 'Excellent customer support when we had a question regarding toll transponders.'),
+(72, 14, 24, 0, 'platform', 5, 'Easy booking modification tools. Made extending our trip completely hassle-free.'),
+(73, 15, 25, 0, 'platform', 4, 'Fair deposit policy and deposit hold was released promptly within 48 hours.'),
+(74, 18, 28, 0, 'platform', 5, 'EliteDrive made organizing transport for our corporate retreat effortless.'),
+(75, 21, 31, 0, 'platform', 5, 'Top-tier luxury fleet. Every detail matches what is shown in the vehicle photos.'),
+(76, 27, 37, 0, 'platform', 5, 'Direct messaging with the owner was fast and helpful. Highly recommended app.'),
+(77, 30, 40, 0, 'platform', 4, 'Intuitive navigation and filter options. Found the exact manual car I wanted.'),
+(78, 33, 43, 0, 'platform', 5, 'Transparent commission breakdown and straightforward check-in inspection checklists.'),
+(79, 39, 49, 0, 'platform', 5, 'Smooth experience. The GPS pickup instructions were accurate and easy to follow.'),
+(80, 47, 57, 0, 'platform', 5, 'Best car sharing platform in the country. Will definitely book again next month.');
 

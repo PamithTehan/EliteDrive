@@ -145,3 +145,24 @@ $stmtCommissions->bindValue(2, $offsetCommissions, PDO::PARAM_INT);
 $stmtCommissions->execute();
 $commissions = $stmtCommissions->fetchAll();
 $totalPagesCommissions = ceil($totalCommissions / $perPage);
+
+// --- PAYMENTS ---
+$pagePayments = isset($_GET['page_payments']) ? max(1, (int)$_GET['page_payments']) : 1;
+$offsetPayments = ($pagePayments - 1) * $perPage;
+
+$stmtTotalPayments = $db->query('SELECT COUNT(*) FROM payments');
+$totalPayments = $stmtTotalPayments->fetchColumn();
+
+$stmtPayments = $db->prepare('
+    SELECT p.id, p.booking_id, p.amount, p.currency, p.status, p.created_at, p.stripe_payment_intent_id,
+           u.full_name as user_name
+    FROM payments p
+    JOIN users u ON p.user_id = u.id
+    ORDER BY p.created_at DESC 
+    LIMIT ? OFFSET ?
+');
+$stmtPayments->bindValue(1, $perPage, PDO::PARAM_INT);
+$stmtPayments->bindValue(2, $offsetPayments, PDO::PARAM_INT);
+$stmtPayments->execute();
+$payments = $stmtPayments->fetchAll();
+$totalPagesPayments = ceil($totalPayments / $perPage);

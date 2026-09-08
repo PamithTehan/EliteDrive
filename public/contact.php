@@ -51,7 +51,7 @@ require_once __DIR__ . '/../includes/partials/head.php';
                         <div class="info-icon"><span class="material-symbols-outlined">mail</span></div>
                         <div>
                             <p class="label-sm" style="color:var(--color-secondary); letter-spacing:1px; text-transform:uppercase; margin-bottom:4px;">Email Us</p>
-                            <p class="body-md" style="font-weight: 500;">concierge@elitedrive.luxury</p>
+                            <p class="body-md" style="font-weight: 500;">contactus@elitedrive.com</p>
                         </div>
                     </div>
                     

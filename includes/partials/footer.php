@@ -1,7 +1,12 @@
     </main>
+    <style>
+        .footer-grid { display: grid; gap: var(--space-lg); grid-template-columns: 2fr 1fr 1fr 1fr; }
+        @media (max-width: 1024px) { .footer-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr; } }
+    </style>
     <footer class="site-footer">
-        <div class="container grid grid-4">
-            <div style="grid-column: span 1;">
+        <div class="container footer-grid">
+            <div>
                 <h3 class="headline-md" style="margin-bottom: 8px; color: var(--color-primary);">EliteDrive</h3>
                 <p class="body-sm" style="color: var(--color-secondary); line-height: 1.6; max-width: 280px;">The premier luxury & performance car rental marketplace. Uncompromising quality, transparent pricing, and 24/7 concierge mobility.</p>
             </div>
@@ -17,7 +22,7 @@
                 <h4 class="label-md" style="color: var(--color-primary); margin-bottom: 12px;">Support & FAQs</h4>
                 <ul class="stack-xs" style="list-style:none; padding:0; margin:0;">
                     <li><a href="<?= baseUrl('/faqs.php') ?>" style="color:var(--color-secondary); text-decoration:none; font-size:14px;">Frequently Asked Questions</a></li>
-                    <li><a href="<?= baseUrl('/contact.php') ?>" style="color:var(--color-secondary); text-decoration:none; font-size:14px;">Emergency Roadside</a></li>
+                    <li><a href="<?= baseUrl('/contact.php') ?>" style="color:var(--color-secondary); text-decoration:none; font-size:14px;">Contact Us</a></li>
                 </ul>
             </div>
             <div>

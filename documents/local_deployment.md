@@ -43,3 +43,22 @@ Example for XAMPP:
 - **Database Connection Error**: Double-check `config.php` for typos in the database username, password, or host port (some MySQL setups use `3306` while others use `3307`).
 - **404 Errors on Links**: Ensure your `base_url` correctly points to the `public/` directory and doesn't contain a trailing slash.
 - **Permission Errors (Images)**: Ensure the `storage/` directory is writable if you test file uploads.
+- **Password Hash Issues**: If you need to manually update a user's password hash in the database and face SQL Safe Mode restrictions:
+  1. **Generate in PHP / CLI**:
+     ```bash
+     php -r "echo password_hash('Password123!', PASSWORD_BCRYPT) . PHP_EOL;"
+     ```
+  2. **Option 1: Disable Safe Mode for the Session**:
+     Temporarily disable `SQL_SAFE_UPDATES` before running the update:
+     ```sql
+     USE elitedrive;
+     SET SQL_SAFE_UPDATES = 0;
+     UPDATE users SET password_hash = '$2y$10$e8Tlgm/d1n7118Riq4tKC0Q0G4r6iK0xVq8iP0H3J4r05.eOcM6d2';
+     SET SQL_SAFE_UPDATES = 1;
+     ```
+  3. **Option 2: Add a Primary Key WHERE Clause**:
+     Bypass the safe update warning without altering session flags by referencing the primary key `id`:
+     ```sql
+     USE elitedrive;
+     UPDATE users SET password_hash = '$2y$10$e8Tlgm/d1n7118Riq4tKC0Q0G4r6iK0xVq8iP0H3J4r05.eOcM6d2' WHERE id > 0;
+     ```
