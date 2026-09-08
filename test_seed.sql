@@ -148,9 +148,9 @@ INSERT INTO driving_licenses (id, user_id, license_number, expiry_date, upload_f
                                                                                                                                                (19, 29, 'DL-MD-10019', '2028-10-01', 'pdf', 'verified', 2, '2024-01-30 10:00:00', NULL),
                                                                                                                                                (20, 30, 'DL-WI-10020', '2026-08-16', 'image', 'verified', 2, '2024-01-31 10:00:00', NULL),
                                                                                                                                                (21, 31, 'DL-CO-10021', '2028-12-09', 'pdf', 'verified', 1, '2024-02-01 10:00:00', NULL),
-                                                                                                                                               (22, 32, 'DL-MN-10022', '2027-04-19', 'image', 'pending', 1, '2024-02-02 10:00:00', NULL),
+                                                                                                                                               (22, 32, 'DL-MN-10022', '2027-04-19', 'pdf', 'pending', 1, '2024-02-02 10:00:00', NULL),
                                                                                                                                                (23, 33, 'DL-SC-10023', '2029-07-27', 'pdf', 'verified', 2, '2024-02-03 10:00:00', NULL),
-                                                                                                                                               (24, 34, 'DL-AL-10024', '2026-06-30', 'image', 'pending', 2, '2024-02-04 10:00:00', NULL),
+                                                                                                                                               (24, 34, 'DL-AL-10024', '2026-06-30', 'pdf', 'pending', 2, '2024-02-04 10:00:00', NULL),
                                                                                                                                                (25, 35, 'DL-LA-10025', '2028-11-21', 'pdf', 'verified', 1, '2024-02-05 10:00:00', NULL),
                                                                                                                                                (26, 36, 'DL-KY-10026', '2027-02-14', 'image', 'verified', 1, '2024-02-06 10:00:00', NULL),
                                                                                                                                                (27, 37, 'DL-OR-10027', '2029-09-08', 'pdf', 'pending', 2, '2024-02-07 10:00:00', NULL),
@@ -183,14 +183,14 @@ INSERT INTO driving_license_pdfs (id, license_id, file_path) VALUES
                                                                  (29, 7, 'assets/uploads/licenses/license.pdf'),
                                                                  (30, 9, 'assets/uploads/licenses/license.pdf'),
                                                                  (31, 11, 'assets/uploads/licenses/license.pdf'),
-                                                                 (32, 13, 'assets/uploads/licenses/license(1).pdf'),
+                                                                 (32, 13, 'assets/uploads/licenses/License(1).pdf'),
                                                                  (33, 15, 'assets/uploads/licenses/license.pdf'),
-                                                                 (34, 17, 'assets/uploads/licenses/license(2).pdf'),
+                                                                 (34, 17, 'assets/uploads/licenses/License(2).pdf'),
                                                                  (35, 19, 'assets/uploads/licenses/license.pdf'),
                                                                  (36, 21, 'assets/uploads/licenses/license.pdf'),
-                                                                 (37, 23, 'assets/uploads/licenses/license(3).pdf'),
+                                                                 (37, 23, 'assets/uploads/licenses/License(3).pdf'),
                                                                  (38, 25, 'assets/uploads/licenses/license.pdf'),
-                                                                 (39, 27, 'assets/uploads/licenses/license(4).pdf'),
+                                                                 (39, 27, 'assets/uploads/licenses/License(4).pdf'),
                                                                  (40, 29, 'assets/uploads/licenses/license.pdf');
 
 -- ----------------------------------------------------------
@@ -790,3 +790,5 @@ INSERT INTO inquiries (id, full_name, email, subject, message, status, admin_res
                                                                                                          (48, 'Wimal Weerawansa', 'wimal.w@example.com', 'Snow Chains', 'Are heavy terrain grip systems provided when traveling through wet central highland passes?', 'pending', NULL, NULL),
                                                                                                          (49, 'Chithra Warakagoda', 'chithra.w@example.com', 'App Notification Issue', 'I am not receiving mobile SMS alerts for host booking acceptance messages.', 'responded', 'Please check that SMS notifications are toggled on inside your user account settings.', '2024-03-20 13:00:00'),
                                                                                                          (50, 'Jackson Anthony', 'jackson.a@example.com', 'Supercar Security Deposit', 'Why does the Porsche 911 require a higher refundable security deposit?', 'responded', 'Higher value vehicles carry adjusted damage deductible holds as per underwriter terms.', '2024-03-21 15:45:00');
+
+
