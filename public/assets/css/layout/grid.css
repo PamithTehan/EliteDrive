@@ -1,3 +1,7 @@
+/**
+ * File: grid.css
+ * Purpose: Custom flex/grid column system
+ */
 .container { 
   max-width: var(--container-max); 
   margin-inline: auto; 

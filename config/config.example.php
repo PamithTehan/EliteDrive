@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: config.example.php
+ * Purpose: Template for environment config
+ */
 // config/config.example.php
 // Copy this file to config.php and update the values with your actual database credentials.
 

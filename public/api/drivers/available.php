@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: available.php
+ * Purpose: Endpoint to fetch available drivers
+ */
 require_once __DIR__ . '/../../../includes/db.php';
 require_once __DIR__ . '/../../../includes/auth.php';
 

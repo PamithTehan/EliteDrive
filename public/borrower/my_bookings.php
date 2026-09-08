@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: my_bookings.php
+ * Purpose: Borrower's rental history
+ */
 require_once __DIR__ . '/../../includes/db.php';
 require_once __DIR__ . '/../../includes/auth.php';
 require_once __DIR__ . '/../../includes/functions.php';

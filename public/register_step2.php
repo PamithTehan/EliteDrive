@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: register_step2.php
+ * Purpose: Step 2: Role-specific details (e.g., license)
+ */
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/functions.php';

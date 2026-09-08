@@ -1,3 +1,7 @@
+/**
+ * File: contact.css
+ * Purpose: Styles for the Contact page
+ */
 .contact-page {
     background-color: var(--color-surface);
     padding: 48px 0 64px;

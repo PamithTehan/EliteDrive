@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: about.php
+ * Purpose: "About Us" static info page
+ */
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/functions.php';

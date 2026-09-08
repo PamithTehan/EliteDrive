@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: driver_assignments.php
+ * Purpose: View/manage assigned driver tasks
+ */
 require_once __DIR__ . '/../../includes/db.php';
 require_once __DIR__ . '/../../includes/auth.php';
 require_once __DIR__ . '/../../includes/functions.php';

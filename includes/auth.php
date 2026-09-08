@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: auth.php
+ * Purpose: Authentication & role checks
+ */
 // includes/auth.php
 require_once __DIR__ . '/functions.php';
 

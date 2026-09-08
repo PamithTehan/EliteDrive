@@ -1,3 +1,7 @@
+/**
+ * File: dashboard.css
+ * Purpose: Layout overrides for admin/owner dashboards
+ */
 .dashboard-sidebar .card-body {
     padding: var(--space-md);
 }

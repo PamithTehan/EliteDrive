@@ -1,3 +1,7 @@
+/**
+ * File: typography.css
+ * Purpose: Headline and body font scaling
+ */
 body {
   font-family: var(--font-family);
   color: var(--color-on-surface);

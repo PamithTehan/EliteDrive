@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: pay.php
+ * Purpose: Endpoint to process Stripe payments
+ */
 require_once __DIR__ . '/../../../includes/db.php';
 require_once __DIR__ . '/../../../includes/auth.php';
 require_once __DIR__ . '/../../../includes/functions.php';

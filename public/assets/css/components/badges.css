@@ -1,3 +1,7 @@
+/**
+ * File: badges.css
+ * Purpose: Status pills and category tags
+ */
 .badge {
     display: inline-block;
     padding: 4px 10px;

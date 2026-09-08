@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: verification_queue.php
+ * Purpose: Validate pending user driving licenses
+ */
 require_once __DIR__ . '/../../includes/db.php';
 require_once __DIR__ . '/../../includes/auth.php';
 require_once __DIR__ . '/../../includes/functions.php';

@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: db.php
+ * Purpose: PDO database connection
+ */
 // includes/db.php
 if (defined('DB_PHP_LOADED')) return;
 define('DB_PHP_LOADED', 1);

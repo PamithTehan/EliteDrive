@@ -1,3 +1,7 @@
+/**
+ * File: buttons.css
+ * Purpose: Primary, secondary, danger buttons
+ */
 .btn {
     display: inline-flex;
     align-items: center;

@@ -1,4 +1,8 @@
 <?php
+/**
+ * File: bookings.php
+ * Purpose: History of rentals for owner's vehicles
+ */
 require_once __DIR__ . '/../../includes/db.php';
 require_once __DIR__ . '/../../includes/auth.php';
 require_once __DIR__ . '/../../includes/functions.php';

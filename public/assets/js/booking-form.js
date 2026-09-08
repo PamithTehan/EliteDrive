@@ -1,3 +1,7 @@
+/**
+ * File: booking-form.js
+ * Purpose: Frontend logic for date selection and payment
+ */
 const radios = document.querySelectorAll('[name="driver_arrangement"]');
 radios.forEach(r => r.addEventListener('change', onArrangementChange));
 
