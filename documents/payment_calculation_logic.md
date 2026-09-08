@@ -39,3 +39,4 @@ The system converts the billable minutes back into hours, and calculates the tot
 **Duration:** 25 hours.
 - *Without Grace Period:* 25 hours = 1 full day (24 hours) + 1 extra hour. The extra hour would trigger a new 6-hour block (LKR 2,500). Total = LKR 12,500.
 - *With Grace Period:* 25 hours = 1500 minutes. Subtract 60 minutes = 1440 billable minutes (exactly 24 hours). The extra hour is waived. Total = LKR 10,000.
+
