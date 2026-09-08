@@ -314,39 +314,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                                 <canvas id="incomeChart" height="100"></canvas>
                             </div>
 
-                            <h3 style="margin-bottom: 16px; font-size: 18px;">Recent Payouts</h3>
-                            <?php if (empty($earningsList)): ?>
-                                <p style="color: var(--color-secondary);">No income records found.</p>
-                            <?php else: ?>
-                                <div class="table-responsive">
-                                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                                        <thead>
-                                            <tr style="border-bottom: 2px solid var(--color-outline);">
-                                                <th style="padding: 12px 8px; font-weight: 600; color: var(--color-secondary);">Date</th>
-                                                <th style="padding: 12px 8px; font-weight: 600; color: var(--color-secondary);">Vehicle</th>
-                                                <th style="padding: 12px 8px; font-weight: 600; color: var(--color-secondary);">Amount</th>
-                                                <th style="padding: 12px 8px; font-weight: 600; color: var(--color-secondary);">Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach ($earningsList as $c): ?>
-                                                <tr style="border-bottom: 1px solid var(--color-outline);">
-                                                    <td style="padding: 12px 8px;"><?= date('M j, Y', strtotime($c['created_at'])) ?></td>
-                                                    <td style="padding: 12px 8px;"><?= escapeHtml($c['make'] . ' ' . $c['model']) ?></td>
-                                                    <td style="padding: 12px 8px; font-weight: 600;">LKR <?= number_format($c['driver_earnings'], 2) ?></td>
-                                                    <td>
-                                                        <?php if ($c['status'] === 'confirmed' || $c['status'] === 'active'): ?>
-                                                            <span class="badge" style="background: #fef3c7; color: #92400e; padding: 4px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase;">Pending</span>
-                                                        <?php else: ?>
-                                                            <span class="badge" style="background: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase;">Paid</span>
-                                                        <?php endif; ?>
-                                                    </td>
-                                                </tr>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            <?php endif; ?>
+
 
                         </div>
                     </div>
