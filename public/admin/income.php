@@ -18,7 +18,7 @@ $thisMonthStmt = $db->prepare('
     FROM bookings 
     WHERE commission_amount > 0 
       AND status IN ("completed", "reviewed")
-      AND DATE_FORMAT(created_at, "%Y-%m") = ?
+      AND DATE_FORMAT(return_date, "%Y-%m") = ?
 ');
 $thisMonthStmt->execute([$currentMonthStr]);
 $thisMonthEarned = (float)$thisMonthStmt->fetchColumn();
@@ -26,12 +26,12 @@ $thisMonthEarned = (float)$thisMonthStmt->fetchColumn();
 // 3. Get Monthly Data for Chart (Current Year)
 $currentYear = date('Y');
 $monthlyDataStmt = $db->prepare('
-    SELECT MONTH(created_at) as month, SUM(commission_amount) as total
+    SELECT MONTH(return_date) as month, SUM(commission_amount) as total
     FROM bookings
     WHERE commission_amount > 0 
       AND status IN ("completed", "reviewed")
-      AND YEAR(created_at) = ?
-    GROUP BY MONTH(created_at)
+      AND YEAR(return_date) = ?
+    GROUP BY MONTH(return_date)
 ');
 $monthlyDataStmt->execute([$currentYear]);
 $rawMonthly = $monthlyDataStmt->fetchAll(PDO::FETCH_KEY_PAIR);
