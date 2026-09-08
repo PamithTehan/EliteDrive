@@ -9,12 +9,12 @@ $db = getDb();
 
 // Fetch earnings for this owner
 $stmtIncome = $db->prepare('
-    SELECT b.id, b.created_at, b.owner_earnings, b.status, v.make, v.model, u.full_name as borrower_name
+    SELECT b.id, b.created_at, b.return_date, b.owner_earnings, b.status, v.make, v.model, u.full_name as borrower_name
     FROM bookings b
     JOIN vehicles v ON b.vehicle_id = v.id
     JOIN users u ON b.borrower_id = u.id
     WHERE v.owner_id = ? AND b.status IN ("completed", "reviewed")
-    ORDER BY b.created_at DESC
+    ORDER BY b.return_date DESC
 ');
 $stmtIncome->execute([$user['id']]);
 $earningsList = $stmtIncome->fetchAll();
@@ -31,7 +31,7 @@ foreach ($earningsList as $row) {
     $amount = (float)$row['owner_earnings'];
     $totalEarned += $amount;
     
-    $ts = strtotime($row['created_at']);
+    $ts = strtotime($row['return_date']);
     if (date('Y', $ts) == $currentYear) {
         $m = (int)date('n', $ts);
         $monthlyData[$m] += $amount;
@@ -178,8 +178,8 @@ require_once __DIR__ . '/../../includes/partials/head.php';
                             datasets: [{
                                 label: 'Revenue (LKR)',
                                 data: monthlyData,
-                                borderColor: '#2563eb',
-                                backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                                borderColor: '#16a34a',
+                                backgroundColor: 'rgba(22, 163, 74, 0.1)',
                                 fill: true,
                                 tension: 0.4
                             }]
