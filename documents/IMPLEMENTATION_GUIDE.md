@@ -33,18 +33,31 @@ Browser (HTML/CSS/JS)
 ```text
 elitedrive/
 ├── config/
-│   ├── config.example.php      # Template for environment config
-│   └── config.php              # Actual DB credentials & environment config
-├── documents/                  # Documentation files (MDs)
+│   ├── config.example.php           # Template for environment config
+│   └── config.php                   # Actual DB credentials & environment config
+├── documents/                       # Documentation files (MDs)
 ├── includes/
-│   ├── admin/                  # Admin-specific SQL query helpers
-│   ├── partials/               # Reusable UI components (head, footer, tabs)
-│   ├── auth.php                # Authentication & role checks
-│   ├── db.php                  # PDO database connection
-│   ├── functions.php           # Global helper functions
-│   └── upload.php              # Secure file upload handler
-├── public/                     # <-- Web Root
-│   ├── admin/                  # Admin dashboard pages
+│   ├── admin/
+│   │   └── management_queries.php   # Complex SQL aggregation logic for admin dashboards
+│   ├── partials/
+│   │   ├── admin/
+│   │   │   ├── tab_bookings.php     # Admin dashboard tab for booking list
+│   │   │   ├── tab_borrowers.php    # Admin dashboard tab for borrower list
+│   │   │   ├── tab_commissions.php  # Admin dashboard tab for commission summary
+│   │   │   ├── tab_drivers.php      # Admin dashboard tab for driver list
+│   │   │   ├── tab_owners.php       # Admin dashboard tab for owner list
+│   │   │   ├── tab_payments.php     # Admin dashboard tab for payment records
+│   │   │   ├── tab_rejections.php   # Admin dashboard tab for rejected items
+│   │   │   └── tab_vehicles.php     # Admin dashboard tab for vehicle list
+│   │   ├── footer.php               # Universal HTML footer
+│   │   ├── head.php                 # Universal HTML head and navbar
+│   │   └── pagination.php           # Reusable pagination logic
+│   ├── auth.php                     # Authentication & role checks
+│   ├── db.php                       # PDO database connection
+│   ├── functions.php                # Global helper functions
+│   └── upload.php                   # Secure file upload handler
+├── public/                          # <-- Web Root
+│   ├── admin/
 │   │   ├── disputes.php             # Review and resolve user disputes
 │   │   ├── driver_assignments.php   # View/manage assigned driver tasks
 │   │   ├── income.php               # Revenue tracking and owner payouts
@@ -53,40 +66,88 @@ elitedrive/
 │   │   ├── ongoing_bookings.php     # Monitor currently active trips
 │   │   ├── vehicle_approvals.php    # Approve newly listed owner vehicles
 │   │   └── verification_queue.php   # Validate pending user driving licenses
-│   ├── api/                    # API Endpoints
-│   │   ├── admin/              # respond_inquiry.php
-│   │   ├── bookings/           # create, cancel, pay, assign_driver, etc.
-│   │   ├── disputes/           # create.php
-│   │   ├── drivers/            # available.php
-│   │   ├── licenses/           # pending, verify
-│   │   ├── payments/           # process.php
-│   │   ├── reviews/            # submit reviews
-│   │   └── vehicles/           # search, pending, approve
-│   ├── assets/                 # CSS, JS, Images, Uploads
+│   ├── api/
+│   │   ├── admin/
+│   │   │   └── respond_inquiry.php  # Endpoint to reply to user inquiries
+│   │   ├── bookings/
+│   │   │   ├── assign_driver.php    # Endpoint for drivers to accept trips
+│   │   │   ├── cancel.php           # Endpoint to cancel a booking
+│   │   │   ├── create.php           # Endpoint to create a new booking
+│   │   │   ├── dispute.php          # Endpoint to escalate a booking dispute
+│   │   │   ├── pay.php              # Endpoint to process Stripe payments
+│   │   │   └── unassigned.php       # Endpoint to fetch trips needing a driver
+│   │   ├── disputes/
+│   │   │   └── create.php           # Endpoint to submit a general dispute
+│   │   ├── drivers/
+│   │   │   └── available.php        # Endpoint to fetch available drivers
+│   │   ├── licenses/
+│   │   │   ├── pending.php          # Endpoint to fetch pending license approvals
+│   │   │   └── verify.php           # Endpoint to approve/reject a license
+│   │   ├── payments/
+│   │   │   └── process.php          # Stripe webhook processing
+│   │   ├── reviews/
+│   │   │   ├── submit.php           # Endpoint to submit a generic review
+│   │   │   ├── submit_multi.php     # Endpoint for batched reviews
+│   │   │   └── submit_single.php    # Endpoint for single entity review
+│   │   └── vehicles/
+│   │       ├── approve.php          # Endpoint to approve/reject vehicles
+│   │       ├── pending.php          # Endpoint to fetch pending vehicles
+│   │       └── search.php           # JSON endpoint for fleet search filtering
+│   ├── assets/
 │   │   ├── css/
-│   │   │   ├── base/           # tokens, typography, reset
-│   │   │   ├── components/     # forms, buttons, cards, tables
-│   │   │   ├── layout/         # grid, header-footer
-│   │   │   └── pages/          # auth, fleet-search, dashboard
-│   │   ├── js/                 # booking-form.js
-│   │   ├── images/             # static assets
-│   │   └── uploads/            # user uploaded images/documents
-│   ├── borrower/               # Borrower portal (my_bookings, booking_confirm)
-│   ├── driver/                 # Driver portal (dashboard, assignments)
-│   ├── fleet/                  # Public fleet search (search, detail)
-│   ├── owner/                  # Owner portal (dashboard, vehicle_form, bookings)
-│   ├── about.php               # "About Us" static info page
-│   ├── contact.php             # Public contact/inquiry form
-│   ├── document.php            # File serving endpoint for secure docs
-│   ├── faqs.php                # Frequently Asked Questions
-│   ├── index.php               # Landing page / Home
-│   ├── login.php               # Universal user authentication
-│   ├── logout.php              # Session destruction
-│   ├── profile.php             # User profile and account settings
-│   ├── register.php            # Step 1: Basic user registration
-│   ├── register_step2.php      # Step 2: Role-specific details (e.g., license)
-│   └── review.php              # Multi-step review submission form
-└── test_seed.sql               # DB schema and seed data
+│   │   │   ├── base/
+│   │   │   │   ├── reset.css        # CSS normalization
+│   │   │   │   ├── tokens.css       # CSS variables (colors, fonts, sizing)
+│   │   │   │   └── typography.css   # Headline and body font scaling
+│   │   │   ├── components/
+│   │   │   │   ├── alerts.css       # Toast notifications and inline alerts
+│   │   │   │   ├── badges.css       # Status pills and category tags
+│   │   │   │   ├── buttons.css      # Primary, secondary, danger buttons
+│   │   │   │   ├── cards.css        # Reusable card containers
+│   │   │   │   ├── forms.css        # Input fields and select dropdowns
+│   │   │   │   └── tables.css       # Data table styling for dashboards
+│   │   │   ├── layout/
+│   │   │   │   ├── grid.css         # Custom flex/grid column system
+│   │   │   │   └── header-footer.css# Global navigation and footer styles
+│   │   │   └── pages/
+│   │   │       ├── about.css        # Styles specific to the About page
+│   │   │       ├── auth.css         # Styles for login/register pages
+│   │   │       ├── contact.css      # Styles for the Contact page
+│   │   │       ├── dashboard.css    # Layout overrides for admin/owner dashboards
+│   │   │       ├── faqs.css         # Styles for accordion FAQ section
+│   │   │       ├── fleet-search.css # Filter sidebar and search grid layout
+│   │   │       ├── home.css         # Hero banner and landing page styles
+│   │   │       ├── management.css   # Complex admin dashboard overrides
+│   │   │       └── profile.css      # User profile page layout
+│   │   ├── js/
+│   │   │   └── booking-form.js      # Frontend logic for date selection and payment
+│   │   ├── images/                  # Static site assets (favicons, hero images)
+│   │   └── uploads/                 # User-uploaded content (vehicles, licenses)
+│   ├── borrower/
+│   │   ├── booking_confirm.php      # Success page after payment
+│   │   └── my_bookings.php          # Borrower's rental history
+│   ├── driver/
+│   │   ├── assignments.php          # Driver's accepted trips
+│   │   └── dashboard.php            # Driver's daily overview
+│   ├── fleet/
+│   │   ├── detail.php               # Specific vehicle detail & booking page
+│   │   └── search.php               # Searchable fleet catalog
+│   ├── owner/
+│   │   ├── bookings.php             # History of rentals for owner's vehicles
+│   │   ├── dashboard.php            # Owner's revenue and vehicle status overview
+│   │   └── vehicle_form.php         # Form to add or edit a listed vehicle
+│   ├── about.php                    # "About Us" static info page
+│   ├── contact.php                  # Public contact/inquiry form
+│   ├── document.php                 # File serving endpoint for secure docs
+│   ├── faqs.php                     # Frequently Asked Questions
+│   ├── index.php                    # Landing page / Home
+│   ├── login.php                    # Universal user authentication
+│   ├── logout.php                   # Session destruction
+│   ├── profile.php                  # User profile and account settings
+│   ├── register.php                 # Step 1: Basic user registration
+│   ├── register_step2.php           # Step 2: Role-specific details (e.g., license)
+│   └── review.php                   # Multi-step review submission form
+└── test_seed.sql                    # DB schema and seed data
 ```
 
 > **Important:** `storage/` must sit **outside** the publicly served directory (or blocked via server config) — driving licenses and IDs are sensitive documents and must never be directly URL-accessible. Serve them only through an authenticated PHP script that checks the requester's permission before streaming the file.
