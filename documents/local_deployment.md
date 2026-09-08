@@ -21,7 +21,7 @@ cd Vehical_rental_system
 1. Open your MySQL interface (e.g., phpMyAdmin, MySQL Workbench).
 2. Create a new database named `elitedrive` (or your preferred name).
 3. Import the `database_schema.sql` file located in the root directory to create the required tables.
-4. *(Optional)* Import the `seed_data.sql` file to populate the database with dummy vehicles, users, and drivers.
+4. *(Optional)* Import the `test_seed.sql` file to populate the database with dummy vehicles, users, and drivers.
 
 ### 3. Setup Configuration
 1. Navigate to the `config/` directory.
@@ -42,7 +42,7 @@ Example for XAMPP:
 ## Troubleshooting
 - **Database Connection Error**: Double-check `config.php` for typos in the database username, password, or host port (some MySQL setups use `3306` while others use `3307`).
 - **404 Errors on Links**: Ensure your `base_url` correctly points to the `public/` directory and doesn't contain a trailing slash.
-- **Permission Errors (Images)**: Ensure the `storage/` directory is writable if you test file uploads.
+- **Permission Errors (Images)**: Ensure the `public/assets/uploads/` directory is writable if you test file uploads.
 - **Password Hash Issues**: If you need to manually update a user's password hash in the database and face SQL Safe Mode restrictions:
   1. **Generate in PHP / CLI**:
      ```bash
