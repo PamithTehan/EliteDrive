@@ -196,27 +196,35 @@ require_once __DIR__ . '/../includes/partials/head.php';
         <div class="grid grid-4" style="gap: 24px;">
             <!-- Team Member 1 -->
             <div class="team-card">
-                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400&auto=format&fit=crop" alt="Julian Sterling" style="width: 100%; border-radius: var(--radius-md); margin-bottom: 16px; aspect-ratio: 3/4; object-fit: cover;">
-                <h3 class="headline-sm">Julian Sterling</h3>
-                <p class="label-sm" style="color:var(--color-primary); text-transform: uppercase;">Chief Executive Officer</p>
+                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400&auto=format&fit=crop" alt="Julian Sterling" style="width: 100%; aspect-ratio: 3/4; object-fit: cover;">
+                <div style="padding: 16px 20px 24px;">
+                    <h3 class="headline-sm">Julian Sterling</h3>
+                    <p class="label-sm" style="color:var(--color-primary); text-transform: uppercase;">Chief Executive Officer</p>
+                </div>
             </div>
             <!-- Team Member 2 -->
             <div class="team-card">
-                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400&auto=format&fit=crop" alt="Elena Vance" style="width: 100%; border-radius: var(--radius-md); margin-bottom: 16px; aspect-ratio: 3/4; object-fit: cover;">
-                <h3 class="headline-sm">Elena Vance</h3>
-                <p class="label-sm" style="color:var(--color-primary); text-transform: uppercase;">Chief Operations Officer</p>
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400&auto=format&fit=crop" alt="Elena Vance" style="width: 100%; aspect-ratio: 3/4; object-fit: cover;">
+                <div style="padding: 16px 20px 24px;">
+                    <h3 class="headline-sm">Elena Vance</h3>
+                    <p class="label-sm" style="color:var(--color-primary); text-transform: uppercase;">Chief Operations Officer</p>
+                </div>
             </div>
             <!-- Team Member 3 -->
             <div class="team-card">
-                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=400&auto=format&fit=crop" alt="Marcus Chen" style="width: 100%; border-radius: var(--radius-md); margin-bottom: 16px; aspect-ratio: 3/4; object-fit: cover;">
-                <h3 class="headline-sm">Marcus Chen</h3>
-                <p class="label-sm" style="color:var(--color-primary); text-transform: uppercase;">Director of Fleet Strategy</p>
+                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=400&auto=format&fit=crop" alt="Marcus Chen" style="width: 100%; aspect-ratio: 3/4; object-fit: cover;">
+                <div style="padding: 16px 20px 24px;">
+                    <h3 class="headline-sm">Marcus Chen</h3>
+                    <p class="label-sm" style="color:var(--color-primary); text-transform: uppercase;">Director of Fleet Strategy</p>
+                </div>
             </div>
             <!-- Team Member 4 -->
             <div class="team-card">
-                <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=400&auto=format&fit=crop" alt="Sophia Moretti" style="width: 100%; border-radius: var(--radius-md); margin-bottom: 16px; aspect-ratio: 3/4; object-fit: cover;">
-                <h3 class="headline-sm">Sophia Moretti</h3>
-                <p class="label-sm" style="color:var(--color-primary); text-transform: uppercase;">Head of Client Experience</p>
+                <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=400&auto=format&fit=crop" alt="Sophia Moretti" style="width: 100%; aspect-ratio: 3/4; object-fit: cover;">
+                <div style="padding: 16px 20px 24px;">
+                    <h3 class="headline-sm">Sophia Moretti</h3>
+                    <p class="label-sm" style="color:var(--color-primary); text-transform: uppercase;">Head of Client Experience</p>
+                </div>
             </div>
         </div>
     </div>
