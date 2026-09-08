@@ -74,12 +74,7 @@ require_once __DIR__ . '/../../includes/partials/head.php';
 
     <div class="container">
         <div class="profile-layout">
-            <aside>
-                <div class="profile-user-card">
-                    <div class="profile-avatar-circle">
-                        <?= escapeHtml($initials) ?>
-                    </div>
-                    <div class="profile-user-name"><?= escapeHtml($user['f<?php 
+            <?php 
             $activeAdminNav = 'management';
             require __DIR__ . '/../../includes/partials/admin/sidebar.php'; 
             ?>                
